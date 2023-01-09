@@ -38,6 +38,10 @@ def parse_arguments(all_module_names, modules):
                              'synthesis loci from whole genome data. Microbial Genomics. 2016. '
                              'doi:10.1099/mgen.0.000102.')
 
+    if '--helpall' in sys.argv or '--allhelp' in sys.argv or '--all_help' in sys.argv:
+        sys.argv.append('--help_all')
+    show_all_args = '--help_all' in sys.argv
+
     io_args = parser.add_argument_group('Input/output')
     io_args.add_argument('-a', '--assemblies', nargs='+', type=str, required=True,
                          help='FASTA file(s) for assemblies')
@@ -51,11 +55,16 @@ def parse_arguments(all_module_names, modules):
                              help='Module presets')
 
     for m in all_module_names:
-        modules[m].add_cli_options(parser)
+        group = modules[m].add_cli_options(parser)
+        if not show_all_args and group is not None:  # no template help unless --help_all was used
+            for a in group._group_actions:
+                a.help = argparse.SUPPRESS
 
     help_args = parser.add_argument_group('Help')
     help_args.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS,
                            help='Show this help message and exit')
+    help_args.add_argument('--help_all', action='help',
+                           help='Show a help message with all module options')
     help_args.add_argument('--version', action='version', version='Kleborate v' + __version__,
                            help="Show program's version number and exit")
 

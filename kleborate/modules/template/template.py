@@ -47,13 +47,14 @@ def add_cli_options(parser):
     (not used by any other module), so verbose names are preferred.
     """
     module_name = os.path.basename(__file__)[:-3]
-    args = parser.add_argument_group(f'{module_name} module')
-    args.add_argument('--template_opt1', type=str, default='opt1_default',
-                      help='String option for module')
-    args.add_argument('--template_opt2', type=int, default=1,
-                      help='Integer option for module')
-    args.add_argument('--template_flag', action='store_true',
-                      help='Optional flag for module')
+    group = parser.add_argument_group(f'{module_name} module')
+    group.add_argument('--template_opt1', type=str, default='opt1_default',
+                       help='String option for module')
+    group.add_argument('--template_opt2', type=int, default=1,
+                       help='Integer option for module')
+    group.add_argument('--template_flag', action='store_true',
+                       help='Optional flag for module')
+    return group
 
 
 def check_cli_options(args):
