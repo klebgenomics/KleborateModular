@@ -16,18 +16,8 @@ not, see <https://www.gnu.org/licenses/>.
 """
 
 import distutils.spawn
+import os
 import sys
-
-
-def module_name():
-    """
-    This function returns the name for this module. It must be a short identifier that can only
-    contain lowercase letters, numbers and underscores.
-    """
-    name = 'template'
-    assert name.isidentifier()
-    assert name == name.lower()
-    return name
 
 
 def get_headers():
@@ -50,13 +40,14 @@ def get_headers():
     return full_headers, stdout_headers
 
 
-def create_cli_options(parser):
+def add_cli_options(parser):
     """
     This function adds a group of arguments for this module. If the template doesn't require any
     option, this function can do nothing (just a single pass statement). CLI options must be unique
     (not used by any other module), so verbose names are preferred.
     """
-    args = parser.add_argument_group(f'{module_name()} options')
+    module_name = os.path.basename(__file__)[:-3]
+    args = parser.add_argument_group(f'{module_name} module')
     args.add_argument('--template_opt1', type=str, default='opt1_default',
                       help='String option for module')
     args.add_argument('--template_opt2', type=int, default=1,

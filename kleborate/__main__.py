@@ -16,6 +16,7 @@ import argparse
 import gzip
 import importlib
 import os
+import pathlib
 import sys
 import tempfile
 
@@ -24,7 +25,7 @@ from .misc import get_compression_type, load_fasta
 from .version import __version__
 
 
-def parse_arguments():
+def parse_arguments(all_module_names, modules):
     parser = MyParser(description='Kleborate: a tool for characterising virulence and resistance '
                                   'in pathogen assemblies',
                       formatter_class=MyHelpFormatter, add_help=False,
@@ -49,7 +50,8 @@ def parse_arguments():
     module_args.add_argument('-p', '--preset', type=str,
                              help='Module presets')
 
-    # TODO: ADD MODULE OPTIONS HERE
+    for m in all_module_names:
+        modules[m].add_cli_options(parser)
 
     help_args = parser.add_argument_group('Help')
     help_args.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS,
@@ -68,9 +70,9 @@ def parse_arguments():
 
 
 def main():
-    args = parse_arguments()
-    check_args(args)
-    module_names, modules = import_modules(args)
+    all_module_names, modules = import_modules()
+    args = parse_arguments(all_module_names, modules)
+    module_names = get_modules(args, all_module_names)
     check_assembles(args)
 
     full_headers, stdout_headers = get_headers(module_names, modules)
@@ -85,13 +87,46 @@ def main():
             output_results(full_headers, stdout_headers, args.outfile, results)
 
 
-def check_args(args):
+def get_modules(args, all_module_names):
+    """
+    Returns a list of the modules names used in this run of Kleborate.
+    """
     if args.modules is None and args.preset is None:
         sys.exit('Error: either --modules or --preset is required')
+    module_names = []
+    if args.preset:
+        # TODO: define presets
+        pass
+    if args.modules:
+        for m in args.modules.split(','):
+            if m not in all_module_names:
+                sys.exit(f'Error: {m} is not a valid module name')
+            if m not in module_names:
+                module_names.append(m)
+    return module_names
 
 
-def import_modules(args):
-    module_names = args.modules.split(',')
+def get_all_module_names():
+    """
+    Looks for all Kleborate modules and returns their names. To qualify as a module, it must be in
+    the 'modules' directory, in a subdirectory that matches the filename. For example:
+    * modules/contig_stats/contig_stats.py  <- is a module
+    * modules/kpsc_mlst/kpsc_mlst.py  <- is a module
+    * modules/contig_stats/test.py  <- not a module
+    """
+    module_dir = pathlib.Path(__file__).parents[0] / 'modules'
+    module_names = []
+    for module_file in module_dir.glob('*/*.py'):
+        dir_name = module_file.parts[-2]
+        if module_file.parts[-1][:-3] == dir_name:
+            module_names.append(dir_name)
+    if 'template' in module_names:
+        module_names.remove('template')
+    return module_names
+
+
+def import_modules():
+    module_names = get_all_module_names()
     modules = {}
     for m in module_names:
         modules[m] = importlib.import_module(f'..modules.{m}.{m}', __name__)
