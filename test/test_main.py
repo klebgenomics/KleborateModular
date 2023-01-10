@@ -33,17 +33,24 @@ def test_version():
 
 
 def test_get_all_module_names():
-    module_names = kleborate.__main__.get_all_module_names()
-    assert 'contig_stats' in module_names
-    assert 'template' not in module_names
+    all_module_names = kleborate.__main__.get_all_module_names()
+    assert 'contig_stats' in all_module_names
+    assert 'template' not in all_module_names
 
 
 def test_get_headers():
-    module_names, modules = kleborate.__main__.import_modules()
+    _, modules = kleborate.__main__.import_modules()
     full_headers, stdout_headers = kleborate.__main__.get_headers(['contig_stats'], modules)
     assert full_headers[0] == 'assembly'
     assert stdout_headers[0] == 'assembly'
     assert all(h in full_headers for h in stdout_headers)
+
+
+def test_check_modules():
+    _, modules = kleborate.__main__.import_modules()
+    Args = collections.namedtuple('Args', ['assemblies'])
+    kleborate.__main__.check_modules(Args(assemblies=['test/test_main/test.fasta']),
+                                     modules, ['contig_stats'])
 
 
 def test_check_assemblies_1():

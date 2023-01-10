@@ -83,6 +83,7 @@ def main():
     all_module_names, modules = import_modules()
     args = parse_arguments(all_module_names, modules)
     module_names = get_used_module_names(args, all_module_names, get_presets())
+    check_modules(args, modules, module_names)
     check_assemblies(args)
 
     full_headers, stdout_headers = get_headers(module_names, modules)
@@ -148,14 +149,29 @@ def get_all_module_names():
 
 
 def import_modules():
-    module_names = get_all_module_names()
+    """
+    This function imports all modules (whether or not they are used in this run of Kleborate).
+    """
+    all_module_names = get_all_module_names()
     modules = {}
-    for m in module_names:
+    for m in all_module_names:
         modules[m] = importlib.import_module(f'..modules.{m}.{m}', __name__)
-    return module_names, modules
+    return all_module_names, modules
+
+
+def check_modules(args, modules, module_names):
+    """
+    This function checks the options and external requirements of the used modules.
+    """
+    for m in module_names:
+        modules[m].check_cli_options(args)
+        modules[m].check_external_programs()
 
 
 def check_assemblies(args):
+    """
+    This function does a quick check to make sure that the input assemblies look good.
+    """
     for assembly in args.assemblies:
         if os.path.isdir(assembly):
             sys.exit('Error: ' + assembly + ' is a directory (please specify assembly files)')
