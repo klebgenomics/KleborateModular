@@ -215,3 +215,10 @@ def test_get_used_module_names_7():
         kleborate.__main__.get_used_module_names(Args(modules=None, preset=None),
                                                  all_module_names, presets)
     assert 'either --preset or --modules is required' in str(e.value)
+
+
+def test_paper_refs():
+    papers = kleborate.__main__.paper_refs()
+    assert 'Lam MMC, et al.' in papers
+    assert 'Wyres KL, et al.' in papers
+    assert '\n\n' in papers

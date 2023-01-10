@@ -17,8 +17,10 @@ import gzip
 import importlib
 import os
 import pathlib
+import shutil
 import sys
 import tempfile
+import textwrap
 import uuid
 
 from .help_formatter import MyParser, MyHelpFormatter
@@ -29,15 +31,7 @@ from .version import __version__
 def parse_arguments(all_module_names, modules):
     parser = MyParser(description='Kleborate: a tool for characterising virulence and resistance '
                                   'in pathogen assemblies',
-                      formatter_class=MyHelpFormatter, add_help=False,
-                      epilog='R|If you use Kleborate, please cite the paper:\nLam MMC, et al. A '
-                             'genomic surveillance framework and genotyping tool for Klebsiella '
-                             'pneumoniae and its related species complex. Nature Communications. '
-                             '2021. doi:10.1038/s41467-021-24448-3.\n\n'
-                             'If you turn on the Kaptive option for full K and O typing, please '
-                             'also cite:\nWyres KL, et al. Identification of Klebsiella capsule '
-                             'synthesis loci from whole genome data. Microbial Genomics. 2016. '
-                             'doi:10.1099/mgen.0.000102.')
+                      formatter_class=MyHelpFormatter, add_help=False, epilog=paper_refs())
 
     if '--helpall' in sys.argv or '--allhelp' in sys.argv or '--all_help' in sys.argv:
         sys.argv.append('--help_all')
@@ -235,6 +229,22 @@ def output_results(full_headers, stdout_headers, outfile, results):
         if h not in full_headers:
             sys.exit(f'Error: results contained a value ({h}) that is not covered by the output '
                      f'headers')
+
+
+def paper_refs():
+    terminal_width = shutil.get_terminal_size().columns
+    text = 'If you use Kleborate, please cite the paper:\n' \
+           'Lam MMC, et al. A genomic surveillance framework and genotyping tool for Klebsiella ' \
+           'pneumoniae and its related species complex. Nature Communications. 2021. ' \
+           'doi:10.1038/s41467-021-24448-3.\n\n' \
+           'If you turn on the Kaptive option for full K and O typing, please also cite:\n' \
+           'Wyres KL, et al. Identification of Klebsiella capsule synthesis loci from whole ' \
+           'genome data. Microbial Genomics. 2016. doi:10.1099/mgen.0.000102.'
+    wrapped_text = ''
+    for line in text.split('\n'):
+        wrapped_text += '\n'.join(textwrap.wrap(line, width=terminal_width - 1))
+        wrapped_text += '\n'
+    return 'R|' + wrapped_text
 
 
 if __name__ == '__main__':
