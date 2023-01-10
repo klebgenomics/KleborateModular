@@ -50,10 +50,10 @@ def parse_arguments(all_module_names, modules):
                          help='File for detailed output (default: Kleborate_results.txt)')
 
     module_args = parser.add_argument_group('Modules')
+    module_args.add_argument('-p', '--preset', type=str,
+                             help=f'Module presets, choose from: ' + ', '.join(get_presets()))
     module_args.add_argument('-m', '--modules', type=str,
                              help='Comma-delimited list of Kleborate modules to use')
-    module_args.add_argument('-p', '--preset', type=str,
-                             help='Module presets')
 
     for m in all_module_names:
         group = modules[m].add_cli_options(parser)
@@ -82,7 +82,7 @@ def parse_arguments(all_module_names, modules):
 def main():
     all_module_names, modules = import_modules()
     args = parse_arguments(all_module_names, modules)
-    module_names = get_modules(args, all_module_names)
+    module_names = get_used_module_names(args, all_module_names, get_presets())
     check_assemblies(args)
 
     full_headers, stdout_headers = get_headers(module_names, modules)
@@ -97,16 +97,28 @@ def main():
             output_results(full_headers, stdout_headers, args.outfile, results)
 
 
-def get_modules(args, all_module_names):
+def get_presets():
     """
-    Returns a list of the modules names used in this run of Kleborate.
+    This function defines the module presets. The keys are the valid choices for the --preset
+    option, and the values are a list of modules for the preset.
     """
-    if args.modules is None and args.preset is None:
-        sys.exit('Error: either --modules or --preset is required')
+    return {'klebsiella': ['contig_stats', 'klebsiella_species'],
+            'escherichia': ['contig_stats']}
+
+
+def get_used_module_names(args, all_module_names, presets):
+    """
+    Returns a list of the modules names used in this run of Kleborate. The user can select modules
+    using --preset (pre-selected modules for a taxon), --modules (listing every module) or both
+    (preset modules plus additional user-selected modules).
+    """
+    if args.preset is None and args.modules is None:
+        sys.exit('Error: either --preset or --modules is required')
     module_names = []
     if args.preset:
-        # TODO: define presets
-        pass
+        if args.preset not in presets:
+            sys.exit(f'Error: {args.preset} is not a valid preset')
+        module_names += presets[args.preset]
     if args.modules:
         for m in args.modules.split(','):
             if m not in all_module_names:

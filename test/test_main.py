@@ -133,3 +133,78 @@ def test_output_results_2(capfd):
         with pytest.raises(SystemExit) as e:
             kleborate.__main__.output_results(full_headers, stdout_headers, out_file, results)
         assert 'not covered by the output headers' in str(e.value)
+
+
+def test_get_presets():
+    presets = kleborate.__main__.get_presets()
+    all_module_names = kleborate.__main__.get_all_module_names()
+    for preset, modules in presets.items():
+        assert len(modules) == len(set(modules))  # duplicates not allowed
+        for module in modules:
+            assert module in all_module_names
+
+
+def test_get_used_module_names_1():
+    all_module_names = ['a', 'b', 'c', 'd', 'e']
+    presets = {'1': ['a', 'b', 'c'], '2': ['c', 'd', 'e']}
+    Args = collections.namedtuple('Args', ['modules', 'preset'])
+    modules = kleborate.__main__.get_used_module_names(Args(modules='b,c,d', preset=None),
+                                                       all_module_names, presets)
+    assert modules == ['b', 'c', 'd']
+
+
+def test_get_used_module_names_2():
+    all_module_names = ['a', 'b', 'c', 'd', 'e']
+    presets = {'1': ['a', 'b', 'c'], '2': ['c', 'd', 'e']}
+    Args = collections.namedtuple('Args', ['modules', 'preset'])
+    modules = kleborate.__main__.get_used_module_names(Args(modules='c,b,a', preset=None),
+                                                       all_module_names, presets)
+    assert modules == ['c', 'b', 'a']
+
+
+def test_get_used_module_names_3():
+    all_module_names = ['a', 'b', 'c', 'd', 'e']
+    presets = {'1': ['a', 'b', 'c'], '2': ['c', 'd', 'e']}
+    Args = collections.namedtuple('Args', ['modules', 'preset'])
+    modules = kleborate.__main__.get_used_module_names(Args(modules=None, preset='2'),
+                                                       all_module_names, presets)
+    assert modules == ['c', 'd', 'e']
+
+
+def test_get_used_module_names_4():
+    all_module_names = ['a', 'b', 'c', 'd', 'e']
+    presets = {'1': ['a', 'b', 'c'], '2': ['c', 'd', 'e']}
+    Args = collections.namedtuple('Args', ['modules', 'preset'])
+    modules = kleborate.__main__.get_used_module_names(Args(modules='b,c', preset='2'),
+                                                       all_module_names, presets)
+    assert modules == ['c', 'd', 'e', 'b']
+
+
+def test_get_used_module_names_5():
+    all_module_names = ['a', 'b', 'c', 'd', 'e']
+    presets = {'1': ['a', 'b', 'c'], '2': ['c', 'd', 'e']}
+    Args = collections.namedtuple('Args', ['modules', 'preset'])
+    with pytest.raises(SystemExit) as e:
+        kleborate.__main__.get_used_module_names(Args(modules=None, preset='3'),
+                                                 all_module_names, presets)
+    assert '3 is not a valid preset' in str(e.value)
+
+
+def test_get_used_module_names_6():
+    all_module_names = ['a', 'b', 'c', 'd', 'e']
+    presets = {'1': ['a', 'b', 'c'], '2': ['c', 'd', 'e']}
+    Args = collections.namedtuple('Args', ['modules', 'preset'])
+    with pytest.raises(SystemExit) as e:
+        kleborate.__main__.get_used_module_names(Args(modules='a,b,f', preset=None),
+                                                 all_module_names, presets)
+    assert 'f is not a valid module name' in str(e.value)
+
+
+def test_get_used_module_names_7():
+    all_module_names = ['a', 'b', 'c', 'd', 'e']
+    presets = {'1': ['a', 'b', 'c'], '2': ['c', 'd', 'e']}
+    Args = collections.namedtuple('Args', ['modules', 'preset'])
+    with pytest.raises(SystemExit) as e:
+        kleborate.__main__.get_used_module_names(Args(modules=None, preset=None),
+                                                 all_module_names, presets)
+    assert 'either --preset or --modules is required' in str(e.value)
