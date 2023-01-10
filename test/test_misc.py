@@ -1,4 +1,10 @@
 """
+This file contains tests for Kleborate. To run all tests, go the repo's root directory and run:
+  python3 -m pytest
+
+To get code coverage stats:
+  coverage run --source . -m pytest && coverage report -m
+
 Copyright 2023 Kat Holt
 Copyright 2023 Ryan Wick (rrwick@gmail.com)
 https://github.com/katholt/Kleborate/
