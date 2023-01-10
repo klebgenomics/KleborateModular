@@ -33,8 +33,8 @@ def parse_arguments(args, all_module_names, modules):
                                   'in pathogen assemblies',
                       formatter_class=MyHelpFormatter, add_help=False, epilog=paper_refs())
 
-    if '--helpall' in sys.argv or '--allhelp' in sys.argv or '--all_help' in sys.argv:
-        sys.argv.append('--help_all')
+    if '--helpall' in args or '--allhelp' in args or '--all_help' in args:
+        args.append('--help_all')
 
     io_args = parser.add_argument_group('Input/output')
     io_args.add_argument('-a', '--assemblies', nargs='+', type=str, required=True,
@@ -48,7 +48,7 @@ def parse_arguments(args, all_module_names, modules):
     module_args.add_argument('-m', '--modules', type=str,
                              help='Comma-delimited list of Kleborate modules to use')
 
-    add_module_cli_arguments(parser, all_module_names, modules)
+    add_module_cli_arguments(parser, args, all_module_names, modules)
 
     help_args = parser.add_argument_group('Help')
     help_args.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS,
@@ -58,7 +58,7 @@ def parse_arguments(args, all_module_names, modules):
     help_args.add_argument('--version', action='version', version='Kleborate v' + __version__,
                            help="Show program's version number and exit")
 
-    if len(sys.argv) == 1:  # if no arguments were used
+    if not args:
         parser.print_help(file=sys.stderr)
         sys.exit(1)
 
@@ -93,7 +93,7 @@ def get_presets():
             'escherichia': ['contig_stats']}
 
 
-def add_module_cli_arguments(parser, all_module_names, modules):
+def add_module_cli_arguments(parser, args, all_module_names, modules):
     """
     This function add CLI argument for modules. Each modules that has options gets its own argument
     group. These are only displayed in the help text if the user used --help_all, otherwise they
@@ -101,7 +101,7 @@ def add_module_cli_arguments(parser, all_module_names, modules):
     """
     for m in all_module_names:
         group = modules[m].add_cli_options(parser)
-        if '--help_all' not in sys.argv and group is not None:
+        if '--help_all' not in args and group is not None:
             for a in group._group_actions:
                 a.help = argparse.SUPPRESS
 

@@ -119,19 +119,19 @@ def test_output_headers(capfd):
         assert open(out_file, 'rt').read() == 'header_a\theader_b\theader_c\n'
 
 
-def test_output_results_1(capfd):
+def test_output_results_1(capsys):
     full_headers = ['header_a', 'header_b', 'header_c']
     stdout_headers = ['header_a', 'header_b']
     results = {'header_a': 'result_a', 'header_b': 'result_b', 'header_c': 'result_c'}
     with tempfile.TemporaryDirectory() as tmp_dir:
         out_file = pathlib.Path(tmp_dir) / 'out.txt'
         kleborate.__main__.output_results(full_headers, stdout_headers, out_file, results)
-        out, err = capfd.readouterr()
+        out, err = capsys.readouterr()
         assert out == 'result_a\tresult_b\n'
         assert open(out_file, 'rt').read() == 'result_a\tresult_b\tresult_c\n'
 
 
-def test_output_results_2(capfd):
+def test_output_results_2():
     full_headers = ['header_a', 'header_b']
     stdout_headers = ['header_a']
     results = {'header_a': 'result_a', 'header_b': 'result_b', 'header_c': 'result_c'}
@@ -222,3 +222,53 @@ def test_paper_refs():
     assert 'Lam MMC, et al.' in papers
     assert 'Wyres KL, et al.' in papers
     assert '\n\n' in papers
+
+
+def remove_formatting(text):
+    return re.sub('\033.*?m', '', text)
+
+
+def test_parse_arguments_1(capsys):
+    all_module_names, modules = kleborate.__main__.import_modules()
+    with pytest.raises(SystemExit):
+        kleborate.__main__.parse_arguments(['--help'], all_module_names, modules)
+    out, err = capsys.readouterr()
+    out = remove_formatting(out)
+    assert 'Kleborate:' in out
+    assert 'Input/output:' in out
+    assert 'klebsiella_species module:' not in out
+
+
+def test_parse_arguments_2(capsys):
+    all_module_names, modules = kleborate.__main__.import_modules()
+    with pytest.raises(SystemExit):
+        kleborate.__main__.parse_arguments(['--help_all'], all_module_names, modules)
+    out, err = capsys.readouterr()
+    out = remove_formatting(out)
+    print(out)
+    assert 'Kleborate:' in out
+    assert 'Input/output:' in out
+    assert 'klebsiella_species module:' in out
+
+
+def test_parse_arguments_3(capsys):
+    all_module_names, modules = kleborate.__main__.import_modules()
+    with pytest.raises(SystemExit):
+        kleborate.__main__.parse_arguments(['--helpall'], all_module_names, modules)
+    out, err = capsys.readouterr()
+    out = remove_formatting(out)
+    print(out)
+    assert 'Kleborate:' in out
+    assert 'Input/output:' in out
+    assert 'klebsiella_species module:' in out
+
+
+def test_parse_arguments_4(capsys):
+    all_module_names, modules = kleborate.__main__.import_modules()
+    with pytest.raises(SystemExit):
+        kleborate.__main__.parse_arguments([], all_module_names, modules)
+    out, err = capsys.readouterr()
+    err = remove_formatting(err)
+    assert 'Kleborate:' in err
+    assert 'Input/output:' in err
+    assert 'klebsiella_species module:' not in err
