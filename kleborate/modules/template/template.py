@@ -15,8 +15,8 @@ details. You should have received a copy of the GNU General Public License along
 not, see <https://www.gnu.org/licenses/>.
 """
 
-import distutils.spawn
 import os
+import shutil
 import sys
 
 
@@ -35,8 +35,6 @@ def get_headers():
     """
     full_headers = ['header_a', 'header_b', 'header_c']
     stdout_headers = ['header_a']
-
-    assert all(h in full_headers for h in stdout_headers)
     return full_headers, stdout_headers
 
 
@@ -73,9 +71,9 @@ def check_external_programs():
     found, this function should quit the program with an error message. If no external programs are
     needed, this function can do nothing (just a single pass statement).
     """
-    if not distutils.spawn.find_executable('mash'):
+    if not shutil.which('mash'):
         sys.exit('Error: could not find mash')
-    if not distutils.spawn.find_executable('minimap2'):
+    if not shutil.which('minimap2'):
         sys.exit('Error: could not find minimap2')
 
 
