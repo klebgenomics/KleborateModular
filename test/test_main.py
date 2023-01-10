@@ -99,3 +99,37 @@ def test_gunzip_assembly_if_necessary_2():
     with tempfile.TemporaryDirectory() as tmp_dir:
         assembly = 'test/test_main/test.fasta.gz'
         assert kleborate.__main__.gunzip_assembly_if_necessary(assembly, tmp_dir) != assembly
+
+
+def test_output_headers(capfd):
+    full_headers = ['header_a', 'header_b', 'header_c']
+    stdout_headers = ['header_a', 'header_b']
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        out_file = pathlib.Path(tmp_dir) / 'out.txt'
+        kleborate.__main__.output_headers(full_headers, stdout_headers, out_file)
+        out, err = capfd.readouterr()
+        assert out == 'header_a\theader_b\n'
+        assert open(out_file, 'rt').read() == 'header_a\theader_b\theader_c\n'
+
+
+def test_output_results_1(capfd):
+    full_headers = ['header_a', 'header_b', 'header_c']
+    stdout_headers = ['header_a', 'header_b']
+    results = {'header_a': 'result_a', 'header_b': 'result_b', 'header_c': 'result_c'}
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        out_file = pathlib.Path(tmp_dir) / 'out.txt'
+        kleborate.__main__.output_results(full_headers, stdout_headers, out_file, results)
+        out, err = capfd.readouterr()
+        assert out == 'result_a\tresult_b\n'
+        assert open(out_file, 'rt').read() == 'result_a\tresult_b\tresult_c\n'
+
+
+def test_output_results_2(capfd):
+    full_headers = ['header_a', 'header_b']
+    stdout_headers = ['header_a']
+    results = {'header_a': 'result_a', 'header_b': 'result_b', 'header_c': 'result_c'}
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        out_file = pathlib.Path(tmp_dir) / 'out.txt'
+        with pytest.raises(SystemExit) as e:
+            kleborate.__main__.output_results(full_headers, stdout_headers, out_file, results)
+        assert 'not covered by the output headers' in str(e.value)
