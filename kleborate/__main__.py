@@ -19,6 +19,7 @@ import os
 import pathlib
 import sys
 import tempfile
+import uuid
 
 from .help_formatter import MyParser, MyHelpFormatter
 from .misc import get_compression_type, load_fasta
@@ -82,14 +83,14 @@ def main():
     all_module_names, modules = import_modules()
     args = parse_arguments(all_module_names, modules)
     module_names = get_modules(args, all_module_names)
-    check_assembles(args)
+    check_assemblies(args)
 
     full_headers, stdout_headers = get_headers(module_names, modules)
     output_headers(full_headers, stdout_headers, args.outfile)
 
     for assembly in args.assemblies:
         with tempfile.TemporaryDirectory() as tmp_dir:
-            unzipped_assembly = gunzip_contigs_if_necessary(assembly, tmp_dir)
+            unzipped_assembly = gunzip_assembly_if_necessary(assembly, tmp_dir)
             results = {'assembly': assembly}
             for m in module_names:
                 results.update(modules[m].get_results(unzipped_assembly))
@@ -142,7 +143,7 @@ def import_modules():
     return module_names, modules
 
 
-def check_assembles(args):
+def check_assemblies(args):
     for assembly in args.assemblies:
         if os.path.isdir(assembly):
             sys.exit('Error: ' + assembly + ' is a directory (please specify assembly files)')
@@ -151,9 +152,7 @@ def check_assembles(args):
         fasta = load_fasta(assembly)
         if len(fasta) < 1:
             sys.exit('Error: invalid FASTA file: ' + assembly)
-        for header, seq in fasta:
-            if len(header) == 0:
-                sys.exit('Error: invalid FASTA file (contains a zero-length header): ' + assembly)
+        for _, seq in fasta:
             if len(seq) == 0:
                 sys.exit('Error: invalid FASTA file (contains a zero-length sequence): ' + assembly)
 
@@ -175,13 +174,13 @@ def get_headers(module_names, modules):
     return full_headers, stdout_headers
 
 
-def gunzip_contigs_if_necessary(contigs, temp_dir):
-    if get_compression_type(contigs) == 'gz':
-        new_contigs = str(temp_dir) + '/' + get_strain_name(contigs) + '.fasta'
-        decompress_file(contigs, new_contigs)
-        return new_contigs
+def gunzip_assembly_if_necessary(assembly, temp_dir):
+    if get_compression_type(assembly) == 'gz':
+        unzipped_assembly = str(temp_dir) + '/' + uuid.uuid4().hex + '.fasta'
+        decompress_file(assembly, unzipped_assembly)
+        return unzipped_assembly
     else:
-        return contigs
+        return assembly
 
 
 def decompress_file(in_file, out_file):
@@ -208,15 +207,6 @@ def output_results(full_headers, stdout_headers, outfile, results):
         if h not in full_headers:
             sys.exit(f'Error: results contained a value ({h}) that is not covered by the output '
                      f'headers')
-
-
-def get_strain_name(full_path):
-    filename = os.path.split(full_path)[1]
-    if filename.endswith('_temp_decompress.fasta'):
-        filename = filename[:-22]
-    if filename.endswith('.gz'):
-        filename = filename[:-3]
-    return os.path.splitext(filename)[0]
 
 
 if __name__ == '__main__':
