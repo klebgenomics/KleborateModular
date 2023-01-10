@@ -43,6 +43,7 @@ def test_get_results():
     assert results['header_a'] == 'result_a'
     assert results['header_b'] == 'result_b'
     assert results['header_c'] == 'result_c'
+    assert sorted(results.keys()) == sorted(get_headers()[0])
 
 
 def test_check_cli_options_1():

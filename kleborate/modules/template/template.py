@@ -83,7 +83,4 @@ def get_results(assembly, args):
     of results, where the module's headers are the keys and the values are the corresponding
     results in string format.
     """
-    results = {'header_a': 'result_a', 'header_b': 'result_b', 'header_c': 'result_c'}
-
-    assert sorted(results.keys()) == sorted(get_headers()[0])
-    return results
+    return {'header_a': 'result_a', 'header_b': 'result_b', 'header_c': 'result_c'}

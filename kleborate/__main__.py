@@ -28,14 +28,13 @@ from .misc import get_compression_type, load_fasta
 from .version import __version__
 
 
-def parse_arguments(all_module_names, modules):
+def parse_arguments(args, all_module_names, modules):
     parser = MyParser(description='Kleborate: a tool for characterising virulence and resistance '
                                   'in pathogen assemblies',
                       formatter_class=MyHelpFormatter, add_help=False, epilog=paper_refs())
 
     if '--helpall' in sys.argv or '--allhelp' in sys.argv or '--all_help' in sys.argv:
         sys.argv.append('--help_all')
-    show_all_args = '--help_all' in sys.argv
 
     io_args = parser.add_argument_group('Input/output')
     io_args.add_argument('-a', '--assemblies', nargs='+', type=str, required=True,
@@ -49,11 +48,7 @@ def parse_arguments(all_module_names, modules):
     module_args.add_argument('-m', '--modules', type=str,
                              help='Comma-delimited list of Kleborate modules to use')
 
-    for m in all_module_names:
-        group = modules[m].add_cli_options(parser)
-        if not show_all_args and group is not None:  # no template help unless --help_all was used
-            for a in group._group_actions:
-                a.help = argparse.SUPPRESS
+    add_module_cli_arguments(parser, all_module_names, modules)
 
     help_args = parser.add_argument_group('Help')
     help_args.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS,
@@ -63,19 +58,16 @@ def parse_arguments(all_module_names, modules):
     help_args.add_argument('--version', action='version', version='Kleborate v' + __version__,
                            help="Show program's version number and exit")
 
-    # If no arguments were used, print the entire help (argparse default is to just give an error
-    # like '-a is required').
-    if len(sys.argv) == 1:
+    if len(sys.argv) == 1:  # if no arguments were used
         parser.print_help(file=sys.stderr)
         sys.exit(1)
 
-    args = parser.parse_args()
-    return args
+    return parser.parse_args(args)
 
 
 def main():
     all_module_names, modules = import_modules()
-    args = parse_arguments(all_module_names, modules)
+    args = parse_arguments(sys.argv[1:], all_module_names, modules)
     module_names = get_used_module_names(args, all_module_names, get_presets())
     check_modules(args, modules, module_names)
     check_assemblies(args)
@@ -99,6 +91,19 @@ def get_presets():
     """
     return {'klebsiella': ['contig_stats', 'klebsiella_species'],
             'escherichia': ['contig_stats']}
+
+
+def add_module_cli_arguments(parser, all_module_names, modules):
+    """
+    This function add CLI argument for modules. Each modules that has options gets its own argument
+    group. These are only displayed in the help text if the user used --help_all, otherwise they
+    are hidden.
+    """
+    for m in all_module_names:
+        group = modules[m].add_cli_options(parser)
+        if '--help_all' not in sys.argv and group is not None:
+            for a in group._group_actions:
+                a.help = argparse.SUPPRESS
 
 
 def get_used_module_names(args, all_module_names, presets):
