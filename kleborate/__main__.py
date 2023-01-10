@@ -93,7 +93,7 @@ def main():
             unzipped_assembly = gunzip_assembly_if_necessary(assembly, tmp_dir)
             results = {'assembly': assembly}
             for m in module_names:
-                results.update(modules[m].get_results(unzipped_assembly))
+                results.update(modules[m].get_results(unzipped_assembly, args))
             output_results(full_headers, stdout_headers, args.outfile, results)
 
 

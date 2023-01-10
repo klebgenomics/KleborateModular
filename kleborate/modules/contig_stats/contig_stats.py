@@ -16,13 +16,14 @@ not, see <https://www.gnu.org/licenses/>.
 """
 
 import collections
+
 from ...misc import load_fasta
 
 
 def get_headers():
-    full_headers = ['contig_count', 'N50', 'largest_contig', 'total_size', 'ambiguous_bases',
-                    'QC_warnings']
-    stdout_headers = ['N50']
+    full_headers = ['contig_count', 'n50', 'largest_contig', 'total_size', 'ambiguous_bases',
+                    'qc_warnings']
+    stdout_headers = ['n50']
     return full_headers, stdout_headers
 
 
@@ -38,15 +39,15 @@ def check_external_programs():
     pass
 
 
-def get_results(assembly):
+def get_results(assembly, args):
     contig_count, n50, longest_contig, total_size, ambiguous_bases = get_contig_stats(assembly)
     qc_warnings = get_qc_warnings(n50, ambiguous_bases)
     return {'contig_count': str(contig_count),
-            'N50': str(n50),
+            'n50': str(n50),
             'largest_contig': str(longest_contig),
             'total_size': str(total_size),
             'ambiguous_bases': ambiguous_bases,
-            'QC_warnings': qc_warnings}
+            'qc_warnings': qc_warnings}
 
 
 def get_contig_stats(assembly):

@@ -77,7 +77,7 @@ def check_external_programs():
         sys.exit('Error: could not find minimap2')
 
 
-def get_results(assembly):
+def get_results(assembly, args):
     """
     This function carries out the module's analysis on a single assembly. It returns a dictionary
     of results, where the module's headers are the keys and the values are the corresponding

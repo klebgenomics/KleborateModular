@@ -39,7 +39,7 @@ def test_get_headers():
 
 def test_get_results():
     # Final results are all in string format.
-    results = get_results(get_file_dir() / 'test_file')
+    results = get_results(get_file_dir() / 'test_file', None)
     assert results['header_a'] == 'result_a'
     assert results['header_b'] == 'result_b'
     assert results['header_c'] == 'result_c'
