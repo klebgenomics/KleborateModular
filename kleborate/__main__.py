@@ -23,8 +23,8 @@ import tempfile
 import textwrap
 import uuid
 
-from .help_formatter import MyParser, MyHelpFormatter
-from .misc import get_compression_type, load_fasta
+from .shared.help_formatter import MyParser, MyHelpFormatter
+from .shared.misc import get_compression_type, load_fasta
 from .version import __version__
 
 

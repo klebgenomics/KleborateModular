@@ -20,22 +20,21 @@ not, see <https://www.gnu.org/licenses/>.
 
 import pytest
 
-import kleborate.alignment
+from kleborate.shared.alignment import *
 
 
 def test_bad_paf():
     with pytest.raises(SystemExit) as e:
-        kleborate.alignment.Alignment('not_a_paf_line')
+        Alignment('not_a_paf_line')
     assert 'PAF format' in str(e.value)
 
 
 def test_repr():
-    a = kleborate.alignment.Alignment('A\t1000\t50\t150\t+\t'
-                                      'C\t1000\t60\t160\t100\t100\tAS:i:100\tcg:Z:100=')
+    a = Alignment('A\t1000\t50\t150\t+\tC\t1000\t60\t160\t100\t100\tAS:i:100\tcg:Z:100=')
     assert str(a) == 'A:50-150(+), C:60-160 (100.000%)'
 
 
 def test_get_expanded_cigar():
-    assert kleborate.alignment.get_expanded_cigar('5=') == '====='
-    assert kleborate.alignment.get_expanded_cigar('3=1I4=2D2=1X4=') == '===I====DD==X===='
-    assert kleborate.alignment.get_expanded_cigar('') == ''
+    assert get_expanded_cigar('5=') == '====='
+    assert get_expanded_cigar('3=1I4=2D2=1X4=') == '===I====DD==X===='
+    assert get_expanded_cigar('') == ''

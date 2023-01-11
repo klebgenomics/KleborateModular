@@ -17,7 +17,7 @@ not, see <https://www.gnu.org/licenses/>.
 
 import collections
 
-from ...misc import load_fasta
+from ...shared.misc import load_fasta
 
 
 def get_headers():
