@@ -29,6 +29,10 @@ from .version import __version__
 
 
 def parse_arguments(args, all_module_names, modules):
+    """
+    This function does the CLI argument parsing for Kleborate. Module-specific arguments are added
+    by each module's add_cli_options function.
+    """
     parser = MyParser(description='Kleborate: a tool for characterising virulence and resistance '
                                   'in pathogen assemblies',
                       formatter_class=MyHelpFormatter, add_help=False, epilog=paper_refs())
@@ -66,6 +70,9 @@ def parse_arguments(args, all_module_names, modules):
 
 
 def main():
+    """
+    Kleborate's main function - execution starts here!
+    """
     all_module_names, modules = import_modules()
     args = parse_arguments(sys.argv[1:], all_module_names, modules)
     module_names = get_used_module_names(args, all_module_names, get_presets())
@@ -86,8 +93,8 @@ def main():
 
 def get_presets():
     """
-    This function defines the module presets. The keys are the valid choices for the --preset
-    option, and the values are a list of modules for the preset.
+    This function defines the module presets as a dictionary. The keys are the valid choices for
+    the --preset option, and the values are a list of modules for the preset.
     """
     return {'klebsiella': ['contig_stats', 'klebsiella_species'],
             'escherichia': ['contig_stats']}
@@ -132,9 +139,9 @@ def get_all_module_names():
     """
     Looks for all Kleborate modules and returns their names. To qualify as a module, it must be in
     the 'modules' directory, in a subdirectory that matches the filename. For example:
-    * modules/contig_stats/contig_stats.py  <- is a module
-    * modules/kpsc_mlst/kpsc_mlst.py  <- is a module
-    * modules/contig_stats/test.py  <- not a module
+    * modules/contig_stats/contig_stats.py       <- is a module
+    * modules/kpsc_mlst/kpsc_mlst.py             <- is a module
+    * modules/contig_stats/test_contig_stats.py  <- not a module
     """
     module_dir = pathlib.Path(__file__).parents[0] / 'modules'
     module_names = []
@@ -149,7 +156,7 @@ def get_all_module_names():
 
 def import_modules():
     """
-    This function imports all modules (whether or not they are used in this run of Kleborate).
+    This function imports all Kleborate modules (whether or not they are used in this run).
     """
     all_module_names = get_all_module_names()
     modules = {}
@@ -160,7 +167,8 @@ def import_modules():
 
 def check_modules(args, modules, module_names):
     """
-    This function checks the options and external requirements of the used modules.
+    This function checks the options and external requirements of the used modules. If any fail,
+    the program will quit with an error.
     """
     for m in module_names:
         modules[m].check_cli_options(args)
@@ -237,6 +245,9 @@ def output_results(full_headers, stdout_headers, outfile, results):
 
 
 def paper_refs():
+    """
+    This function prepares the references for the program's help text, with clean line wrapping.
+    """
     terminal_width = shutil.get_terminal_size().columns
     text = 'If you use Kleborate, please cite the paper:\n' \
            'Lam MMC, et al. A genomic surveillance framework and genotyping tool for Klebsiella ' \
