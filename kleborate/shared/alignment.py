@@ -62,6 +62,13 @@ class Alignment(object):
                self.target_name + ':' + str(self.target_start) + '-' + str(self.target_end) + \
                ' (' + ('%.3f' % self.percent_identity) + '%)'
 
+    def is_exact(self):
+        """
+        Returns True if the alignment covers the entire query with perfect identity.
+        """
+        return (self.matching_bases == self.num_bases and  # 100% identity
+                self.query_end - self.query_start == self.query_length)  # 100% coverage
+
 
 def align_a_to_b(filename_a, filename_b, preset='asm20'):
     """

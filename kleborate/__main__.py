@@ -96,7 +96,7 @@ def get_presets():
     This function defines the module presets as a dictionary. The keys are the valid choices for
     the --preset option, and the values are a list of modules for the preset.
     """
-    return {'klebsiella': ['contig_stats', 'klebsiella_species'],
+    return {'kpsc': ['contig_stats', 'klebsiella_species', 'kpsc_mlst'],
             'escherichia': ['contig_stats']}
 
 
