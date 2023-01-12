@@ -40,7 +40,10 @@ def test_get_all_module_names():
 
 def test_get_headers():
     _, modules = kleborate.__main__.import_modules()
-    full_headers, stdout_headers = kleborate.__main__.get_headers(['contig_stats'], modules)
+    top_headers, full_headers, stdout_headers = \
+        kleborate.__main__.get_headers(['contig_stats'], modules)
+    assert top_headers[0] == ''
+    assert top_headers[1] == 'contig_stats'
     assert full_headers[0] == 'assembly'
     assert stdout_headers[0] == 'assembly'
     assert all(h in full_headers for h in stdout_headers)
@@ -109,14 +112,15 @@ def test_gunzip_assembly_if_necessary_2():
 
 
 def test_output_headers(capfd):
+    top_headers = ['module', '', '']
     full_headers = ['header_a', 'header_b', 'header_c']
     stdout_headers = ['header_a', 'header_b']
     with tempfile.TemporaryDirectory() as tmp_dir:
         out_file = pathlib.Path(tmp_dir) / 'out.txt'
-        kleborate.__main__.output_headers(full_headers, stdout_headers, out_file)
+        kleborate.__main__.output_headers(top_headers, full_headers, stdout_headers, out_file)
         out, err = capfd.readouterr()
         assert out == 'header_a\theader_b\n'
-        assert open(out_file, 'rt').read() == 'header_a\theader_b\theader_c\n'
+        assert open(out_file, 'rt').read() == 'module\t\t\nheader_a\theader_b\theader_c\n'
 
 
 def test_output_results_1(capsys):

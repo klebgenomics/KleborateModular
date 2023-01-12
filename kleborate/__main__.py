@@ -79,8 +79,8 @@ def main():
     check_modules(args, modules, module_names)
     check_assemblies(args)
 
-    full_headers, stdout_headers = get_headers(module_names, modules)
-    output_headers(full_headers, stdout_headers, args.outfile)
+    top_headers, full_headers, stdout_headers = get_headers(module_names, modules)
+    output_headers(top_headers, full_headers, stdout_headers, args.outfile)
 
     for assembly in args.assemblies:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -97,6 +97,7 @@ def get_presets():
     the --preset option, and the values are a list of modules for the preset.
     """
     return {'kpsc': ['contig_stats', 'klebsiella_species', 'kpsc_mlst'],
+            'kosc': ['contig_stats', 'klebsiella_species', 'kosc_mlst'],
             'escherichia': ['contig_stats']}
 
 
@@ -194,19 +195,20 @@ def check_assemblies(args):
 
 def get_headers(module_names, modules):
     """
-    This function returns two lists of headers:
-    * full_headers: will be used in Kleborate's output file.
-    * stdout_headers: will be displayed in Kleborate's stdout
+    This function returns three lists of headers:
+    * top_headers: for Kleborate's output file, shows module names
+    * full_headers: for Kleborate's output file, show column names
+    * stdout_headers: for Kleborate's stdout
     Each used module contributes headers to these lists.
     """
-    full_headers, stdout_headers = ['assembly'], ['assembly']
-    for m in module_names:
-        module_full, module_stdout = modules[m].get_headers()
+    top_headers, full_headers, stdout_headers = [''], ['assembly'], ['assembly']
+    for module_name in module_names:
+        module_full, module_stdout = modules[module_name].get_headers()
+        top_headers.append(module_name)
+        top_headers += [''] * (len(module_full) - 1)
         full_headers += module_full
         stdout_headers += module_stdout
-        assert len(full_headers) == len(set(full_headers))  # duplicates not allowed
-        assert len(stdout_headers) == len(set(stdout_headers))  # duplicates not allowed
-    return full_headers, stdout_headers
+    return top_headers, full_headers, stdout_headers
 
 
 def gunzip_assembly_if_necessary(assembly, temp_dir):
@@ -224,9 +226,11 @@ def decompress_file(in_file, out_file):
         o.write(s)
 
 
-def output_headers(full_headers, stdout_headers, outfile):
+def output_headers(top_headers, full_headers, stdout_headers, outfile):
     print('\t'.join(stdout_headers))
     with open(outfile, 'wt') as o:
+        o.write('\t'.join(top_headers))
+        o.write('\n')
         o.write('\t'.join(full_headers))
         o.write('\n')
 

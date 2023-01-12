@@ -23,8 +23,8 @@ import sys
 
 
 def get_headers():
-    full_headers = ['klebsiella_species', 'klebsiella_species_match']
-    stdout_headers = ['klebsiella_species']
+    full_headers = ['species', 'species_match']
+    stdout_headers = ['species']
     return full_headers, stdout_headers
 
 
@@ -70,8 +70,8 @@ def get_results(assembly, args):
     else:
         species = 'unknown'
         species_hit_strength = ''
-    return {'klebsiella_species': species,
-            'klebsiella_species_match': species_hit_strength}
+    return {'species': species,
+            'species_match': species_hit_strength}
 
 
 def get_klebsiella_species(assembly, sketch_file):

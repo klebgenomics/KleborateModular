@@ -84,24 +84,24 @@ def test_get_results_1():
     Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
     results = get_results(get_test_genome_dir() / 'GCF_000016305.1.fna.gz',
                           Args(klebsiella_species_strong=0.01, klebsiella_species_weak=0.04))
-    assert results['klebsiella_species'] == 'Klebsiella pneumoniae'
-    assert results['klebsiella_species_match'] == 'strong'
+    assert results['species'] == 'Klebsiella pneumoniae'
+    assert results['species_match'] == 'strong'
 
 
 def test_get_results_2():
     Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
     results = get_results(get_test_genome_dir() / 'GCF_000016305.1.fna.gz',
                           Args(klebsiella_species_strong=0.001, klebsiella_species_weak=0.004))
-    assert results['klebsiella_species'] == 'Klebsiella pneumoniae'
-    assert results['klebsiella_species_match'] == 'weak'
+    assert results['species'] == 'Klebsiella pneumoniae'
+    assert results['species_match'] == 'weak'
 
 
 def test_get_results_3():
     Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
     results = get_results(get_test_genome_dir() / 'GCF_000016305.1.fna.gz',
                           Args(klebsiella_species_strong=0.0001, klebsiella_species_weak=0.0004))
-    assert results['klebsiella_species'] == 'unknown'
-    assert results['klebsiella_species_match'] == ''
+    assert results['species'] == 'unknown'
+    assert results['species_match'] == ''
 
 
 def test_klebsiella_aerogenes():
