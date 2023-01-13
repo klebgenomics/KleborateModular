@@ -100,7 +100,7 @@ def get_presets():
     """
     return {'kpsc': ['contig_stats', 'klebsiella_species', 'kpsc_mlst'],
             'kosc': ['contig_stats', 'klebsiella_species', 'kosc_mlst'],
-            'escherichia': ['contig_stats']}
+            'escherichia': ['contig_stats', 'escherichia_mlst_achtman', 'escherichia_mlst_pasteur']}
 
 
 def add_module_cli_arguments(parser, args, all_module_names, modules):
@@ -154,7 +154,7 @@ def get_all_module_names():
             module_names.append(dir_name)
     if 'template' in module_names:
         module_names.remove('template')
-    return module_names
+    return sorted(module_names)
 
 
 def import_modules():
