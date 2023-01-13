@@ -86,8 +86,10 @@ def main():
         with tempfile.TemporaryDirectory() as tmp_dir:
             unzipped_assembly = gunzip_assembly_if_necessary(assembly, tmp_dir)
             results = {'assembly': assembly}
-            for m in module_names:
-                results.update(modules[m].get_results(unzipped_assembly, args))
+            for module in module_names:
+                module_results = modules[module].get_results(unzipped_assembly, args)
+                results.update({f'{module}__{header}': result
+                                for header, result in module_results.items()})
             output_results(full_headers, stdout_headers, args.outfile, results)
 
 
@@ -117,7 +119,7 @@ def add_module_cli_arguments(parser, args, all_module_names, modules):
 def get_used_module_names(args, all_module_names, presets):
     """
     Returns a list of the modules names used in this run of Kleborate. The user can select modules
-    using --preset (pre-selected modules for a taxon), --modules (listing every module) or both
+    using --preset (pre-selected group of modules), --modules (listing individual modules) or both
     (preset modules plus additional user-selected modules).
     """
     if args.preset is None and args.modules is None:
@@ -199,15 +201,18 @@ def get_headers(module_names, modules):
     * top_headers: for Kleborate's output file, shows module names
     * full_headers: for Kleborate's output file, show column names
     * stdout_headers: for Kleborate's stdout
-    Each used module contributes headers to these lists.
+
+    Each used module contributes headers to these lists. To ensure that there aren't any duplicate
+    headers, the module name is added before each header in full_headers and stdout_header,
+    separated by a double-underscore.
     """
     top_headers, full_headers, stdout_headers = [''], ['assembly'], ['assembly']
     for module_name in module_names:
         module_full, module_stdout = modules[module_name].get_headers()
         top_headers.append(module_name)
         top_headers += [''] * (len(module_full) - 1)
-        full_headers += module_full
-        stdout_headers += module_stdout
+        full_headers += [f'{module_name}__{h}' for h in module_full]
+        stdout_headers += [f'{module_name}__{h}' for h in module_stdout]
     return top_headers, full_headers, stdout_headers
 
 
@@ -227,11 +232,17 @@ def decompress_file(in_file, out_file):
 
 
 def output_headers(top_headers, full_headers, stdout_headers, outfile):
-    print('\t'.join(stdout_headers))
+    """
+    This function prints headers to stdout and writes headers to the output file. Module names are
+    trimmed off to make the headers shorter and easier to read.
+    """
+    trimmed_stdout_headers = [h.split('__')[-1] for h in stdout_headers]
+    trimmed_full_headers = [h.split('__')[-1] for h in full_headers]
+    print('\t'.join(trimmed_stdout_headers))
     with open(outfile, 'wt') as o:
         o.write('\t'.join(top_headers))
         o.write('\n')
-        o.write('\t'.join(full_headers))
+        o.write('\t'.join(trimmed_full_headers))
         o.write('\n')
 
 
