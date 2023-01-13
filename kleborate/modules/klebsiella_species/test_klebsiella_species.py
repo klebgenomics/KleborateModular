@@ -32,12 +32,6 @@ def get_sketch_file():
     return pathlib.Path(__file__).parents[0] / 'data' / 'species_mash_sketches.msh'
 
 
-def test_get_headers():
-    # stdout_headers must be a subset of full_headers.
-    full_headers, stdout_headers = get_headers()
-    assert all(h in full_headers for h in stdout_headers)
-
-
 def test_check_cli_options_1():
     Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
     check_cli_options(Args(klebsiella_species_strong=0.01, klebsiella_species_weak=0.05))
@@ -183,7 +177,7 @@ def test_klebsiella_variicola_subsp_tropica():
 
 
 def test_klebsiella_africana():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'ERR2835900.fna.gz',
+    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_016804125.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella africana'
 

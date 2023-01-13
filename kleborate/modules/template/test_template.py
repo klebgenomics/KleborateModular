@@ -31,12 +31,6 @@ def get_file_dir():
     return pathlib.Path(__file__).parents[0] / 'test_files'
 
 
-def test_get_headers():
-    # stdout_headers must be a subset of full_headers.
-    full_headers, stdout_headers = get_headers()
-    assert all(h in full_headers for h in stdout_headers)
-
-
 def test_get_results():
     # Final results are all in string format.
     results = get_results(get_file_dir() / 'test_file', None)

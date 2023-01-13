@@ -19,7 +19,6 @@ not, see <https://www.gnu.org/licenses/>.
 """
 
 import collections
-import pathlib
 import pytest
 
 from .kpsc_mlst import *
@@ -27,12 +26,6 @@ from .kpsc_mlst import *
 
 def get_test_genome_dir():
     return pathlib.Path(__file__).parents[3] / 'test' / 'test_genomes'
-
-
-def test_get_headers():
-    # stdout_headers must be a subset of full_headers.
-    full_headers, stdout_headers = get_headers()
-    assert all(h in full_headers for h in stdout_headers)
 
 
 def test_check_cli_options_1():
@@ -107,7 +100,7 @@ def test_get_results_1():
     results = get_results(get_test_genome_dir() / 'GCF_000968155.1.fna.gz',
                           Args(kpsc_mlst_min_identity=90.0, kpsc_mlst_min_coverage=80.0,
                                kpsc_mlst_required_exact_matches=3))
-    assert results['klebsiella_st'] == 'ST66'
+    assert results['st'] == 'ST66'
     assert results['gapA'] == '2'
     assert results['infB'] == '3'
     assert results['mdh'] == '2'
@@ -123,7 +116,7 @@ def test_get_results_2():
     results = get_results(get_test_genome_dir() / 'GCF_001068035.1.fna.gz',
                           Args(kpsc_mlst_min_identity=90.0, kpsc_mlst_min_coverage=80.0,
                                kpsc_mlst_required_exact_matches=3))
-    assert results['klebsiella_st'] == 'ST592-1LV'
+    assert results['st'] == 'ST592-1LV'
     assert results['gapA'] == '2'
     assert results['infB'] == '3'
     assert results['mdh'] == '6'
@@ -131,3 +124,13 @@ def test_get_results_2():
     assert results['phoE'] == '9'
     assert results['rpoB'] == '4'
     assert results['tonB'] == '13'
+
+
+def test_get_results_3():
+    # Tests a Klebsiella oxytoca using the KpSC scheme, so no ST should be assigned.
+    Args = collections.namedtuple('Args', ['kpsc_mlst_min_identity', 'kpsc_mlst_min_coverage',
+                                           'kpsc_mlst_required_exact_matches'])
+    results = get_results(get_test_genome_dir() / 'GCF_000247855.1.fna.gz',
+                          Args(kpsc_mlst_min_identity=90.0, kpsc_mlst_min_coverage=80.0,
+                               kpsc_mlst_required_exact_matches=3))
+    assert results['st'] == 'NA'

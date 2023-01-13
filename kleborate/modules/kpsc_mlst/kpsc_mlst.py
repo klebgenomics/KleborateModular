@@ -24,8 +24,8 @@ from ...shared.mlst import mlst
 
 
 def get_headers():
-    full_headers = ['klebsiella_st', 'gapA', 'infB', 'mdh', 'pgi', 'phoE', 'rpoB', 'tonB']
-    stdout_headers = ['klebsiella_st']
+    full_headers = ['st', 'gapA', 'infB', 'mdh', 'pgi', 'phoE', 'rpoB', 'tonB']
+    stdout_headers = ['st']
     return full_headers, stdout_headers
 
 
@@ -64,10 +64,10 @@ def get_results(assembly, args):
     profiles = data_dir() / 'profiles.tsv'
     alleles = {gene: data_dir() / f'{gene}.fasta' for gene in genes}
 
-    st, alleles = mlst(assembly, profiles, alleles, args.kpsc_mlst_min_identity,
-                       args.kpsc_mlst_min_coverage, args.kpsc_mlst_required_exact_matches)
+    st, _, alleles = mlst(assembly, profiles, alleles, genes, None, args.kpsc_mlst_min_identity,
+                          args.kpsc_mlst_min_coverage, args.kpsc_mlst_required_exact_matches)
 
-    return {'klebsiella_st': st,
+    return {'st': st,
             'gapA': alleles['gapA'], 'infB': alleles['infB'], 'mdh': alleles['mdh'],
             'pgi': alleles['pgi'], 'phoE': alleles['phoE'], 'rpoB': alleles['rpoB'],
             'tonB': alleles['tonB']}

@@ -1,4 +1,7 @@
 """
+This file contains code for standard assigning a standard MLST scheme (e.g. 7-gene Klebsiella
+pneumoniae ST) to an assembly.
+
 Copyright 2023 Kat Holt
 Copyright 2023 Ryan Wick (rrwick@gmail.com)
 https://github.com/katholt/Kleborate/
@@ -17,30 +20,32 @@ import re
 from .alignment import align_a_to_b
 
 
-def mlst(assembly_path, profiles_path, allele_paths, min_identity, min_coverage,
-         required_exact_matches):
+def mlst(assembly_path, profiles_path, allele_paths, gene_names, extra_info, min_identity,
+         min_coverage, required_exact_matches):
     """
     This function takes:
     * assembly_path: a path for an assembly in FASTA format
     * profiles_path: a path for the MLST profiles file in TSV format
     * allele_paths: a dictionary {gene name: path for the allele FASTA file}
+    * gene_names: a list of the gene names in the MLST scheme
+    * extra_info: the name of an additional extra-info column in the MLST scheme (or None)
     * min_identity: hits with a lower percent identity than this are discarded
     * min_coverage: hits with a lower percent coverage than this are discarded
-    * required_exact_matches: at least this many alleles in the ST must be an exact match for this
-                              function to assign an ST
+    * required_exact_matches: at least this many alleles must be an exact match to assign an ST
 
     This function returns:
     * the best matching ST profile (e.g. 'ST123', 'ST456-1LV' or 'NA')
-    * a dictionary of allele numbers {gene name: allele number}
+    * the extra-info value for the best ST (if used, otherwise an empty string)
+    * a dictionary of allele numbers in str format {gene name: allele number}
     """
-    profiles, gene_names = load_st_profiles(profiles_path)
+    profiles = load_st_profiles(profiles_path, gene_names, extra_info)
     best_hits_per_gene = get_best_hits_per_gene(gene_names, allele_paths, assembly_path,
                                                 min_identity, min_coverage)
-    best_st, best_st_alleles = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
-    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, best_st_alleles)
+    st, alleles, extra_info = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
+    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, alleles)
 
     exact_matches, lv_count, allele_numbers = 0, 0, {}
-    for gene_name, st_allele in zip(gene_names, best_st_alleles):
+    for gene_name, st_allele in zip(gene_names, alleles):
         hit = best_hit_per_gene[gene_name]
         hit_allele = number_from_hit(hit)
 
@@ -57,37 +62,47 @@ def mlst(assembly_path, profiles_path, allele_paths, min_identity, min_coverage,
             lv_count += 1
 
     if exact_matches < required_exact_matches:
-        best_st = 'NA'
+        st = 'NA'
     elif lv_count == 0:
-        best_st = 'ST' + str(best_st)
+        st = 'ST' + str(st)
     else:
-        best_st = 'ST' + str(best_st) + f'-{lv_count}LV'
+        st = 'ST' + str(st) + f'-{lv_count}LV'
 
-    return best_st, allele_numbers
+    return st, extra_info, allele_numbers
 
 
-def load_st_profiles(database_path):
+def load_st_profiles(database_path, gene_names, extra_info_name):
     """
     This function reads through a tab-delimited MLST database file where the first column is the ST
-    number and the subsequent columns are allele numbers. The first line of the file should be a
-    header ('ST' followed by gene names), and all other lines should only contain positive
-    integers.
+    number and the subsequent columns are allele numbers, with a final optional extra-info column.
+    The first line of the file should be a header: 'ST', followed by gene names, optionally
+    followed by the extra-info column name . All other lines should only contain positive integers
+    for the ST and gene columns, and the final optional column can contain anything.
 
-    This function returns:
-    * A list of ST profiles, where each value is a tuple: (ST number, list of allele numbers).
-    * A list of the gene names for this MLST scheme
+    This function returns a list of ST profiles, where each value is a tuple:
+    (ST number, list of allele numbers, extra info)
     """
-    profiles, gene_names = [], []
+    profiles, first_line = [], True
     with open(database_path, 'r') as f:
         for line in f:
             parts = line.rstrip('\n').split('\t')
-            if len(gene_names) == 0:
-                gene_names = parts[1:]
+            if first_line:
+                assert parts[0] == 'ST'
+                if extra_info_name is None:
+                    assert parts[1:] == gene_names
+                else:
+                    assert parts[1:] == gene_names + [extra_info_name]
+                first_line = False
             else:
                 st = int(parts[0])
-                alleles = [int(a) for a in parts[1:]]
-                profiles.append((st, alleles))
-    return profiles, gene_names
+                if extra_info_name is None:
+                    alleles = [int(a) for a in parts[1:]]
+                    extra_info = None
+                else:
+                    alleles = [int(a) for a in parts[1:-1]]
+                    extra_info = parts[-1]
+                profiles.append((st, alleles, extra_info))
+    return profiles
 
 
 def get_best_hits_per_gene(gene_names, allele_paths, assembly_path, min_identity, min_coverage):
@@ -140,22 +155,23 @@ def get_best_matching_profile(profiles, gene_names, best_hits_per_gene):
     """
     This function looks for an ST which best matches the hits. Each ST is scored based on the
     number of genes which have a matching hit (i.e. a hit with the same number). So the score for
-    any ST can be 0 to the number of genes in the scheme.
+    any ST can be 0 to the number of genes in the scheme. STs earlier in the profiles are
+    preferred, so if an assembly matches multiple STs equally well, this function will return
+    whichever is first in the profiles.
     """
-    best_st, best_st_alleles, best_matches = 0, [0] * len(gene_names), 0
-    for st, alleles in profiles:
+    best_st, best_extra_info, best_matches = 0, '', 0
+    best_alleles = [0] * len(gene_names)
+    for st, alleles, extra_info in profiles:
         matches = 0
         for gene_name, allele in zip(gene_names, alleles):
             if any(allele == number_from_hit(h) for h in best_hits_per_gene[gene_name]):
                 matches += 1
         if matches > best_matches:
-            best_st = st
-            best_st_alleles = alleles
-            best_matches = matches
-    return best_st, best_st_alleles
+            best_st, best_alleles, best_extra_info, best_matches = st, alleles, extra_info, matches
+    return best_st, best_alleles, best_extra_info
 
 
-def get_best_hit_per_gene(gene_names, best_hits_per_gene, st_alleles):
+def get_best_hit_per_gene(gene_names, best_hits_per_gene, alleles):
     """
     This function takes the best_hits_per_gene dict, and for any genes that have multiple hits, it
     chooses a single hit. Which hit is chosen is first based on the ST call, i.e. if one of the
@@ -163,9 +179,9 @@ def get_best_hit_per_gene(gene_names, best_hits_per_gene, st_alleles):
     lowest allele number is chosen.
     """
     best_hit_per_gene = {}
-    for gene_name, st_allele in zip(gene_names, st_alleles):
+    for gene_name, allele in zip(gene_names, alleles):
         best_hits = best_hits_per_gene[gene_name]
-        hits_matching_st = [h for h in best_hits if number_from_hit(h) == st_allele]
+        hits_matching_st = [h for h in best_hits if number_from_hit(h) == allele]
         if not best_hits:
             best_hit_per_gene[gene_name] = None
         elif hits_matching_st:

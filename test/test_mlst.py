@@ -25,7 +25,9 @@ from kleborate.shared.mlst import *
 from kleborate.shared.alignment import Alignment
 
 
-def test_load_st_profiles():
+def test_load_st_profiles_1():
+    # Tests a profile without a final extra-info column.
+    gene_names = ['abcD', 'efgH', 'ijkL']
     with tempfile.TemporaryDirectory() as tmp_dir:
         profile_file = pathlib.Path(tmp_dir) / 'profiles'
         with open(profile_file, 'wt') as f:
@@ -33,9 +35,22 @@ def test_load_st_profiles():
             f.write('1\t1\t1\t1\n')
             f.write('2\t1\t2\t1\n')
             f.write('3\t1\t1\t2\n')
-        profiles, gene_names = load_st_profiles(profile_file)
-    assert gene_names == ['abcD', 'efgH', 'ijkL']
-    assert profiles == [(1, [1, 1, 1]), (2, [1, 2, 1]), (3, [1, 1, 2])]
+        profiles = load_st_profiles(profile_file, gene_names, None)
+    assert profiles == [(1, [1, 1, 1], None), (2, [1, 2, 1], None), (3, [1, 1, 2], None)]
+
+
+def test_load_st_profiles_2():
+    # Tests a profile with a final extra-info column.
+    gene_names = ['abcD', 'efgH', 'ijkL']
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        profile_file = pathlib.Path(tmp_dir) / 'profiles'
+        with open(profile_file, 'wt') as f:
+            f.write('ST\tabcD\tefgH\tijkL\textra\n')
+            f.write('1\t1\t1\t1\t123\n')
+            f.write('2\t1\t2\t1\txyz\n')
+            f.write('3\t1\t1\t2\t\n')
+        profiles = load_st_profiles(profile_file, gene_names, 'extra')
+    assert profiles == [(1, [1, 1, 1], '123'), (2, [1, 2, 1], 'xyz'), (3, [1, 1, 2], '')]
 
 
 def test_get_best_hits_1():
@@ -162,7 +177,7 @@ def test_number_from_hit_5():
 
 def test_get_best_matching_profile_1():
     # Tests a perfect match to ST1.
-    profiles = [(1, [1, 1, 1]), (2, [1, 2, 1]), (3, [1, 1, 2])]
+    profiles = [(1, [1, 1, 1], None), (2, [1, 2, 1], None), (3, [1, 1, 2], None)]
     gene_names = ['abcD', 'efgH', 'ijkL']
     best_hits_per_gene = {'abcD': [Alignment('abcD_1\t100\t0\t100\t+\t'
                                              'tig\t100\t0\t100\t100\t100\tAS:i:100\tcg:Z:100=')],
@@ -170,11 +185,11 @@ def test_get_best_matching_profile_1():
                                              'tig\t100\t0\t100\t100\t100\tAS:i:100\tcg:Z:100=')],
                           'ijkL': [Alignment('ijkL_1\t100\t0\t100\t+\t'
                                              'tig\t100\t0\t100\t100\t100\tAS:i:100\tcg:Z:100=')]}
-    best_st, best_st_alleles = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
-    assert best_st == 1
-    assert best_st_alleles == [1, 1, 1]
+    st, alleles, extra_info = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
+    assert st == 1
+    assert alleles == [1, 1, 1]
 
-    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, best_st_alleles)
+    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, alleles)
     assert best_hit_per_gene['abcD'].query_name == 'abcD_1'
     assert best_hit_per_gene['efgH'].query_name == 'efgH_1'
     assert best_hit_per_gene['ijkL'].query_name == 'ijkL_1'
@@ -182,7 +197,7 @@ def test_get_best_matching_profile_1():
 
 def test_get_best_matching_profile_2():
     # Tests a perfect match to ST2.
-    profiles = [(1, [1, 1, 1]), (2, [1, 2, 1]), (3, [1, 1, 2])]
+    profiles = [(1, [1, 1, 1], None), (2, [1, 2, 1], None), (3, [1, 1, 2], None)]
     gene_names = ['abcD', 'efgH', 'ijkL']
     best_hits_per_gene = {'abcD': [Alignment('abcD_1\t100\t0\t100\t+\t'
                                              'tig\t100\t0\t100\t100\t100\tAS:i:100\tcg:Z:100=')],
@@ -190,11 +205,11 @@ def test_get_best_matching_profile_2():
                                              'tig\t100\t0\t100\t100\t100\tAS:i:100\tcg:Z:100=')],
                           'ijkL': [Alignment('ijkL_1\t100\t0\t100\t+\t'
                                              'tig\t100\t0\t100\t100\t100\tAS:i:100\tcg:Z:100=')]}
-    best_st, best_st_alleles = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
-    assert best_st == 2
-    assert best_st_alleles == [1, 2, 1]
+    st, alleles, extra_info = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
+    assert st == 2
+    assert alleles == [1, 2, 1]
 
-    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, best_st_alleles)
+    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, alleles)
     assert best_hit_per_gene['abcD'].query_name == 'abcD_1'
     assert best_hit_per_gene['efgH'].query_name == 'efgH_2'
     assert best_hit_per_gene['ijkL'].query_name == 'ijkL_1'
@@ -202,7 +217,7 @@ def test_get_best_matching_profile_2():
 
 def test_get_best_matching_profile_3():
     # This test doesn't match any ST, but it's closest to ST3.
-    profiles = [(1, [1, 1, 1]), (2, [1, 2, 1]), (3, [1, 1, 2])]
+    profiles = [(1, [1, 1, 1], None), (2, [1, 2, 1], None), (3, [1, 1, 2], None)]
     gene_names = ['abcD', 'efgH', 'ijkL']
     best_hits_per_gene = {'abcD': [Alignment('abcD_1\t100\t0\t100\t+\t'
                                              'tig\t100\t0\t100\t100\t100\tAS:i:100\tcg:Z:100=')],
@@ -210,11 +225,11 @@ def test_get_best_matching_profile_3():
                                              'tig\t100\t0\t100\t100\t100\tAS:i:100\tcg:Z:100=')],
                           'ijkL': [Alignment('ijkL_2\t100\t0\t100\t+\t'
                                              'tig\t100\t0\t100\t100\t100\tAS:i:100\tcg:Z:100=')]}
-    best_st, best_st_alleles = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
-    assert best_st == 3
-    assert best_st_alleles == [1, 1, 2]
+    st, alleles, extra_info = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
+    assert st == 3
+    assert alleles == [1, 1, 2]
 
-    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, best_st_alleles)
+    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, alleles)
     assert best_hit_per_gene['abcD'].query_name == 'abcD_1'
     assert best_hit_per_gene['efgH'].query_name == 'efgH_3'
     assert best_hit_per_gene['ijkL'].query_name == 'ijkL_2'
@@ -222,14 +237,14 @@ def test_get_best_matching_profile_3():
 
 def test_get_best_matching_profile_4():
     # Test no hits at all.
-    profiles = [(1, [1, 1, 1]), (2, [1, 2, 1]), (3, [1, 1, 2])]
+    profiles = [(1, [1, 1, 1], None), (2, [1, 2, 1], None), (3, [1, 1, 2], None)]
     gene_names = ['abcD', 'efgH', 'ijkL']
     best_hits_per_gene = {'abcD': [], 'efgH': [], 'ijkL': []}
-    best_st, best_st_alleles = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
-    assert best_st == 0
-    assert best_st_alleles == [0, 0, 0]
+    st, alleles, extra_info = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
+    assert st == 0
+    assert alleles == [0, 0, 0]
 
-    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, best_st_alleles)
+    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, alleles)
     assert best_hit_per_gene['abcD'] is None
     assert best_hit_per_gene['efgH'] is None
     assert best_hit_per_gene['ijkL'] is None
@@ -238,7 +253,7 @@ def test_get_best_matching_profile_4():
 def test_get_best_matching_profile_5():
     # This test has two hits for efgH, so it matches equally well to ST1 and ST2. The correct
     # answer is ST1 because that's earlier in the profile.
-    profiles = [(1, [1, 1, 1]), (2, [1, 2, 1]), (3, [1, 1, 2])]
+    profiles = [(1, [1, 1, 1], None), (2, [1, 2, 1], None), (3, [1, 1, 2], None)]
     gene_names = ['abcD', 'efgH', 'ijkL']
     best_hits_per_gene = {'abcD': [Alignment('abcD_1\t100\t0\t100\t+\t'
                                              'tig\t100\t0\t100\t100\t100\tAS:i:100\tcg:Z:100=')],
@@ -248,11 +263,11 @@ def test_get_best_matching_profile_5():
                                              'tig\t100\t0\t100\t99\t100\tAS:i:99\tcg:Z:99=')],
                           'ijkL': [Alignment('ijkL_1\t100\t0\t100\t+\t'
                                              'tig\t100\t0\t100\t100\t100\tAS:i:100\tcg:Z:100=')]}
-    best_st, best_st_alleles = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
-    assert best_st == 1
-    assert best_st_alleles == [1, 1, 1]
+    st, alleles, extra_info = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
+    assert st == 1
+    assert alleles == [1, 1, 1]
 
-    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, best_st_alleles)
+    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, alleles)
     assert best_hit_per_gene['abcD'].query_name == 'abcD_1'
     assert best_hit_per_gene['efgH'].query_name == 'efgH_1'
     assert best_hit_per_gene['ijkL'].query_name == 'ijkL_1'
@@ -261,7 +276,7 @@ def test_get_best_matching_profile_5():
 def test_get_best_matching_profile_6():
     # This test has two hits for efgH and two hits for ijkL, so it matches equally well to ST2 and
     # ST3. The correct answer is ST2 because that's earlier in the profile.
-    profiles = [(1, [1, 1, 1]), (2, [1, 2, 1]), (3, [1, 1, 2])]
+    profiles = [(1, [1, 1, 1], None), (2, [1, 2, 1], None), (3, [1, 1, 2], None)]
     gene_names = ['abcD', 'efgH', 'ijkL']
     best_hits_per_gene = {'abcD': [Alignment('abcD_1\t100\t0\t100\t+\t'
                                              'tig\t100\t0\t100\t100\t100\tAS:i:100\tcg:Z:100=')],
@@ -273,11 +288,11 @@ def test_get_best_matching_profile_6():
                                              'tig\t100\t0\t100\t99\t100\tAS:i:99\tcg:Z:99='),
                                    Alignment('ijkL_3\t100\t0\t100\t+\t'
                                              'tig\t100\t0\t100\t99\t100\tAS:i:99\tcg:Z:99=')]}
-    best_st, best_st_alleles = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
-    assert best_st == 2
-    assert best_st_alleles == [1, 2, 1]
+    st, alleles, extra_info = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
+    assert st == 2
+    assert alleles == [1, 2, 1]
 
-    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, best_st_alleles)
+    best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, alleles)
     assert best_hit_per_gene['abcD'].query_name == 'abcD_1'
     assert best_hit_per_gene['efgH'].query_name == 'efgH_2'
     assert best_hit_per_gene['ijkL'].query_name == 'ijkL_2'
