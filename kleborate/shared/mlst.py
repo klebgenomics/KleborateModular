@@ -62,7 +62,7 @@ def mlst(assembly_path, profiles_path, allele_paths, gene_names, extra_info, min
             lv_count += 1
 
     if exact_matches < required_exact_matches:
-        st = 'NA'
+        st, extra_info = 'NA', ''
     elif lv_count == 0:
         st = 'ST' + str(st)
     else:
