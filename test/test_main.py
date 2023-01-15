@@ -25,11 +25,10 @@ import re
 import tempfile
 
 import kleborate.__main__
-import kleborate.version
 
 
-def test_version():
-    assert re.match(r'\d+\.\d+\.\d+', kleborate.version.__version__)
+def test_get_version():
+    assert re.match(r'\d+\.\d+\.\d+', kleborate.__main__.get_version())
 
 
 def test_get_all_module_names():

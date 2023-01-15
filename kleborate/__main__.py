@@ -15,8 +15,10 @@ not, see <https://www.gnu.org/licenses/>.
 import argparse
 import gzip
 import importlib
+import importlib.metadata
 import os
 import pathlib
+import re
 import shutil
 import sys
 import tempfile
@@ -25,7 +27,6 @@ import uuid
 
 from .shared.help_formatter import MyParser, MyHelpFormatter
 from .shared.misc import get_compression_type, load_fasta
-from .version import __version__
 
 
 def parse_arguments(args, all_module_names, modules):
@@ -59,7 +60,7 @@ def parse_arguments(args, all_module_names, modules):
                            help='Show this help message and exit')
     help_args.add_argument('--help_all', action='help',
                            help='Show a help message with all module options')
-    help_args.add_argument('--version', action='version', version='Kleborate v' + __version__,
+    help_args.add_argument('--version', action='version', version=f'Kleborate v{get_version()}',
                            help="Show program's version number and exit")
 
     if not args:
@@ -276,6 +277,30 @@ def paper_refs():
         wrapped_text += '\n'.join(textwrap.wrap(line, width=terminal_width - 1))
         wrapped_text += '\n'
     return 'R|' + wrapped_text
+
+
+def get_version():
+    """
+    This function returns the version of Kleborate as a string, without the leading 'v'.
+    """
+    # First try to get the version from the pyproject.toml file, in case this is being run directly
+    # from the repo using the kleborate-runner.py file.
+    pyproject = pathlib.Path(__file__).parents[1] / 'pyproject.toml'
+    if pyproject.is_file():
+        with open(pyproject, 'rt') as f:
+            pyproject_text = f.read()
+        if 'name = "kleborate"' in pyproject_text:  # make sure it's the right pyproject.toml
+            match = re.search(r'version = "(\d+\.\d+\.\d+)"', pyproject_text)
+            if match:
+                return match.group(1)
+
+    # If there wasn't a 'pyproject.toml' file, then Kleborate is probably installed, so use
+    # importlib to get the version of the installed package.
+    try:
+        from importlib import metadata
+    except ImportError:
+        import importlib_metadata as metadata
+    return metadata.version(__package__ or __name__)
 
 
 if __name__ == '__main__':
