@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kleborate"
+version = "3.0.0"
+authors = [
+    {name = "Ryan Wick", email = "rrwick@gmail.com"},
+    {name = "Kathryn Holt", email = "kat.holt@lshtm.ac.uk"},
+]
+description = "Kleborate: a tool for typing and screening pathogen genome assemblies"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {file = "LICENSE"}
+dependencies = ["biopython"]
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-mock"]
+
+[project.urls]
+homepage = "https://github.com/katholt/Kleborate"
+documentation = "https://github.com/katholt/Kleborate/wiki"
+repository = "https://github.com/katholt/Kleborate"
+
+[project.scripts]
+kleborate = "kleborate.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["kleborate", "kleborate.shared", "kleborate.modules", "kleborate.modules.*"]
+exclude = ["kleborate.modules.template"]
+
+[tool.setuptools.package-data]
+"*" = ["data/*"]
