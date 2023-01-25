@@ -17,7 +17,7 @@ not, see <https://www.gnu.org/licenses/>.
 
 import re
 
-from .alignment import align_a_to_b
+from .alignment import align_query_to_ref
 
 
 def mlst(assembly_path, profiles_path, allele_paths, gene_names, extra_info, min_identity,
@@ -115,7 +115,7 @@ def get_best_hits_per_gene(gene_names, allele_paths, assembly_path, min_identity
     best_hit_per_gene = {}
     for gene in gene_names:
         assert gene in allele_paths
-        hits = align_a_to_b(allele_paths[gene], assembly_path)
+        hits = align_query_to_ref(allele_paths[gene], assembly_path)
         best_hit = get_best_hits(hits, min_identity, min_coverage)
         best_hit_per_gene[gene] = best_hit
     return best_hit_per_gene

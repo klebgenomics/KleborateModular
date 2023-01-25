@@ -38,10 +38,10 @@ class Alignment(object):
         self.query_end = int(line_parts[3])
         self.strand = line_parts[4]
 
-        self.target_name = line_parts[5]
-        self.target_length = int(line_parts[6])
-        self.target_start = int(line_parts[7])
-        self.target_end = int(line_parts[8])
+        self.ref_name = line_parts[5]
+        self.ref_length = int(line_parts[6])
+        self.ref_start = int(line_parts[7])
+        self.ref_end = int(line_parts[8])
 
         self.matching_bases = int(line_parts[9])
         self.num_bases = int(line_parts[10])
@@ -59,7 +59,7 @@ class Alignment(object):
     def __repr__(self):
         return self.query_name + ':' + str(self.query_start) + '-' + str(self.query_end) + \
                '(' + self.strand + '), ' + \
-               self.target_name + ':' + str(self.target_start) + '-' + str(self.target_end) + \
+               self.ref_name + ':' + str(self.ref_start) + '-' + str(self.ref_end) + \
                ' (' + ('%.3f' % self.percent_identity) + '%)'
 
     def is_exact(self):
@@ -70,14 +70,13 @@ class Alignment(object):
                 self.query_end - self.query_start == self.query_length)  # 100% coverage
 
 
-def align_a_to_b(filename_a, filename_b, preset='asm20'):
+def align_query_to_ref(query_filename, ref_filename, preset='asm20'):
     """
     Runs minimap2 on two sequence files (FASTA or FASTQ) and returns a list of Alignment objects.
-    The first file (filename_a) is the query and the second (filename_b) is the target.
     """
     with open(os.devnull, 'w') as dev_null:
         out = subprocess.check_output(['minimap2', '--eqx', '-c', '-x', preset,
-                                       str(filename_b), str(filename_a)], stderr=dev_null)
+                                       str(ref_filename), str(query_filename)], stderr=dev_null)
     return [Alignment(x) for x in out.decode().splitlines()]
 
 
