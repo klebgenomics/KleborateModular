@@ -31,9 +31,9 @@ def add_cli_options(parser):
     module_name = os.path.basename(__file__)[:-3]
     group = parser.add_argument_group(f'{module_name} module')
     group.add_argument('--escherichia_mlst_pasteur_min_identity', type=float, default=90.0,
-                       help='Minimum alignment percent identity for KpSC MLST')
+                       help='Minimum alignment percent identity for Escherchia-Pasteur MLST')
     group.add_argument('--escherichia_mlst_pasteur_min_coverage', type=float, default=80.0,
-                       help='Minimum alignment percent coverage for KpSC MLST')
+                       help='Minimum alignment percent coverage for Escherchia-Pasteur MLST')
     group.add_argument('--escherichia_mlst_pasteur_required_exact_matches', type=int, default=4,
                        help='At least this many exact matches are required to call an ST')
     return group
