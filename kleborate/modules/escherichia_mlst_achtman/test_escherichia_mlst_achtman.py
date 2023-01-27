@@ -154,4 +154,4 @@ def test_get_results_3():
                                escherichia_mlst_achtman_min_coverage=80.0,
                                escherichia_mlst_achtman_required_exact_matches=3))
     assert results['st'] == 'NA'
-    assert results['clonal_complex'] == ''
+    assert results['clonal_complex'] == '-'

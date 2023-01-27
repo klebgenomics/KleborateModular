@@ -136,4 +136,4 @@ def test_get_results_3():
                           Args(kosc_mlst_min_identity=90.0, kosc_mlst_min_coverage=80.0,
                                kosc_mlst_required_exact_matches=3))
     assert results['st'] == 'NA'
-    assert results['clonal_complex'] == ''
+    assert results['clonal_complex'] == '-'
