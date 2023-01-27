@@ -18,7 +18,6 @@ details. You should have received a copy of the GNU General Public License along
 not, see <https://www.gnu.org/licenses/>.
 """
 
-import gzip
 import pytest
 
 from kleborate.shared.misc import *

@@ -61,7 +61,7 @@ def test_get_best_hits_1():
                       'tig\t10000\t3000\t4000\t1000\t1000\tAS:i:1000\tcg:Z:1000='),
             Alignment('abcD_3\t1000\t0\t1000\t+\t'
                       'tig\t10000\t3000\t4000\t999\t1000\tAS:i:999\tcg:Z:500=1X499=')]
-    best_hits = get_best_hits(hits, 90.0, 90.0)
+    best_hits = get_best_hits(hits)
     assert len(best_hits) == 1
     assert best_hits[0].query_name == 'abcD_2'
 
@@ -75,7 +75,7 @@ def test_get_best_hits_2():
                       'tig\t10000\t3000\t4000\t1000\t1000\tAS:i:1000\tcg:Z:1000='),
             Alignment('abcD_3\t1100\t0\t1100\t+\t'
                       'tig\t10000\t3000\t4000\t1100\t1100\tAS:i:1100\tcg:Z:1100=')]
-    best_hits = get_best_hits(hits, 90.0, 90.0)
+    best_hits = get_best_hits(hits)
     assert len(best_hits) == 1
     assert best_hits[0].query_name == 'abcD_3'
 
@@ -88,63 +88,13 @@ def test_get_best_hits_3():
                       'tig\t10000\t3000\t4000\t999\t1000\tAS:i:1000\tcg:Z:1000='),
             Alignment('abcD_3\t1000\t0\t1000\t+\t'
                       'tig\t10000\t3000\t4000\t999\t1000\tAS:i:1000\tcg:Z:1000=')]
-    best_hits = get_best_hits(hits, 90.0, 90.0)
+    best_hits = get_best_hits(hits)
     assert len(best_hits) == 3
 
 
 def test_get_best_hits_4():
     # Tests an empty list.
-    assert get_best_hits([], 90.0, 90.0) == []
-
-
-def test_get_best_hits_5():
-    # Tests the identity threshold.
-    hits = [Alignment('abcD_1\t1000\t0\t1000\t+\t'
-                      'tig\t10000\t3000\t4000\t900\t1000\tAS:i:900\tcg:Z:450=100X450='),
-            Alignment('abcD_2\t1000\t0\t1000\t+\t'
-                      'tig\t10000\t3000\t4000\t900\t1000\tAS:i:900\tcg:Z:450=100X450='),
-            Alignment('abcD_3\t1000\t0\t1000\t+\t'
-                      'tig\t10000\t3000\t4000\t950\t1000\tAS:i:950\tcg:Z:475=50X475=')]
-
-    best_hits = get_best_hits(hits, 80.0, 90.0)
-    assert len(best_hits) == 1
-    assert best_hits[0].query_name == 'abcD_3'
-
-    best_hits = get_best_hits(hits, 90.0, 90.0)
-    assert len(best_hits) == 1
-    assert best_hits[0].query_name == 'abcD_3'
-
-    best_hits = get_best_hits(hits, 95.0, 90.0)
-    assert len(best_hits) == 1
-    assert best_hits[0].query_name == 'abcD_3'
-
-    best_hits = get_best_hits(hits, 96.0, 90.0)
-    assert len(best_hits) == 0
-
-
-def test_get_best_hits_6():
-    # Tests the coverage threshold.
-    hits = [Alignment('abcD_1\t1000\t0\t900\t+\t'
-                      'tig\t10000\t3000\t3900\t900\t1000\tAS:i:900\tcg:Z:900='),
-            Alignment('abcD_2\t1000\t0\t900\t+\t'
-                      'tig\t10000\t3000\t3900\t900\t1000\tAS:i:900\tcg:Z:900='),
-            Alignment('abcD_3\t1000\t0\t950\t+\t'
-                      'tig\t10000\t3000\t3950\t950\t1000\tAS:i:950\tcg:Z:950=')]
-
-    best_hits = get_best_hits(hits, 90.0, 80.0)
-    assert len(best_hits) == 1
-    assert best_hits[0].query_name == 'abcD_3'
-
-    best_hits = get_best_hits(hits, 90.0, 90.0)
-    assert len(best_hits) == 1
-    assert best_hits[0].query_name == 'abcD_3'
-
-    best_hits = get_best_hits(hits, 90.0, 95.0)
-    assert len(best_hits) == 1
-    assert best_hits[0].query_name == 'abcD_3'
-
-    best_hits = get_best_hits(hits, 90.0, 96.0)
-    assert len(best_hits) == 0
+    assert get_best_hits([]) == []
 
 
 def test_number_from_hit_1():

@@ -39,8 +39,17 @@ def mlst(assembly_path, profiles_path, allele_paths, gene_names, extra_info, min
     * a dictionary of allele numbers in str format {gene name: allele number}
     """
     profiles = load_st_profiles(profiles_path, gene_names, extra_info)
-    best_hits_per_gene = get_best_hits_per_gene(gene_names, allele_paths, assembly_path,
-                                                min_identity, min_coverage)
+    hits_per_gene = {g: align_query_to_ref(allele_paths[g], assembly_path,
+                                           min_identity=min_identity,
+                                           min_query_coverage=min_coverage) for g in gene_names}
+    return run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches)
+
+
+def run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches):
+    """
+    This function is factored out because it is also called by the multi_mlst.py file.
+    """
+    best_hits_per_gene = {gene: get_best_hits(hits_per_gene[gene]) for gene in gene_names}
     st, alleles, extra_info = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
     best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, alleles)
 
@@ -105,31 +114,13 @@ def load_st_profiles(database_path, gene_names, extra_info_name):
     return profiles
 
 
-def get_best_hits_per_gene(gene_names, allele_paths, assembly_path, min_identity, min_coverage):
-    """
-    This function does the alignment of each gene's allele's to the assembly. It returns a
-    dictionary where key is the gene name and value is a list of the best hits (Alignment objects)
-    for that gene. For most genes, there will be only one hit (a list of one), but multiple best
-    hits are possible.
-    """
-    best_hit_per_gene = {}
-    for gene in gene_names:
-        assert gene in allele_paths
-        hits = align_query_to_ref(allele_paths[gene], assembly_path)
-        best_hit = get_best_hits(hits, min_identity, min_coverage)
-        best_hit_per_gene[gene] = best_hit
-    return best_hit_per_gene
-
-
-def get_best_hits(hits, min_identity, min_coverage):
+def get_best_hits(hits):
     """
     Given a bunch of hits to an allele, this function returns a list of the best hits. 'Best' is
     defined as highest identity. If there is a tie, hits with higher alignment scores are
     preferred. Usually this results in just a single hit, but if there is still a tie (i.e. same
-    identity and same alignment score), then multiple hits can be returned. This function can also
-    return an empty list where then are no hits which meet the identity and coverage thresholds.
+    identity and same alignment score), then multiple hits can be returned.
     """
-    hits = [h for h in hits if h.percent_identity >= min_identity and h.query_cov >= min_coverage]
     if not hits:
         return []
     best_identity = max(h.percent_identity for h in hits)

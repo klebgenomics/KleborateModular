@@ -70,14 +70,20 @@ class Alignment(object):
                 self.query_end - self.query_start == self.query_length)  # 100% coverage
 
 
-def align_query_to_ref(query_filename, ref_filename, preset='asm20'):
+def align_query_to_ref(query_filename, ref_filename, preset='asm20', min_identity=None,
+                       min_query_coverage=None):
     """
     Runs minimap2 on two sequence files (FASTA or FASTQ) and returns a list of Alignment objects.
     """
     with open(os.devnull, 'w') as dev_null:
         out = subprocess.check_output(['minimap2', '--eqx', '-c', '-x', preset,
                                        str(ref_filename), str(query_filename)], stderr=dev_null)
-    return [Alignment(x) for x in out.decode().splitlines()]
+    alignments = [Alignment(x) for x in out.decode().splitlines()]
+    if min_identity is not None:
+        alignments = [a for a in alignments if a.percent_identity >= min_identity]
+    if min_query_coverage is not None:
+        alignments = [a for a in alignments if a.query_cov >= min_query_coverage]
+    return alignments
 
 
 def get_expanded_cigar(cigar):
