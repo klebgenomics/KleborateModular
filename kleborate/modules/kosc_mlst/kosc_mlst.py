@@ -1,7 +1,4 @@
 """
-This file contains a template module for Kleborate. Any new modules must contain the functions
-defined in this file.
-
 Copyright 2023 Kat Holt
 Copyright 2023 Ryan Wick (rrwick@gmail.com)
 https://github.com/katholt/Kleborate/
