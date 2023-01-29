@@ -137,6 +137,11 @@ def number_from_hit(hit):
     if hit is None:
         return 0
     try:
+        last_part = hit.query_name.split('_')[-1]
+        return int(last_part)
+    except ValueError:
+        pass
+    try:
         return int(re.sub('[^0-9]', '', hit.query_name))
     except ValueError:
         return 0
