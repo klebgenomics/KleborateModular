@@ -21,7 +21,7 @@ from ...shared.multi_mlst import multi_mlst
 
 
 def get_headers():
-    full_headers = ['st', 'lineage', 'rmpA', 'rmpC', 'rmpD']
+    full_headers = ['st', 'lineage', 'rmpA', 'rmpD', 'rmpC']
     stdout_headers = []
     return full_headers, stdout_headers
 
@@ -66,4 +66,4 @@ def get_results(assembly, args):
                                       args.rmst_required_exact_matches)
 
     return {'st': st, 'lineage': lineage,
-            'rmpA': alleles['rmpA'], 'rmpC': alleles['rmpC'], 'rmpD': alleles['rmpD']}
+            'rmpA': alleles['rmpA'], 'rmpD': alleles['rmpD'], 'rmpC': alleles['rmpC']}

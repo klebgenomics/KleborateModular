@@ -70,7 +70,7 @@ class Alignment(object):
                 self.query_end - self.query_start == self.query_length)  # 100% coverage
 
 
-def align_query_to_ref(query_filename, ref_filename, preset='asm20', min_identity=None,
+def align_query_to_ref(query_filename, ref_filename, preset='map-ont', min_identity=None,
                        min_query_coverage=None):
     """
     Runs minimap2 on two sequence files (FASTA or FASTQ) and returns a list of Alignment objects.

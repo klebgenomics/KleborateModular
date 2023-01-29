@@ -103,8 +103,8 @@ def test_get_results_1():
     assert results['st'] == 'ST2'
     assert results['lineage'] == 'rmp 2; KpVP-2'
     assert results['rmpA'] == '9'
-    assert results['rmpC'] == '32'
-    assert results['rmpD'] == '5'
+    assert results['rmpD'] == '32'
+    assert results['rmpC'] == '5'
 
 
 def test_get_results_2():
@@ -115,9 +115,9 @@ def test_get_results_2():
                                rmst_required_exact_matches=3))
     assert results['st'] == 'ST26'
     assert results['lineage'] == 'rmp 1; KpVP-1'
+    assert results['rmpD'] == '2'
     assert results['rmpA'] == '2'
     assert results['rmpC'] == '2'
-    assert results['rmpD'] == '2'
 
 
 def test_get_results_3():
