@@ -125,6 +125,12 @@ def test_number_from_hit_5():
     assert number_from_hit(None) == 0
 
 
+def test_number_from_hit_6():
+    hit = Alignment('abc123_45\t1000\t1\t1000\t+\t'
+                    'tig\t10000\t3000\t4000\t1000\t1000\tAS:i:1000\tcg:Z:1000=')
+    assert number_from_hit(hit) == 45
+
+
 def test_get_best_matching_profile_1():
     # Tests a perfect match to ST1.
     profiles = [(1, [1, 1, 1], None), (2, [1, 2, 1], None), (3, [1, 1, 2], None)]
