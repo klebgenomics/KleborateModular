@@ -88,7 +88,7 @@ def main():
             unzipped_assembly = gunzip_assembly_if_necessary(assembly, tmp_dir)
             results = {'assembly': assembly}
             for module in module_names:
-                module_results = modules[module].get_results(unzipped_assembly, args)
+                module_results = modules[module].get_results(unzipped_assembly, args, results)
                 results.update({f'{module}__{header}': result
                                 for header, result in module_results.items()})
             output_results(full_headers, stdout_headers, args.outfile, results)
@@ -100,7 +100,7 @@ def get_presets():
     the --preset option, and the values are a list of modules for the preset.
     """
     return {'kpsc': ['contig_stats', 'klebsiella_species', 'kpsc_mlst',
-                     'ybst', 'cbst', 'abst', 'smst', 'rmst'],
+                     'ybst', 'cbst', 'abst', 'smst', 'rmst', 'kpsc_virulence_score'],
             'kosc': ['contig_stats', 'klebsiella_species', 'kosc_mlst'],
             'escherichia': ['contig_stats', 'escherichia_mlst_achtman', 'escherichia_mlst_pasteur']}
 

@@ -19,6 +19,10 @@ import shutil
 import sys
 
 
+def prerequisite_modules():
+    return []
+
+
 def get_headers():
     full_headers = ['species', 'species_match']
     stdout_headers = ['species']
@@ -57,7 +61,7 @@ def check_external_programs():
         sys.exit('Error: could not find mash')
 
 
-def get_results(assembly, args):
+def get_results(assembly, args, previous_results):
     sketch_file = pathlib.Path(__file__).parents[0] / 'data' / 'species_mash_sketches.msh'
     species, distance = get_klebsiella_species(assembly, sketch_file)
     if distance <= args.klebsiella_species_strong:

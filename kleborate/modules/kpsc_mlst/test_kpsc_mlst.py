@@ -99,7 +99,7 @@ def test_get_results_1():
                                            'kpsc_mlst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000968155.1.fna.gz',
                           Args(kpsc_mlst_min_identity=90.0, kpsc_mlst_min_coverage=80.0,
-                               kpsc_mlst_required_exact_matches=3))
+                               kpsc_mlst_required_exact_matches=3), {})
     assert results['st'] == 'ST66'
     assert results['gapA'] == '2'
     assert results['infB'] == '3'
@@ -115,7 +115,7 @@ def test_get_results_2():
                                            'kpsc_mlst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_001068035.1.fna.gz',
                           Args(kpsc_mlst_min_identity=90.0, kpsc_mlst_min_coverage=80.0,
-                               kpsc_mlst_required_exact_matches=3))
+                               kpsc_mlst_required_exact_matches=3), {})
     assert results['st'] == 'ST592-1LV'
     assert results['gapA'] == '2'
     assert results['infB'] == '3'
@@ -132,5 +132,5 @@ def test_get_results_3():
                                            'kpsc_mlst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000247855.1.fna.gz',
                           Args(kpsc_mlst_min_identity=90.0, kpsc_mlst_min_coverage=80.0,
-                               kpsc_mlst_required_exact_matches=3))
+                               kpsc_mlst_required_exact_matches=3), {})
     assert results['st'] == 'NA'

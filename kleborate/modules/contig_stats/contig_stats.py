@@ -17,6 +17,10 @@ import collections
 from ...shared.misc import load_fasta
 
 
+def prerequisite_modules():
+    return []
+
+
 def get_headers():
     full_headers = ['contig_count', 'n50', 'largest_contig', 'total_size', 'ambiguous_bases',
                     'qc_warnings']
@@ -36,7 +40,7 @@ def check_external_programs():
     pass
 
 
-def get_results(assembly, args):
+def get_results(assembly, args, previous_results):
     contig_count, n50, longest_contig, total_size, ambiguous_bases = get_contig_stats(assembly)
     qc_warnings = get_qc_warnings(n50, ambiguous_bases)
     return {'contig_count': str(contig_count),

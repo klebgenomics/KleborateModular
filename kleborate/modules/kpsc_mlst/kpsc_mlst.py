@@ -20,6 +20,10 @@ import sys
 from ...shared.mlst import mlst
 
 
+def prerequisite_modules():
+    return []
+
+
 def get_headers():
     full_headers = ['st', 'gapA', 'infB', 'mdh', 'pgi', 'phoE', 'rpoB', 'tonB']
     stdout_headers = ['st']
@@ -56,7 +60,7 @@ def data_dir():
     return pathlib.Path(__file__).parents[0] / 'data'
 
 
-def get_results(assembly, args):
+def get_results(assembly, args, previous_results):
     genes = ['gapA', 'infB', 'mdh', 'pgi', 'phoE', 'rpoB', 'tonB']
     profiles = data_dir() / 'profiles.tsv'
     alleles = {gene: data_dir() / f'{gene}.fasta' for gene in genes}

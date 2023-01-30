@@ -99,7 +99,7 @@ def test_get_results_1():
                                            'cbst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000968155.1.fna.gz',
                           Args(cbst_min_identity=90.0, cbst_min_coverage=80.0,
-                               cbst_required_exact_matches=3))
+                               cbst_required_exact_matches=3), {})
     assert results['st'] == 'ST9'
     assert results['lineage'] == 'clb 1'
     assert results['clbA'] == '1'
@@ -125,6 +125,6 @@ def test_get_results_2():
                                            'cbst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000008865.2.fna.gz',
                           Args(cbst_min_identity=90.0, cbst_min_coverage=80.0,
-                               cbst_required_exact_matches=3))
+                               cbst_required_exact_matches=3), {})
     assert results['st'] == 'NA'
     assert results['lineage'] == '-'

@@ -99,7 +99,7 @@ def test_get_results_1():
                                            'ybst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000968155.1.fna.gz',
                           Args(ybst_min_identity=90.0, ybst_min_coverage=80.0,
-                               ybst_required_exact_matches=3))
+                               ybst_required_exact_matches=3), {})
     assert results['st'] == 'ST315'
     assert results['lineage'] == 'ybt 12; ICEKp10'
     assert results['ybtS'] == '7'
@@ -121,7 +121,7 @@ def test_get_results_2():
                                            'ybst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000009885.1.fna.gz',
                           Args(ybst_min_identity=90.0, ybst_min_coverage=80.0,
-                               ybst_required_exact_matches=3))
+                               ybst_required_exact_matches=3), {})
     assert results['st'] == 'ST326'
     assert results['lineage'] == 'ybt 2; ICEKp1'
     assert results['ybtS'] == '9'
@@ -143,6 +143,6 @@ def test_get_results_3():
                                            'ybst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000008865.2.fna.gz',
                           Args(ybst_min_identity=90.0, ybst_min_coverage=80.0,
-                               ybst_required_exact_matches=3))
+                               ybst_required_exact_matches=3), {})
     assert results['st'] == 'NA'
     assert results['lineage'] == '-'

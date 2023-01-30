@@ -99,7 +99,7 @@ def test_get_results_1():
                                            'abst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000968155.1.fna.gz',
                           Args(abst_min_identity=90.0, abst_min_coverage=80.0,
-                               abst_required_exact_matches=3))
+                               abst_required_exact_matches=3), {})
     assert results['st'] == 'ST24'
     assert results['lineage'] == 'iuc 2'
     assert results['iucA'] == '2'
@@ -114,7 +114,7 @@ def test_get_results_2():
                                            'abst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000009885.1.fna.gz',
                           Args(abst_min_identity=90.0, abst_min_coverage=80.0,
-                               abst_required_exact_matches=3))
+                               abst_required_exact_matches=3), {})
     assert results['st'] == 'ST1'
     assert results['lineage'] == 'iuc 1'
     assert results['iucA'] == '1'
@@ -130,6 +130,6 @@ def test_get_results_3():
                                            'abst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000008865.2.fna.gz',
                           Args(abst_min_identity=90.0, abst_min_coverage=80.0,
-                               abst_required_exact_matches=3))
+                               abst_required_exact_matches=3), {})
     assert results['st'] == 'NA'
     assert results['lineage'] == '-'

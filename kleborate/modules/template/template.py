@@ -20,6 +20,16 @@ import shutil
 import sys
 
 
+def prerequisite_modules():
+    """
+    This function returns a list of the other modules that this module depends on. I.e. each of
+    these modules must be run before this module is run. Circular dependencies (e.g. module a
+    requires module b and module b requires module a) are not allowed. If this module has no
+    dependencies, this function should return an empty list.
+    """
+    return []
+
+
 def get_headers():
     """
     This function returns the headers (column titles) for this module. It returns two lists:
@@ -77,10 +87,15 @@ def check_external_programs():
         sys.exit('Error: could not find minimap2')
 
 
-def get_results(assembly, args):
+def get_results(assembly, args, previous_results):
     """
     This function carries out the module's analysis on a single assembly. It returns a dictionary
     of results, where the module's headers are the keys and the values are the corresponding
     results in string format.
+
+    It takes three arguments:
+    * assembly: the path to the assembly file
+    * args: all of Kleborate's command-line arguments
+    * previous_results: a dictionary of results from modules run before this one.
     """
     return {'header_a': 'result_a', 'header_b': 'result_b', 'header_c': 'result_c'}

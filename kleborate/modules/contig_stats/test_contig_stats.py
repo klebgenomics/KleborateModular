@@ -147,7 +147,7 @@ def test_empty_file_1():
 
 def test_get_results():
     # Final results are all in string format.
-    results = get_results(get_file_dir() / 'test_1.fasta', None)
+    results = get_results(get_file_dir() / 'test_1.fasta', None, {})
     assert results['contig_count'] == '4'
     assert results['n50'] == '40'
     assert results['largest_contig'] == '45'

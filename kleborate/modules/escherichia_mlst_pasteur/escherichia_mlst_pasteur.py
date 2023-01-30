@@ -20,6 +20,10 @@ import sys
 from ...shared.mlst import mlst
 
 
+def prerequisite_modules():
+    return []
+
+
 def get_headers():
     full_headers = ['st',
                     'dinB', 'icdA', 'pabB', 'polB', 'putP', 'trpA', 'trpB', 'uidA']
@@ -60,7 +64,7 @@ def data_dir():
     return pathlib.Path(__file__).parents[0] / 'data'
 
 
-def get_results(assembly, args):
+def get_results(assembly, args, previous_results):
     genes = ['dinB', 'icdA', 'pabB', 'polB', 'putP', 'trpA', 'trpB', 'uidA']
     profiles = data_dir() / 'profiles.tsv'
     alleles = {gene: data_dir() / f'{gene}.fasta' for gene in genes}

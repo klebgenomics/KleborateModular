@@ -99,7 +99,7 @@ def test_get_results_1():
                                            'rmst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000968155.1.fna.gz',
                           Args(rmst_min_identity=90.0, rmst_min_coverage=80.0,
-                               rmst_required_exact_matches=3))
+                               rmst_required_exact_matches=3), {})
     assert results['st'] == 'ST2'
     assert results['lineage'] == 'rmp 2; KpVP-2'
     assert results['rmpA'] == '9'
@@ -112,7 +112,7 @@ def test_get_results_2():
                                            'rmst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_001068035.1.fna.gz',
                           Args(rmst_min_identity=90.0, rmst_min_coverage=80.0,
-                               rmst_required_exact_matches=3))
+                               rmst_required_exact_matches=3), {})
     assert results['st'] == 'ST26'
     assert results['lineage'] == 'rmp 1; KpVP-1'
     assert results['rmpD'] == '2'
@@ -126,6 +126,6 @@ def test_get_results_3():
                                            'rmst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000008865.2.fna.gz',
                           Args(rmst_min_identity=90.0, rmst_min_coverage=80.0,
-                               rmst_required_exact_matches=3))
+                               rmst_required_exact_matches=3), {})
     assert results['st'] == 'NA'
     assert results['lineage'] == '-'

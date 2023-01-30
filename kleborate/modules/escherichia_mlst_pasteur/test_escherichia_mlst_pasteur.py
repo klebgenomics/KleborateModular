@@ -113,7 +113,7 @@ def test_get_results_1():
     results = get_results(get_test_genome_dir() / 'GCF_000005845.2.fna.gz',
                           Args(escherichia_mlst_pasteur_min_identity=90.0,
                                escherichia_mlst_pasteur_min_coverage=80.0,
-                               escherichia_mlst_pasteur_required_exact_matches=3))
+                               escherichia_mlst_pasteur_required_exact_matches=3), {})
     assert results['st'] == 'ST262'
     assert results['dinB'] == '8'
     assert results['icdA'] == '118'
@@ -132,7 +132,7 @@ def test_get_results_2():
     results = get_results(get_test_genome_dir() / 'GCF_000008865.2.fna.gz',
                           Args(escherichia_mlst_pasteur_min_identity=90.0,
                                escherichia_mlst_pasteur_min_coverage=80.0,
-                               escherichia_mlst_pasteur_required_exact_matches=3))
+                               escherichia_mlst_pasteur_required_exact_matches=3), {})
     assert results['st'] == 'ST296'
     assert results['dinB'] == '68'
     assert results['icdA'] == '110'
@@ -152,5 +152,5 @@ def test_get_results_3():
     results = get_results(get_test_genome_dir() / 'GCF_000009885.1.fna.gz',
                           Args(escherichia_mlst_pasteur_min_identity=90.0,
                                escherichia_mlst_pasteur_min_coverage=80.0,
-                               escherichia_mlst_pasteur_required_exact_matches=3))
+                               escherichia_mlst_pasteur_required_exact_matches=3), {})
     assert results['st'] == 'NA'

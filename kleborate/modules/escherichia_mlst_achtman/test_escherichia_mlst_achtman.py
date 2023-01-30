@@ -113,7 +113,7 @@ def test_get_results_1():
     results = get_results(get_test_genome_dir() / 'GCF_000005845.2.fna.gz',
                           Args(escherichia_mlst_achtman_min_identity=90.0,
                                escherichia_mlst_achtman_min_coverage=80.0,
-                               escherichia_mlst_achtman_required_exact_matches=3))
+                               escherichia_mlst_achtman_required_exact_matches=3), {})
     assert results['st'] == 'ST10'
     assert results['clonal_complex'] == 'ST10 Cplx'
     assert results['adk'] == '10'
@@ -132,7 +132,7 @@ def test_get_results_2():
     results = get_results(get_test_genome_dir() / 'GCF_000008865.2.fna.gz',
                           Args(escherichia_mlst_achtman_min_identity=90.0,
                                escherichia_mlst_achtman_min_coverage=80.0,
-                               escherichia_mlst_achtman_required_exact_matches=3))
+                               escherichia_mlst_achtman_required_exact_matches=3), {})
     assert results['st'] == 'ST11'
     assert results['clonal_complex'] == 'ST11 Cplx'
     assert results['adk'] == '12'
@@ -152,6 +152,6 @@ def test_get_results_3():
     results = get_results(get_test_genome_dir() / 'GCF_000009885.1.fna.gz',
                           Args(escherichia_mlst_achtman_min_identity=90.0,
                                escherichia_mlst_achtman_min_coverage=80.0,
-                               escherichia_mlst_achtman_required_exact_matches=3))
+                               escherichia_mlst_achtman_required_exact_matches=3), {})
     assert results['st'] == 'NA'
     assert results['clonal_complex'] == '-'

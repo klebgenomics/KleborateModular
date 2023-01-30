@@ -20,6 +20,10 @@ import sys
 from ...shared.multi_mlst import multi_mlst
 
 
+def prerequisite_modules():
+    return []
+
+
 def get_headers():
     full_headers = ['st', 'lineage', 'clbA', 'clbB', 'clbC', 'clbD', 'clbE', 'clbF', 'clbG',
                     'clbH', 'clbI', 'clbL', 'clbM', 'clbN', 'clbO', 'clbP', 'clbQ']
@@ -57,7 +61,7 @@ def data_dir():
     return pathlib.Path(__file__).parents[0] / 'data'
 
 
-def get_results(assembly, args):
+def get_results(assembly, args, previous_results):
     genes = ['clbA', 'clbB', 'clbC', 'clbD', 'clbE', 'clbF', 'clbG', 'clbH', 'clbI', 'clbL',
              'clbM', 'clbN', 'clbO', 'clbP', 'clbQ']
     profiles = data_dir() / 'profiles.tsv'

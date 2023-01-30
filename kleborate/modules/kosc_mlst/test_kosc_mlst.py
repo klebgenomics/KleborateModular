@@ -99,7 +99,7 @@ def test_get_results_1():
                                            'kosc_mlst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000247855.1.fna.gz',
                           Args(kosc_mlst_min_identity=90.0, kosc_mlst_min_coverage=80.0,
-                               kosc_mlst_required_exact_matches=3))
+                               kosc_mlst_required_exact_matches=3), {})
     assert results['st'] == 'ST30'
     assert results['clonal_complex'] == ''
     assert results['gapA'] == '1'
@@ -116,7 +116,7 @@ def test_get_results_2():
                                            'kosc_mlst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000733495.1.fna.gz',
                           Args(kosc_mlst_min_identity=90.0, kosc_mlst_min_coverage=80.0,
-                               kosc_mlst_required_exact_matches=3))
+                               kosc_mlst_required_exact_matches=3), {})
     assert results['st'] == 'ST406-1LV'
     assert results['clonal_complex'] == ''
     assert results['gapA'] == '5'
@@ -134,6 +134,6 @@ def test_get_results_3():
                                            'kosc_mlst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000009885.1.fna.gz',
                           Args(kosc_mlst_min_identity=90.0, kosc_mlst_min_coverage=80.0,
-                               kosc_mlst_required_exact_matches=3))
+                               kosc_mlst_required_exact_matches=3), {})
     assert results['st'] == 'NA'
     assert results['clonal_complex'] == '-'

@@ -99,7 +99,7 @@ def test_get_results_1():
                                            'smst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000968155.1.fna.gz',
                           Args(smst_min_identity=90.0, smst_min_coverage=80.0,
-                               smst_required_exact_matches=3))
+                               smst_required_exact_matches=3), {})
     assert results['st'] == 'ST22'
     assert results['lineage'] == 'iro 2'
     assert results['iroB'] == '4'
@@ -114,7 +114,7 @@ def test_get_results_2():
                                            'smst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000009885.1.fna.gz',
                           Args(smst_min_identity=90.0, smst_min_coverage=80.0,
-                               smst_required_exact_matches=3))
+                               smst_required_exact_matches=3), {})
     assert results['st'] == 'ST18,ST19'
     assert results['lineage'] == 'iro 3,iro 1'
     assert results['iroB'] == '21,1'
@@ -129,5 +129,5 @@ def test_get_results_3():
                                            'smst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000008865.2.fna.gz',
                           Args(smst_min_identity=90.0, smst_min_coverage=80.0,
-                               smst_required_exact_matches=3))
+                               smst_required_exact_matches=3), {})
     assert results['st'] == 'NA'
