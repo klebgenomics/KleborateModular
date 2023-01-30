@@ -28,6 +28,10 @@ def get_test_genome_dir():
     return pathlib.Path(__file__).parents[3] / 'test' / 'test_genomes'
 
 
+def test_prerequisite_modules():
+    assert prerequisite_modules() == []
+
+
 def test_check_cli_options_1():
     Args = collections.namedtuple('Args', ['ybst_min_identity', 'ybst_min_coverage',
                                            'ybst_required_exact_matches'])

@@ -275,3 +275,26 @@ def test_parse_arguments_4(capsys):
     assert 'Kleborate:' in err
     assert 'Input/output:' in err
     assert 'klebsiella_species module:' not in err
+
+
+def test_get_run_order_1():
+    dependency_graph = {'a': [], 'b': [], 'c': []}
+    assert kleborate.__main__.get_run_order(dependency_graph) == ['a', 'b', 'c']
+
+    dependency_graph = {'b': [], 'c': [], 'a': []}
+    assert kleborate.__main__.get_run_order(dependency_graph) == ['b', 'c', 'a']
+
+    dependency_graph = {'c': [], 'a': [], 'b': []}
+    assert kleborate.__main__.get_run_order(dependency_graph) == ['c', 'a', 'b']
+
+
+def test_get_run_order_2():
+    dependency_graph = {'a': ['b'], 'b': [], 'c': []}
+    assert sorted(kleborate.__main__.get_run_order(dependency_graph)) == ['a', 'b', 'c']
+
+    dependency_graph = {'a': [], 'b': ['a'], 'c': []}
+    assert sorted(kleborate.__main__.get_run_order(dependency_graph)) == ['a', 'b', 'c']
+
+    dependency_graph = {'a': ['b'], 'b': ['a'], 'c': []}
+    with pytest.raises(SystemExit) as e:
+        assert kleborate.__main__.get_run_order(dependency_graph)

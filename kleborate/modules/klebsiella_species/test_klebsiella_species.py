@@ -32,6 +32,10 @@ def get_sketch_file():
     return pathlib.Path(__file__).parents[0] / 'data' / 'species_mash_sketches.msh'
 
 
+def test_prerequisite_modules():
+    assert prerequisite_modules() == []
+
+
 def test_check_cli_options_1():
     Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
     check_cli_options(Args(klebsiella_species_strong=0.01, klebsiella_species_weak=0.05))

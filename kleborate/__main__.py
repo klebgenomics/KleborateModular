@@ -13,6 +13,7 @@ not, see <https://www.gnu.org/licenses/>.
 """
 
 import argparse
+import graphlib
 import gzip
 import importlib
 import importlib.metadata
@@ -77,7 +78,7 @@ def main():
     all_module_names, modules = import_modules()
     args = parse_arguments(sys.argv[1:], all_module_names, modules)
     module_names = get_used_module_names(args, all_module_names, get_presets())
-    check_modules(args, modules, module_names)
+    module_run_order = check_modules(args, modules, module_names)
     check_assemblies(args)
 
     top_headers, full_headers, stdout_headers = get_headers(module_names, modules)
@@ -87,7 +88,7 @@ def main():
         with tempfile.TemporaryDirectory() as tmp_dir:
             unzipped_assembly = gunzip_assembly_if_necessary(assembly, tmp_dir)
             results = {'assembly': assembly}
-            for module in module_names:
+            for module in module_run_order:
                 module_results = modules[module].get_results(unzipped_assembly, args, results)
                 results.update({f'{module}__{header}': result
                                 for header, result in module_results.items()})
@@ -99,8 +100,8 @@ def get_presets():
     This function defines the module presets as a dictionary. The keys are the valid choices for
     the --preset option, and the values are a list of modules for the preset.
     """
-    return {'kpsc': ['contig_stats', 'klebsiella_species', 'kpsc_mlst',
-                     'ybst', 'cbst', 'abst', 'smst', 'rmst', 'kpsc_virulence_score'],
+    return {'kpsc': ['contig_stats', 'klebsiella_species', 'kpsc_virulence_score', 'kpsc_mlst',
+                     'ybst', 'cbst', 'abst', 'smst', 'rmst'],
             'kosc': ['contig_stats', 'klebsiella_species', 'kosc_mlst'],
             'escherichia': ['contig_stats', 'escherichia_mlst_achtman', 'escherichia_mlst_pasteur']}
 
@@ -172,12 +173,23 @@ def import_modules():
 
 def check_modules(args, modules, module_names):
     """
-    This function checks the options and external requirements of the used modules. If any fail,
-    the program will quit with an error.
+    This function checks the options, prerequisites external requirements of the used modules. If
+    any fail, the program will quit with an error. It returns a list of the modules sorted
+    topologically, so each module will have its prerequisites run first.
     """
     for m in module_names:
         modules[m].check_cli_options(args)
         modules[m].check_external_programs()
+    dependency_graph = {m: modules[m].prerequisite_modules() for m in module_names}
+    return get_run_order(dependency_graph)
+
+
+def get_run_order(dependency_graph):
+    try:
+        ts = graphlib.TopologicalSorter(dependency_graph)
+        return list(ts.static_order())
+    except graphlib.CycleError:
+        sys.exit('Error: module dependency graph contains a cycle')
 
 
 def check_assemblies(args):

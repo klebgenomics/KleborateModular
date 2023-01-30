@@ -28,6 +28,10 @@ def get_file_dir():
     return pathlib.Path(__file__).parents[0] / 'test_files'
 
 
+def test_prerequisite_modules():
+    assert prerequisite_modules() == []
+
+
 def test_get_headers():
     # stdout_headers must be a subset of full_headers.
     full_headers, stdout_headers = get_headers()

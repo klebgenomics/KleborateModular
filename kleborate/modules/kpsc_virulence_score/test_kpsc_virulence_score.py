@@ -21,6 +21,17 @@ not, see <https://www.gnu.org/licenses/>.
 from .kpsc_virulence_score import *
 
 
+def test_prerequisite_modules():
+    assert sorted(prerequisite_modules()) == ['abst', 'cbst', 'ybst']
+
+
+def test_empty_functions():
+    # Tests the functions that aren't used in this module.
+    assert add_cli_options(None) is None
+    assert check_cli_options(None) is None
+    assert check_external_programs() is None
+
+
 def test_get_results_1():
     previous_results = {'ybst__st': 'NA', 'abst__st': 'NA', 'cbst__st': 'NA'}
     assert get_results(None, None, previous_results)['virulence_score'] == '0'
