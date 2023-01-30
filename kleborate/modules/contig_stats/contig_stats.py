@@ -37,10 +37,10 @@ def check_cli_options(args):
 
 
 def check_external_programs():
-    pass
+    return []
 
 
-def get_results(assembly, args, previous_results):
+def get_results(assembly, minimap2_index, args, previous_results):
     contig_count, n50, longest_contig, total_size, ambiguous_bases = get_contig_stats(assembly)
     qc_warnings = get_qc_warnings(n50, ambiguous_bases)
     return {'contig_count': str(contig_count),

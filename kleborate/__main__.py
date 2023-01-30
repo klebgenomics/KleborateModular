@@ -21,6 +21,7 @@ import os
 import pathlib
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 import textwrap
@@ -78,18 +79,21 @@ def main():
     all_module_names, modules = import_modules()
     args = parse_arguments(sys.argv[1:], all_module_names, modules)
     module_names = get_used_module_names(args, all_module_names, get_presets())
-    module_run_order = check_modules(args, modules, module_names)
+    module_run_order, external_programs = check_modules(args, modules, module_names)
     check_assemblies(args)
 
     top_headers, full_headers, stdout_headers = get_headers(module_names, modules)
     output_headers(top_headers, full_headers, stdout_headers, args.outfile)
 
     for assembly in args.assemblies:
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            unzipped_assembly = gunzip_assembly_if_necessary(assembly, tmp_dir)
+        with tempfile.TemporaryDirectory() as temp_dir:
+            unzipped_assembly = gunzip_assembly_if_necessary(assembly, temp_dir)
+            minimap2_index = build_minimap2_index(assembly, unzipped_assembly, external_programs,
+                                                  temp_dir)
             results = {'assembly': assembly}
             for module in module_run_order:
-                module_results = modules[module].get_results(unzipped_assembly, args, results)
+                module_results = modules[module].get_results(unzipped_assembly, minimap2_index,
+                                                             args, results)
                 results.update({f'{module}__{header}': result
                                 for header, result in module_results.items()})
             output_results(full_headers, stdout_headers, args.outfile, results)
@@ -177,11 +181,12 @@ def check_modules(args, modules, module_names):
     any fail, the program will quit with an error. It returns a list of the modules sorted
     topologically, so each module will have its prerequisites run first.
     """
+    all_external_programs = set()
     for m in module_names:
         modules[m].check_cli_options(args)
-        modules[m].check_external_programs()
+        all_external_programs.update(modules[m].check_external_programs())
     dependency_graph = {m: modules[m].prerequisite_modules() for m in module_names}
-    return get_run_order(dependency_graph)
+    return get_run_order(dependency_graph), sorted(all_external_programs)
 
 
 def get_run_order(dependency_graph):
@@ -232,11 +237,26 @@ def get_headers(module_names, modules):
 
 def gunzip_assembly_if_necessary(assembly, temp_dir):
     if get_compression_type(assembly) == 'gz':
-        unzipped_assembly = str(temp_dir) + '/' + uuid.uuid4().hex + '.fasta'
+        unzipped_assembly = pathlib.Path(temp_dir) / (uuid.uuid4().hex + '.fasta')
         decompress_file(assembly, unzipped_assembly)
         return unzipped_assembly
     else:
         return assembly
+
+
+def build_minimap2_index(assembly, unzipped_assembly, external_programs, temp_dir):
+    """
+    A lot of the modules use minimap2 alignment, so pre-building the index for this assembly once
+    can save a bit of time.
+    """
+    if 'minimap2' not in external_programs:
+        return None
+    minimap2_index = (pathlib.Path(temp_dir) / (uuid.uuid4().hex + '.mmi')).resolve()
+    command = ['minimap2', '-d', minimap2_index, unzipped_assembly]
+    p = subprocess.run(command, capture_output=True, text=True)
+    if p.returncode != 0:
+        sys.exit(f'\nError: minimap2 failed to index sample {assembly}:\n{p.stderr}')
+    return minimap2_index
 
 
 def decompress_file(in_file, out_file):

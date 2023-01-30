@@ -42,7 +42,7 @@ def test_empty_functions():
     # Tests the functions that aren't used in this module.
     assert add_cli_options(None) is None
     assert check_cli_options(None) is None
-    assert check_external_programs() is None
+    assert check_external_programs() == []
 
 
 def test_count_1():
@@ -151,7 +151,7 @@ def test_empty_file_1():
 
 def test_get_results():
     # Final results are all in string format.
-    results = get_results(get_file_dir() / 'test_1.fasta', None, {})
+    results = get_results(get_file_dir() / 'test_1.fasta', None, None, {})
     assert results['contig_count'] == '4'
     assert results['n50'] == '40'
     assert results['largest_contig'] == '45'

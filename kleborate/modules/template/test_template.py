@@ -37,7 +37,7 @@ def test_prerequisite_modules():
 
 def test_get_results():
     # Final results are all in string format.
-    results = get_results(get_file_dir() / 'test_file', None, {})
+    results = get_results(get_file_dir() / 'test_file', None, None, {})
     assert results['header_a'] == 'result_a'
     assert results['header_b'] == 'result_b'
     assert results['header_c'] == 'result_c'
@@ -61,7 +61,7 @@ def test_check_external_programs_1(mocker):
         'shutil.which',
         side_effect=lambda x: {'mash': '/usr/bin/mash', 'minimap2': '/usr/bin/minimap2'}[x],
     )
-    check_external_programs()
+    assert check_external_programs() == ['mash', 'minimap2']
 
 
 def test_check_external_programs_2(mocker):

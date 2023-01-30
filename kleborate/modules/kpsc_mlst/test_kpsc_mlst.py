@@ -85,7 +85,7 @@ def test_check_external_programs_1(mocker):
         'shutil.which',
         side_effect=lambda x: {'minimap2': '/usr/bin/minimap2'}[x],
     )
-    check_external_programs()
+    assert check_external_programs() == ['minimap2']
 
 
 def test_check_external_programs_2(mocker):
@@ -101,7 +101,7 @@ def test_check_external_programs_2(mocker):
 def test_get_results_1():
     Args = collections.namedtuple('Args', ['kpsc_mlst_min_identity', 'kpsc_mlst_min_coverage',
                                            'kpsc_mlst_required_exact_matches'])
-    results = get_results(get_test_genome_dir() / 'GCF_000968155.1.fna.gz',
+    results = get_results(get_test_genome_dir() / 'GCF_000968155.1.fna.gz', None,
                           Args(kpsc_mlst_min_identity=90.0, kpsc_mlst_min_coverage=80.0,
                                kpsc_mlst_required_exact_matches=3), {})
     assert results['st'] == 'ST66'
@@ -117,7 +117,7 @@ def test_get_results_1():
 def test_get_results_2():
     Args = collections.namedtuple('Args', ['kpsc_mlst_min_identity', 'kpsc_mlst_min_coverage',
                                            'kpsc_mlst_required_exact_matches'])
-    results = get_results(get_test_genome_dir() / 'GCF_001068035.1.fna.gz',
+    results = get_results(get_test_genome_dir() / 'GCF_001068035.1.fna.gz', None,
                           Args(kpsc_mlst_min_identity=90.0, kpsc_mlst_min_coverage=80.0,
                                kpsc_mlst_required_exact_matches=3), {})
     assert results['st'] == 'ST592-1LV'
@@ -134,7 +134,7 @@ def test_get_results_3():
     # Tests a Klebsiella oxytoca using the KpSC scheme, so no ST should be assigned.
     Args = collections.namedtuple('Args', ['kpsc_mlst_min_identity', 'kpsc_mlst_min_coverage',
                                            'kpsc_mlst_required_exact_matches'])
-    results = get_results(get_test_genome_dir() / 'GCF_000247855.1.fna.gz',
+    results = get_results(get_test_genome_dir() / 'GCF_000247855.1.fna.gz', None,
                           Args(kpsc_mlst_min_identity=90.0, kpsc_mlst_min_coverage=80.0,
                                kpsc_mlst_required_exact_matches=3), {})
     assert results['st'] == 'NA'

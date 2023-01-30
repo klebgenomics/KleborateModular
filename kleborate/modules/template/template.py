@@ -78,23 +78,26 @@ def check_cli_options(args):
 def check_external_programs():
     """
     This function checks any external programs needed by this module. If any requirements are not
-    found, this function should quit the program with an error message. If no external programs are
-    needed, this function can do nothing (just a single pass statement).
+    found, this function should quit the program with an error message. It also returns a list of
+    external programs needed. If no external programs are needed, this function can do nothing and
+    return an empty list.
     """
-    if not shutil.which('mash'):
-        sys.exit('Error: could not find mash')
-    if not shutil.which('minimap2'):
-        sys.exit('Error: could not find minimap2')
+    programs = ['mash', 'minimap2']
+    for program in programs:
+        if not shutil.which(program):
+            sys.exit(f'Error: could not find {program}')
+    return programs
 
 
-def get_results(assembly, args, previous_results):
+def get_results(assembly, minimap2_index, args, previous_results):
     """
     This function carries out the module's analysis on a single assembly. It returns a dictionary
     of results, where the module's headers are the keys and the values are the corresponding
     results in string format.
 
-    It takes three arguments:
+    It takes four arguments:
     * assembly: the path to the assembly file
+    * minimap2_index: the path to the minimap2 index for the assembly
     * args: all of Kleborate's command-line arguments
     * previous_results: a dictionary of results from modules run before this one.
     """

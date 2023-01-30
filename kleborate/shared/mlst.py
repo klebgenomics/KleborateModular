@@ -20,11 +20,12 @@ import re
 from .alignment import align_query_to_ref
 
 
-def mlst(assembly_path, profiles_path, allele_paths, gene_names, extra_info, min_identity,
+def mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_names, extra_info, min_identity,
          min_coverage, required_exact_matches):
     """
     This function takes:
     * assembly_path: a path for an assembly in FASTA format
+    * minimap2_index: a path for the assembly's minimap2 index (for faster alignment)
     * profiles_path: a path for the MLST profiles file in TSV format
     * allele_paths: a dictionary {gene name: path for the allele FASTA file}
     * gene_names: a list of the gene names in the MLST scheme
@@ -40,7 +41,7 @@ def mlst(assembly_path, profiles_path, allele_paths, gene_names, extra_info, min
     """
     profiles = load_st_profiles(profiles_path, gene_names, extra_info)
     hits_per_gene = {g: align_query_to_ref(allele_paths[g], assembly_path,
-                                           min_identity=min_identity,
+                                           ref_index=minimap2_index, min_identity=min_identity,
                                            min_query_coverage=min_coverage) for g in gene_names}
     return run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches)
 

@@ -58,19 +58,20 @@ def check_cli_options(args):
 def check_external_programs():
     if not shutil.which('minimap2'):
         sys.exit('Error: could not find minimap2')
+    return ['minimap2']
 
 
 def data_dir():
     return pathlib.Path(__file__).parents[0] / 'data'
 
 
-def get_results(assembly, args, previous_results):
+def get_results(assembly, minimap2_index, args, previous_results):
     genes = ['dinB', 'icdA', 'pabB', 'polB', 'putP', 'trpA', 'trpB', 'uidA']
     profiles = data_dir() / 'profiles.tsv'
     alleles = {gene: data_dir() / f'{gene}.fasta' for gene in genes}
 
     st, _, alleles = \
-        mlst(assembly, profiles, alleles, genes, None,
+        mlst(assembly, minimap2_index, profiles, alleles, genes, None,
              args.escherichia_mlst_pasteur_min_identity, args.escherichia_mlst_pasteur_min_coverage,
              args.escherichia_mlst_pasteur_required_exact_matches)
 

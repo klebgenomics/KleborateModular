@@ -20,8 +20,8 @@ from .alignment import align_query_to_ref
 from .mlst import load_st_profiles, run_single_mlst
 
 
-def multi_mlst(assembly_path, profiles_path, allele_paths, gene_names, extra_info, min_identity,
-               min_coverage, required_exact_matches):
+def multi_mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_names, extra_info,
+               min_identity, min_coverage, required_exact_matches):
     """
     This function takes and returns the same things as the mlst function in mlst.py. However, it
     will look for cases where multiple contigs have hits for the full set of MLST genes, and in
@@ -29,7 +29,7 @@ def multi_mlst(assembly_path, profiles_path, allele_paths, gene_names, extra_inf
     """
     profiles = load_st_profiles(profiles_path, gene_names, extra_info)
     hits_per_gene = {g: align_query_to_ref(allele_paths[g], assembly_path,
-                                           min_identity=min_identity,
+                                           ref_index=minimap2_index, min_identity=min_identity,
                                            min_query_coverage=min_coverage) for g in gene_names}
     hits_by_contig = cluster_hits_by_contig(hits_per_gene, gene_names)
     full_set_contigs = find_full_set_contigs(hits_by_contig)

@@ -32,10 +32,10 @@ def check_cli_options(args):
 
 
 def check_external_programs():
-    pass
+    return []
 
 
-def get_results(assembly, args, previous_results):
+def get_results(assembly, minimap2_index, args, previous_results):
     has_ybt = (previous_results['ybst__st'] != 'NA')
     has_aero = (previous_results['abst__st'] != 'NA')
     has_coli = (previous_results['cbst__st'] != 'NA')

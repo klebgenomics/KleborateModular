@@ -65,7 +65,7 @@ def test_check_external_programs_1(mocker):
         'shutil.which',
         side_effect=lambda x: {'mash': '/usr/bin/mash'}[x],
     )
-    check_external_programs()
+    assert check_external_programs() == ['mash']
 
 
 def test_check_external_programs_2(mocker):
@@ -80,7 +80,7 @@ def test_check_external_programs_2(mocker):
 
 def test_get_results_1():
     Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
-    results = get_results(get_test_genome_dir() / 'GCF_000016305.1.fna.gz',
+    results = get_results(get_test_genome_dir() / 'GCF_000016305.1.fna.gz', None,
                           Args(klebsiella_species_strong=0.01, klebsiella_species_weak=0.04), {})
     assert results['species'] == 'Klebsiella pneumoniae'
     assert results['species_match'] == 'strong'
@@ -88,7 +88,7 @@ def test_get_results_1():
 
 def test_get_results_2():
     Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
-    results = get_results(get_test_genome_dir() / 'GCF_000016305.1.fna.gz',
+    results = get_results(get_test_genome_dir() / 'GCF_000016305.1.fna.gz', None,
                           Args(klebsiella_species_strong=0.001, klebsiella_species_weak=0.004), {})
     assert results['species'] == 'Klebsiella pneumoniae'
     assert results['species_match'] == 'weak'
@@ -96,7 +96,7 @@ def test_get_results_2():
 
 def test_get_results_3():
     Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
-    results = get_results(get_test_genome_dir() / 'GCF_000016305.1.fna.gz',
+    results = get_results(get_test_genome_dir() / 'GCF_000016305.1.fna.gz', None,
                           Args(klebsiella_species_strong=0.0001, klebsiella_species_weak=0.0004),
                           {})
     assert results['species'] == 'unknown'

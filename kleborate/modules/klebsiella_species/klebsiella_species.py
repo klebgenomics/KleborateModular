@@ -59,9 +59,10 @@ def check_cli_options(args):
 def check_external_programs():
     if not shutil.which('mash'):
         sys.exit('Error: could not find mash')
+    return ['mash']
 
 
-def get_results(assembly, args, previous_results):
+def get_results(assembly, minimap2_index, args, previous_results):
     sketch_file = pathlib.Path(__file__).parents[0] / 'data' / 'species_mash_sketches.msh'
     species, distance = get_klebsiella_species(assembly, sketch_file)
     if distance <= args.klebsiella_species_strong:
