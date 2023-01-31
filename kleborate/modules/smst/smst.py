@@ -68,7 +68,8 @@ def get_results(assembly, minimap2_index, args, previous_results):
 
     st, lineage, alleles = multi_mlst(assembly, minimap2_index, profiles, alleles, genes,
                                       'iro_lineage', args.smst_min_identity,
-                                      args.smst_min_coverage, args.smst_required_exact_matches)
+                                      args.smst_min_coverage, args.smst_required_exact_matches,
+                                      check_for_truncation=True)
 
     return {'st': st, 'lineage': lineage,
             'iroB': alleles['iroB'], 'iroC': alleles['iroC'], 'iroD': alleles['iroD'],

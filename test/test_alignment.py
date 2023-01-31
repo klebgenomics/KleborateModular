@@ -49,3 +49,54 @@ def test_get_expanded_cigar():
     assert get_expanded_cigar('5=') == '====='
     assert get_expanded_cigar('3=1I4=2D2=1X4=') == '===I====DD==X===='
     assert get_expanded_cigar('') == ''
+
+
+def test_sequences_1():
+    alignments = align_query_to_ref('test/test_alignment/query.fasta',
+                                    'test/test_alignment/forward_hit.fasta')
+    assert len(alignments) == 1
+    a = alignments[0]
+    assert a.strand == '+'
+    assert a.percent_identity == pytest.approx(100.0)
+    assert a.query_cov == pytest.approx(100.0)
+    assert a.ref_cov == pytest.approx(10.0)
+    assert len(a.query_seq) == 1000
+    assert len(a.ref_seq) == 1000
+    assert a.query_seq.startswith('CTTCCACAACCCTCCCAAATGTCCC')
+    assert a.ref_seq.startswith('CTTCCACAACCCTCCCAAATGTCCC')
+    assert a.query_seq.endswith('ATGCGCGTTAGCTGCCTGACAGCTG')
+    assert a.ref_seq.endswith('ATGCGCGTTAGCTGCCTGACAGCTG')
+
+
+def test_sequences_2():
+    alignments = align_query_to_ref('test/test_alignment/query.fasta',
+                                    'test/test_alignment/reverse_hit.fasta')
+    assert len(alignments) == 1
+    a = alignments[0]
+    assert a.strand == '-'
+    assert a.percent_identity == pytest.approx(100.0)
+    assert a.query_cov == pytest.approx(100.0)
+    assert a.ref_cov == pytest.approx(10.0)
+    assert len(a.query_seq) == 1000
+    assert len(a.ref_seq) == 1000
+    assert a.query_seq.startswith('CTTCCACAACCCTCCCAAATGTCCC')
+    assert a.ref_seq.startswith('CTTCCACAACCCTCCCAAATGTCCC')
+    assert a.query_seq.endswith('ATGCGCGTTAGCTGCCTGACAGCTG')
+    assert a.ref_seq.endswith('ATGCGCGTTAGCTGCCTGACAGCTG')
+
+
+def test_sequences_3():
+    alignments = align_query_to_ref('test/test_alignment/query.fasta',
+                                    'test/test_alignment/imperfect_hit.fasta')
+    assert len(alignments) == 1
+    a = alignments[0]
+    assert a.strand == '+'
+    assert a.percent_identity < 100.0
+    assert a.query_cov == pytest.approx(100.0)
+    assert a.ref_cov > 10.0
+    assert len(a.query_seq) == 1000
+    assert len(a.ref_seq) == 1001
+    assert a.query_seq.startswith('CTTCCACAACCCTCCCAAATGTCCC')
+    assert a.ref_seq.startswith('CTTCCACAACCCTCCCAAATGTCCC')
+    assert a.query_seq.endswith('ATGCGCGTTAGCTGCCTGACAGCTG')
+    assert a.ref_seq.endswith('ATGCGCGTTAGCTGCCTGACAGCTG')

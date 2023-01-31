@@ -17,11 +17,11 @@ not, see <https://www.gnu.org/licenses/>.
 
 import re
 
-from .alignment import align_query_to_ref
+from .alignment import align_query_to_ref, truncation_check
 
 
-def mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_names, extra_info, min_identity,
-         min_coverage, required_exact_matches):
+def mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_names, extra_info,
+         min_identity, min_coverage, required_exact_matches, check_for_truncation=False):
     """
     This function takes:
     * assembly_path: a path for an assembly in FASTA format
@@ -33,6 +33,7 @@ def mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_names,
     * min_identity: hits with a lower percent identity than this are discarded
     * min_coverage: hits with a lower percent coverage than this are discarded
     * required_exact_matches: at least this many alleles must be an exact match to assign an ST
+    * check_for_truncation: if true, truncation strings will be added to the allele numbers
 
     This function returns:
     * the best matching ST profile (e.g. 'ST123', 'ST456-1LV' or 'NA')
@@ -43,10 +44,12 @@ def mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_names,
     hits_per_gene = {g: align_query_to_ref(allele_paths[g], assembly_path,
                                            ref_index=minimap2_index, min_identity=min_identity,
                                            min_query_coverage=min_coverage) for g in gene_names}
-    return run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches)
+    return run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches,
+                           check_for_truncation)
 
 
-def run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches):
+def run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches,
+                    check_for_truncation=False):
     """
     This function is factored out because it is also called by the multi_mlst.py file.
     """
@@ -54,7 +57,7 @@ def run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches)
     st, alleles, extra_info = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
     best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, alleles)
 
-    exact_matches, lv_count, allele_numbers = 0, 0, {}
+    exact_matches, lv_count, allele_numbers, any_truncations = 0, 0, {}, False
     for gene_name, st_allele in zip(gene_names, alleles):
         hit = best_hit_per_gene[gene_name]
         hit_allele = number_from_hit(hit)
@@ -65,6 +68,12 @@ def run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches)
             allele_numbers[gene_name] = str(hit_allele)
         else:
             allele_numbers[gene_name] = str(hit_allele) + '*'
+
+        if check_for_truncation and hit is not None:
+            truncation_suffix = truncation_check(hit)[0]
+            allele_numbers[gene_name] += truncation_suffix
+            if truncation_suffix:
+                any_truncations = True
 
         if hit is not None and hit.is_exact() and st_allele == hit_allele:
             exact_matches += 1
@@ -77,6 +86,9 @@ def run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches)
         st = 'ST' + str(st)
     else:
         st = 'ST' + str(st) + f'-{lv_count}LV'
+
+    if extra_info != '-' and any_truncations:
+        extra_info += ' (truncated)'
 
     return st, extra_info, allele_numbers
 
