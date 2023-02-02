@@ -49,7 +49,7 @@ def mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_names,
 
 
 def run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches,
-                    check_for_truncation=False):
+                    check_for_truncation=False, report_incomplete=False):
     """
     This function is factored out because it is also called by the multi_mlst.py file.
     """
@@ -57,13 +57,15 @@ def run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches,
     st, alleles, extra_info = get_best_matching_profile(profiles, gene_names, best_hits_per_gene)
     best_hit_per_gene = get_best_hit_per_gene(gene_names, best_hits_per_gene, alleles)
 
-    exact_matches, lv_count, allele_numbers, any_truncations = 0, 0, {}, False
+    exact_matches, lv_count, allele_numbers = 0, 0, {}
+    any_truncations, any_missing = False, False
     for gene_name, st_allele in zip(gene_names, alleles):
         hit = best_hit_per_gene[gene_name]
         hit_allele = number_from_hit(hit)
 
         if hit is None:
             allele_numbers[gene_name] = '-'
+            any_missing = True
         elif hit.is_exact():
             allele_numbers[gene_name] = str(hit_allele)
         else:
@@ -87,6 +89,8 @@ def run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches,
     else:
         st = 'ST' + str(st) + f'-{lv_count}LV'
 
+    if extra_info != '-' and any_missing and report_incomplete:
+        extra_info += ' (incomplete)'
     if extra_info != '-' and any_truncations:
         extra_info += ' (truncated)'
 

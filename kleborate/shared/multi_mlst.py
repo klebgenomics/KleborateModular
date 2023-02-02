@@ -21,7 +21,8 @@ from .mlst import load_st_profiles, run_single_mlst
 
 
 def multi_mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_names, extra_info,
-               min_identity, min_coverage, required_exact_matches, check_for_truncation=False):
+               min_identity, min_coverage, required_exact_matches, check_for_truncation=False,
+               report_incomplete=False):
     """
     This function takes and returns the same things as the mlst function in mlst.py. However, it
     will look for cases where multiple contigs have hits for the full set of MLST genes, and in
@@ -38,14 +39,15 @@ def multi_mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_
     # case, i.e. the same as regular MLST.
     if len(full_set_contigs) < 2:
         return run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches,
-                               check_for_truncation)
+                               check_for_truncation, report_incomplete)
 
     # If more than one contig has the full set of genes, then this is treated as a multi-MLST case,
     # where each full-set contig gets an MLST call.
     contig_results = {}
     for contig in full_set_contigs:
         contig_results[contig] = run_single_mlst(profiles, hits_by_contig[contig], gene_names,
-                                                 required_exact_matches, check_for_truncation)
+                                                 required_exact_matches, check_for_truncation,
+                                                 report_incomplete)
     return combine_results(full_set_contigs, contig_results, gene_names)
 
 

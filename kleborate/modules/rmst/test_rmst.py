@@ -28,6 +28,10 @@ def get_test_genome_dir():
     return pathlib.Path(__file__).parents[3] / 'test' / 'test_genomes'
 
 
+def get_test_file_dir():
+    return pathlib.Path(__file__).parents[0] / 'test_files'
+
+
 def test_prerequisite_modules():
     assert prerequisite_modules() == []
 
@@ -133,3 +137,42 @@ def test_get_results_3():
                                rmst_required_exact_matches=3), {})
     assert results['st'] == 'NA'
     assert results['lineage'] == '-'
+
+
+def test_gcf_000968155():
+    Args = collections.namedtuple('Args', ['rmst_min_identity', 'rmst_min_coverage',
+                                           'rmst_required_exact_matches'])
+    results = get_results(get_test_file_dir() / 'GCF_000968155.1_rmp_locus.fasta', None,
+                          Args(rmst_min_identity=90.0, rmst_min_coverage=80.0,
+                               rmst_required_exact_matches=2), {})
+    assert results['st'] == 'ST2'
+    assert results['lineage'] == 'rmp 2; KpVP-2'
+    assert results['rmpA'] == '9'
+    assert results['rmpD'] == '32'
+    assert results['rmpC'] == '5'
+
+
+def test_gcf_000968155_incomplete():
+    Args = collections.namedtuple('Args', ['rmst_min_identity', 'rmst_min_coverage',
+                                           'rmst_required_exact_matches'])
+    results = get_results(get_test_file_dir() / 'GCF_000968155.1_rmp_locus_incomplete.fasta', None,
+                          Args(rmst_min_identity=90.0, rmst_min_coverage=80.0,
+                               rmst_required_exact_matches=2), {})
+    assert results['st'] == 'ST2-1LV'
+    assert results['lineage'] == 'rmp 2; KpVP-2 (incomplete)'
+    assert results['rmpA'] == '9'
+    assert results['rmpD'] == '32'
+    assert results['rmpC'] == '-'
+
+
+def test_gcf_000968155_truncated():
+    Args = collections.namedtuple('Args', ['rmst_min_identity', 'rmst_min_coverage',
+                                           'rmst_required_exact_matches'])
+    results = get_results(get_test_file_dir() / 'GCF_000968155.1_rmp_locus_truncated.fasta', None,
+                          Args(rmst_min_identity=90.0, rmst_min_coverage=80.0,
+                               rmst_required_exact_matches=2), {})
+    assert results['st'] == 'ST2-1LV'
+    assert results['lineage'] == 'rmp 2; KpVP-2 (truncated)'
+    assert results['rmpA'] == '9'
+    assert results['rmpD'] == '32'
+    assert results['rmpC'] == '5*-28%'
