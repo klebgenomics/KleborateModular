@@ -79,7 +79,7 @@ def main():
     all_module_names, modules = import_modules()
     args = parse_arguments(sys.argv[1:], all_module_names, modules)
     module_names = get_used_module_names(args, all_module_names, get_presets())
-    module_run_order, external_programs = check_modules(args, modules, module_names)
+    module_names, module_run_order, external_programs = check_modules(args, modules, module_names)
     check_assemblies(args)
 
     top_headers, full_headers, stdout_headers = get_headers(module_names, modules)
@@ -178,15 +178,27 @@ def import_modules():
 def check_modules(args, modules, module_names):
     """
     This function checks the options, prerequisites external requirements of the used modules. If
-    any fail, the program will quit with an error. It returns a list of the modules sorted
-    topologically, so each module will have its prerequisites run first.
+    any fail, the program will quit with an error. It returns:
+    * A list of all module names. Probably the same list as given, but if any prerequisite modules
+      were missing, they've been added to the end.
+    * A topologically sorted list of module names. This is the run order so each module will have
+      its prerequisites run first.
+    * A list of all external programs used.
     """
     all_external_programs = set()
     for m in module_names:
         modules[m].check_cli_options(args)
         all_external_programs.update(modules[m].check_external_programs())
+
+    new_module_names = module_names.copy()
+    for m in module_names:
+        for prereq in modules[m].prerequisite_modules():
+            if prereq not in new_module_names:
+                new_module_names.append(prereq)
+    module_names = new_module_names
+
     dependency_graph = {m: modules[m].prerequisite_modules() for m in module_names}
-    return get_run_order(dependency_graph), sorted(all_external_programs)
+    return module_names, get_run_order(dependency_graph), sorted(all_external_programs)
 
 
 def get_run_order(dependency_graph):
