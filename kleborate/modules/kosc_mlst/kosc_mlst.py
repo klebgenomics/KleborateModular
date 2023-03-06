@@ -20,6 +20,10 @@ import sys
 from ...shared.mlst import mlst
 
 
+def description():
+    return 'chromosomal MLST for the Klebsiella oxytoca species complex'
+
+
 def prerequisite_modules():
     return []
 

@@ -21,6 +21,14 @@ not, see <https://www.gnu.org/licenses/>.
 from kleborate.__main__ import import_modules
 
 
+def test_descriptions():
+    # Makes sure that a description is provided for each module.
+    module_names, modules = import_modules()
+    for module_name in module_names:
+        description = modules[module_name].description()
+        assert len(description) > 0
+
+
 def test_header_subset():
     # For each module, tests that stdout_headers are a subset of full_headers.
     module_names, modules = import_modules()

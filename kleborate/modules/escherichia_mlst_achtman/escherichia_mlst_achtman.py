@@ -20,6 +20,10 @@ import sys
 from ...shared.mlst import mlst
 
 
+def description():
+    return 'chromosomal MLST for Escherichia coli using the Achtman scheme'
+
+
 def prerequisite_modules():
     return []
 

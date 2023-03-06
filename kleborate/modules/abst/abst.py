@@ -20,6 +20,10 @@ import sys
 from ...shared.multi_mlst import multi_mlst
 
 
+def description():
+    return 'MLST on the KpSC aerobactin locus (iuc genes)'
+
+
 def prerequisite_modules():
     return []
 

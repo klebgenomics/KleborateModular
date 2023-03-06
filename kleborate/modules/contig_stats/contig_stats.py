@@ -17,6 +17,10 @@ import collections
 from ...shared.misc import load_fasta
 
 
+def description():
+    return 'basic stats on the assembly\'s contigs'
+
+
 def prerequisite_modules():
     return []
 

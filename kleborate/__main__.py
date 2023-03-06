@@ -44,12 +44,14 @@ def parse_arguments(args, all_module_names, modules):
         args.append('--help_all')
 
     io_args = parser.add_argument_group('Input/output')
-    io_args.add_argument('-a', '--assemblies', nargs='+', type=str, required=True,
+    io_args.add_argument('-a', '--assemblies', nargs='+', type=str,
                          help='FASTA file(s) for assemblies')
     io_args.add_argument('-o', '--outfile', type=str, default='Kleborate_results.txt',
                          help='File for detailed output (default: Kleborate_results.txt)')
 
     module_args = parser.add_argument_group('Modules')
+    module_args.add_argument('--list_modules', action='store_true',
+                             help='Print a list of all available modules and then quit')
     module_args.add_argument('-p', '--preset', type=str,
                              help=f'Module presets, choose from: ' + ', '.join(get_presets()))
     module_args.add_argument('-m', '--modules', type=str,
@@ -78,6 +80,7 @@ def main():
     """
     all_module_names, modules = import_modules()
     args = parse_arguments(sys.argv[1:], all_module_names, modules)
+    print_modules(args, all_module_names, modules)
     module_names = get_used_module_names(args, all_module_names, get_presets())
     module_names, module_run_order, external_programs = check_modules(args, modules, module_names)
     check_assemblies(args)
@@ -97,6 +100,23 @@ def main():
                 results.update({f'{module}__{header}': result
                                 for header, result in module_results.items()})
             output_results(full_headers, stdout_headers, args.outfile, results)
+
+
+def print_modules(args, all_module_names, modules):
+    if args.list_modules:
+        print()
+        print('Available modules for Kleborate')
+        print('-------------------------------')
+        terminal_width = shutil.get_terminal_size().columns
+        end_formatting, bold = '\033[0m', '\033[1m'
+        for m in all_module_names:
+            description = modules[m].description()
+            text = f'{bold}{m}{end_formatting}: {description}'
+            print('\n'.join(textwrap.wrap(text, width=terminal_width - 1)))
+            print()
+        sys.exit(0)
+    elif not args.assemblies:
+        sys.exit('Error: you must provide one or more assembly files using --assemblies')
 
 
 def get_presets():

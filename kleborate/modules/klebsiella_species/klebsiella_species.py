@@ -19,6 +19,10 @@ import shutil
 import sys
 
 
+def description():
+    return 'Mash-based species detection for Klebsiella and closely-related genera'
+
+
 def prerequisite_modules():
     return []
 

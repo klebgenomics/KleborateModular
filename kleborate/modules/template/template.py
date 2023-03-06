@@ -20,6 +20,14 @@ import shutil
 import sys
 
 
+def description():
+    """
+    This function returns a brief high-level description of what the module does. It will be
+    printed to screen if the user runs kleborate --list_modules
+    """
+    return 'template module (not used)'
+
+
 def prerequisite_modules():
     """
     This function returns a list of the other modules that this module depends on. I.e. each of

@@ -13,6 +13,11 @@ not, see <https://www.gnu.org/licenses/>.
 """
 
 
+def description():
+    return 'virulence score (0-5) for the Klebsiella pneumoniae species complex, based on the ' \
+           'results of the abst, cbst and ybst modules'
+
+
 def prerequisite_modules():
     return ['abst', 'cbst', 'ybst']
 
