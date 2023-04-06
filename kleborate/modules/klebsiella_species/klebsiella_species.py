@@ -98,6 +98,8 @@ def get_klebsiella_species(assembly, sketch_file):
 
 
 def clean_species_name(species):
+    if species is None:
+        return None
     species = species.replace('Escherichia_coli', 'Escherichia coli / Shigella')
     species = species.replace('Raoultella', 'Klebsiella (Raoultella)')
     species = species.replace('_', ' ')
