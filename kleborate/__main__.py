@@ -28,7 +28,7 @@ import textwrap
 import uuid
 
 from .shared.help_formatter import MyParser, MyHelpFormatter
-from .shared.misc import get_compression_type, load_fasta
+from .shared.misc import get_compression_type, load_fasta,reverse_complement
 
 
 def parse_arguments(args, all_module_names, modules):
@@ -125,7 +125,8 @@ def get_presets():
     the --preset option, and the values are a list of modules for the preset.
     """
     return {'kpsc': ['contig_stats', 'klebsiella_species', 'kpsc_virulence_score', 'kpsc_mlst',
-                     'ybst', 'cbst', 'abst', 'smst', 'rmst'],
+                     'ybst', 'cbst', 'abst', 'smst', 'rmst', 'amr_genotyping', 'kpsc_resistance_gene_count',
+                     'kpsc_resistance_score', 'kpsc_resistance_class_count'],
             'kosc': ['contig_stats', 'klebsiella_species', 'kosc_mlst'],
             'escherichia': ['contig_stats', 'escherichia_mlst_achtman', 'escherichia_mlst_pasteur']}
 
@@ -172,6 +173,7 @@ def get_all_module_names():
     * modules/contig_stats/contig_stats.py       <- is a module
     * modules/kpsc_mlst/kpsc_mlst.py             <- is a module
     * modules/contig_stats/test_contig_stats.py  <- not a module
+
     """
     module_dir = pathlib.Path(__file__).parents[0] / 'modules'
     module_names = []
@@ -313,9 +315,11 @@ def output_headers(top_headers, full_headers, stdout_headers, outfile):
 
 
 def output_results(full_headers, stdout_headers, outfile, results):
-    print('\t'.join([results[x] for x in stdout_headers]))
+    print('\t'.join([str(results[x]).strip("[] ").replace("'", "") for x in stdout_headers]))
+    #print('\t'.join([results[x] for x in stdout_headers]))
     with open(outfile, 'at') as o:
-        o.write('\t'.join([results[x] for x in full_headers]))
+        o.write('\t'.join([str(results[x]).strip("[] ").replace("'", "") for x in full_headers]))
+         #o.write('\t'.join([str(results[x]) for x in full_headers])) 
         o.write('\n')
 
     # Double check that there weren't any results without a corresponding output header.

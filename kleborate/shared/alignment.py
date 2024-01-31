@@ -1,6 +1,6 @@
 """
-Copyright 2023 Kat Holt
-Copyright 2023 Ryan Wick (rrwick@gmail.com)
+Copyright 2024 Kat Holt
+Copyright 2020 Ryan Wick (rrwick@gmail.com)
 https://github.com/katholt/Kleborate/
 
 This file is part of Kleborate. Kleborate is free software: you can redistribute it and/or modify
@@ -152,6 +152,44 @@ def get_expanded_cigar(cigar):
         letter = p[-1]
         expanded_cigar.append(letter * size)
     return ''.join(expanded_cigar)
+
+
+def hits_overlap(a, b):
+    if a.ref_start <= b.ref_end and b.ref_start <= a.ref_end:  # There is some overlap
+        allowed_overlap = 50
+        overlap_size = min(a.ref_end, b.ref_end) - max(a.ref_start, b.ref_start) + 1
+        return overlap_size > allowed_overlap
+    else:
+        return False
+
+
+def overlapping(hits, existing_hits):
+    # Only consider hits in the same reading frame.
+    existing_hits = [h for h in existing_hits if
+                     h.strand == hits.strand and h.ref_name == hits.ref_name]
+
+    for existing_hit in existing_hits:
+        if hits_overlap(hits, existing_hit):
+            return True
+
+    return False
+
+
+def call_redundant_hits(hits):
+    
+    # Sort the hits from best to worst. Hit quality is defined as the product of gene coverage,
+    # identity 
+    
+    minimap_hits = sorted(hits, key=lambda x: (1/(x.percent_identity * x.alignment_score * x.query_cov), x.query_name))
+
+    filtered_minimap_hits = []
+
+    for h in minimap_hits:
+        if not overlapping(h, filtered_minimap_hits):
+            filtered_minimap_hits.append(h)
+
+    return filtered_minimap_hits
+
 
 
 def truncation_check(alignment, cov_threshold=90.0):
