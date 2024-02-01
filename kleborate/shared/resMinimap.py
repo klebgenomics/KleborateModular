@@ -44,7 +44,6 @@ def resminimap_assembly(assembly, ref_file, gene_info, qrdr, trunc, omp,  min_co
     return hits_dict
 
 
-
 def read_class_file(res_class_file):
     gene_info = {}  # key = sequence id (fasta header in ref file), value = (allele,class,Bla_Class)
     res_classes = []
@@ -91,8 +90,6 @@ def read_class_file(res_class_file):
     return gene_info, res_classes, bla_classes
 
 
-
-
 def get_res_headers(res_classes, bla_classes):
     res_headers = res_classes + bla_classes
 
@@ -109,6 +106,7 @@ def get_res_headers(res_classes, bla_classes):
                    for h in res_headers]
 
     return res_headers
+
 
 def minimap_against_all(assembly, ref_file, gene_info, min_ident, min_spurious_cov, min_spurious_ident, min_cov):
     
@@ -204,7 +202,6 @@ def minimap_against_all(assembly, ref_file, gene_info, min_ident, min_spurious_c
     return hits_dict
 
 
-
 def check_for_exact_aa_match(ref_file, hit, contigs):
     
     """
@@ -273,8 +270,6 @@ def check_for_exact_aa_match(ref_file, hit, contigs):
         return sorted(best_matches)[0]
 
 
-
-
 def is_exact_aa_match(gene_nucl_seq_1, ref_nucl_seq):
     # look at the gene nucleotide sequence in all three frames of the forward strand.
     gene_nucl_seq_2 = gene_nucl_seq_1[1:]
@@ -305,7 +300,6 @@ def translate_nucl_to_prot(nucl_seq):
     return str(Seq(truncated_nucl_seq).translate(table='Bacterial', to_stop=False, cds=False))
 
 
-
 def check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_ident, min_cov):
     
     """
@@ -314,7 +308,6 @@ def check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_ident, min_cov):
     This function returns:
     * a hits dictionary with Fluoroquinolone(Qrdr) mutations
     """
-
 
     qrdr_loci = {'GyrA': [(83, 'S'), (87, 'D')],
                      'ParC': [(80, 'S'), (84, 'E')]}
