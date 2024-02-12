@@ -19,11 +19,11 @@ from ...shared.resMinimap import read_class_file, get_res_headers
 
 def description():
     return 'Counts up all resistance genes, excluding the Bla class which is intrinsic' \
-           'results of the amr_genotyping module'
+           'results of the kpsc_amr module'
 
 
 def prerequisite_modules():
-    return ['amr_genotyping']
+    return ['kpsc_amr']
 
 
 def get_headers():
@@ -58,7 +58,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
     _, res_classes, bla_classes = read_class_file(data_dir() / 'CARD_AMR_clustered.csv')
     res_headers = get_res_headers(res_classes, bla_classes)
 
-    res_hits = {key.split('__')[1]: value for key, value in previous_results.items() if key.startswith('amr_genotyping__')}
+    res_hits = {key.split('__')[1]: value for key, value in previous_results.items() if key.startswith('kpsc_amr__')}
 
 
     if not res_headers:

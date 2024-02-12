@@ -1,4 +1,10 @@
 """
+This file contains tests for Kleborate. To run all tests, go the repo's root directory and run:
+  python3 -m pytest
+
+To get code coverage stats:
+  coverage run --source . -m pytest && coverage report -m
+
 Copyright 2023 Kat Holt
 Copyright 2020 Ryan Wick (rrwick@gmail.com)
 https://github.com/katholt/Kleborate/
@@ -19,44 +25,39 @@ import pathlib
 
 
 from kleborate.shared.resMinimap import read_class_file, get_res_headers, resminimap_assembly
-from kleborate.modules.amr_genotyping.amr_genotyping import get_headers, get_results
+from kleborate.modules.kpsc_amr.kpsc_amr import get_headers, get_results
 
 
 def get_test_genome_dir():
-    return pathlib.Path(__file__).parents[3] / 'test' / 'test_res_mgrb_pmrb'
+    return pathlib.Path(__file__).parents[3] / 'test' / 'test_res_qrdr'
 
 
 def test_get_results_1():
     Args = collections.namedtuple('Args', ['min_identity', 'min_coverage', 'min_spurious_identity', 'min_spurious_coverage'])
-    results = get_results(get_test_genome_dir() / 'test_res_mgrb_pmrb_1.fasta', None,
+    results = get_results(get_test_genome_dir() / 'test_res_qrdr_1.fasta', None,
                           Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
-    assert results['Col_mutations'] == '-'
+    assert results['Flq_mutations'] == '-'
 
-
+    
 def test_get_results_2():
     Args = collections.namedtuple('Args', ['min_identity', 'min_coverage', 'min_spurious_identity', 'min_spurious_coverage'])
-    results = get_results(get_test_genome_dir() / 'test_res_mgrb_pmrb_2.fasta', None,
+    results = get_results(get_test_genome_dir() / 'test_res_qrdr_2.fasta', None,
                           Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
-    assert results['Col_mutations'] == 'PmrB-42%'
-
+    assert results['Flq_mutations'] == 'GyrA-83C'
+    
 
 def test_get_results_3():
     Args = collections.namedtuple('Args', ['min_identity', 'min_coverage', 'min_spurious_identity', 'min_spurious_coverage'])
-    results = get_results(get_test_genome_dir() / 'test_res_mgrb_pmrb_3.fasta', None,
+    results = get_results(get_test_genome_dir() / 'test_res_qrdr_3.fasta', None,
                           Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
-    assert results['Col_mutations'] == 'PmrB-38%'
-
+    assert results['Flq_mutations'] == 'ParC-84D'
+    
 
 def test_get_results_4():
     Args = collections.namedtuple('Args', ['min_identity', 'min_coverage', 'min_spurious_identity', 'min_spurious_coverage'])
-    results = get_results(get_test_genome_dir() / 'test_res_mgrb_pmrb_4.fasta', None,
+    results = get_results(get_test_genome_dir() / 'test_res_qrdr_4.fasta', None,
                           Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
-    assert results['Col_mutations'] == 'MgrB-0%'
+    print(results)
+    assert results['Flq_mutations'] == 'GyrA-83C;ParC-84D'
 
-
-def test_get_results_5():
-    Args = collections.namedtuple('Args', ['min_identity', 'min_coverage', 'min_spurious_identity', 'min_spurious_coverage'])
-    results = get_results(get_test_genome_dir() / 'SRR2098701.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
-    assert results['Col_mutations'] == 'PmrB-58%'
 

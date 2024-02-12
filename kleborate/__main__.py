@@ -125,7 +125,7 @@ def get_presets():
     the --preset option, and the values are a list of modules for the preset.
     """
     return {'kpsc': ['contig_stats', 'klebsiella_species', 'kpsc_virulence_score', 'kpsc_mlst',
-                     'ybst', 'cbst', 'abst', 'smst', 'rmst', 'amr_genotyping', 'kpsc_resistance_gene_count',
+                     'ybst', 'cbst', 'abst', 'smst', 'rmst', 'kpsc_amr', 'kpsc_resistance_gene_count',
                      'kpsc_resistance_score', 'kpsc_resistance_class_count'],
             'kosc': ['contig_stats', 'klebsiella_species', 'kosc_mlst'],
             'escherichia': ['contig_stats', 'escherichia_mlst_achtman', 'escherichia_mlst_pasteur']}

@@ -20,11 +20,11 @@ from ...shared.resMinimap import read_class_file, get_res_headers
 
 def description():
     return 'resistance score (0-3) for the Klebsiella pneumoniae species complex, based on the ' \
-           'results of the amr_genotyping module'
+           'results of the kpsc_amr module'
 
 
 def prerequisite_modules():
-    return ['amr_genotyping']
+    return ['kpsc_amr']
 
 
 def get_headers():
@@ -62,7 +62,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
     """
 
 
-    res_hits = {key.split('__')[1]: value for key, value in previous_results.items() if key.startswith('amr_genotyping__')}
+    res_hits = {key.split('__')[1]: value for key, value in previous_results.items() if key.startswith('kpsc_amr__')}
 
 
     if not res_headers:

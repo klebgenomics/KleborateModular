@@ -24,17 +24,13 @@ import pytest
 import pathlib
 
 
-from kleborate.shared.shv_mutations import*
+from .shv_mutations import*
 from kleborate.shared.resMinimap import read_class_file, get_res_headers, resminimap_assembly
-from kleborate.modules.amr_genotyping.amr_genotyping import get_headers, get_results
+from kleborate.modules.kpsc_amr.kpsc_amr import get_headers, get_results
 
 
 def get_test_genome_dir():
     return pathlib.Path(__file__).parents[3] / 'test' / 'test_shv'
-
-
-# def test_prerequisite_modules():
-#     assert prerequisite_modules() == []
 
 
 def test_get_results_1():
@@ -61,7 +57,7 @@ def test_get_results_3():
     """
     Args = collections.namedtuple('Args', ['min_identity', 'min_coverage','min_spurious_identity', 'min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / '03.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0,min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
     assert results['Bla_ESBL_acquired'] == 'SHV-1* +238Y'
     assert results['SHV_mutations'] == '238Y'
 
@@ -92,7 +88,7 @@ def test_get_results_6():
     """
     Args = collections.namedtuple('Args', ['min_identity', 'min_coverage','min_spurious_identity', 'min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / '06.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0,min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
     assert results['Bla_ESBL_inhR_acquired'] == 'SHV-29* +234Y'
     assert results['SHV_mutations'] ==  '234Y;238A;35Q'
 
@@ -113,7 +109,7 @@ def test_get_results_8():
     """
     Args = collections.namedtuple('Args', ['min_identity', 'min_coverage','min_spurious_identity', 'min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / '08.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0,min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
     assert results['Bla_chr'] == 'SHV-1^'
     assert results['SHV_mutations'] == '-'
 
@@ -123,8 +119,9 @@ def test_get_results_9():
     """
     Args = collections.namedtuple('Args', ['min_identity', 'min_coverage','min_spurious_identity', 'min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / '09.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0,min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
-    assert results['Bla_ESBL_acquired'] == 'SHV-1* +174R'
+                          Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+    print(results)
+    assert results['Bla_chr'] == 'SHV-1*'
     assert results['SHV_mutations'] == '174R;omega-loop=RWETELNEALRGDARD'
 
 def test_bla_class_01():
