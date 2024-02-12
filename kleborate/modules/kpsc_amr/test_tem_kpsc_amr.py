@@ -19,7 +19,7 @@ import pathlib
 
 
 from kleborate.shared.resMinimap import read_class_file, get_res_headers, resminimap_assembly
-from kleborate.modules.amr_genotyping.amr_genotyping import get_headers, get_results
+from kleborate.modules.kpsc_amr.kpsc_amr import get_headers, get_results
 
 def get_test_genome_dir():
     return pathlib.Path(__file__).parents[3] / 'test' / 'test_res_tem' 

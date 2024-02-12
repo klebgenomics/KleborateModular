@@ -21,7 +21,7 @@ from ...shared.resMinimap import read_class_file, get_res_headers, resminimap_as
 
 
 def description():
-    return 'identfying AMR genes on the assembly\'s contigs'
+    return 'Genotyping acquired genes and mutations for the Klebsiella pneumoniae species complex'
 
 
 def prerequisite_modules():
@@ -55,14 +55,14 @@ def add_cli_options(parser):
 
 
 def check_cli_options(args):
-	if args.min_identity <= 50.0 or args.min_identity >= 100.0:
-		sys.exit('Error: --min_identity must be between 50.0 and 100.0')
-	if args.min_coverage <= 50.0 or args.min_coverage >= 100.0:
-		sys.exit('Error: --min_coverage must be between 50.0 and 100.0')
-	if args.min_spurious_identity <= 50.0 or args.min_spurious_identity >= 100.0:
-		sys.exit('Error: --min_spurious_identity must be between 50.0 and 100.0')
-	if args.min_spurious_coverage <= 30.0 or args.min_spurious_coverage >= 100.0:
-		sys.exit('Error: --min_spurious__coverage  must be between 40.0 and 100.0')
+    if args.min_identity <= 50.0 or args.min_identity >= 100.0:
+        sys.exit('Error: --min_identity must be between 50.0 and 100.0')
+    if args.min_coverage <= 50.0 or args.min_coverage >= 100.0:
+        sys.exit('Error: --min_coverage must be between 50.0 and 100.0')
+    if args.min_spurious_identity <= 50.0 or args.min_spurious_identity >= 100.0:
+        sys.exit('Error: --min_spurious_identity must be between 50.0 and 100.0')
+    if args.min_spurious_coverage <= 30.0 or args.min_spurious_coverage >= 100.0:
+        sys.exit('Error: --min_spurious__coverage  must be between 40.0 and 100.0')
 
 
 def check_external_programs():
