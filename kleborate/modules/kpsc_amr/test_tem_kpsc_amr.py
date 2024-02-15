@@ -31,9 +31,9 @@ def test_get_results_1():
     on the wrong strand. This test sequence was coming up as "TEM-15^" from a wrong strand match
     until we fixed the bug (only checking the forward strand).
     """
-    Args = collections.namedtuple('Args', ['min_identity', 'min_coverage','min_spurious_identity', 'min_spurious_coverage'])
+    Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage','kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / 'tem.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0, kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
     assert results['Bla_ESBL_acquired'] == '-'
     assert results['Bla_acquired'] == 'TEM-1D.v1^'
 

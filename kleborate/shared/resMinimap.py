@@ -14,7 +14,6 @@ not, see <http://www.gnu.org/licenses/>.
 """
 
 import collections
-
 from collections import defaultdict
 from Bio import pairwise2
 from Bio.Align import substitution_matrices
@@ -28,9 +27,9 @@ from kleborate.modules.kpsc_amr.shv_mutations import*
 
 
 
-def resminimap_assembly(assembly, ref_file, gene_info, qrdr, trunc, omp,  min_cov, min_ident,
-                          min_spurious_cov, min_spurious_ident):
-    hits_dict = minimap_against_all(assembly, ref_file, gene_info, min_ident, min_spurious_cov, min_spurious_ident, min_cov)
+def resminimap_assembly(assembly, minimap2_index, ref_file, gene_info, qrdr, trunc, omp,  min_cov, min_ident,
+                          min_spurious_cov, min_spurious_identity):
+    hits_dict = minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_ident, min_spurious_cov, min_spurious_identity, min_cov)
     
     if qrdr:
         check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_ident, 90.0)
@@ -106,7 +105,7 @@ def get_res_headers(res_classes, bla_classes):
     return res_headers
 
 
-def minimap_against_all(assembly, ref_file, gene_info, min_ident, min_spurious_cov, min_spurious_ident, min_cov):
+def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_ident, min_spurious_cov, min_spurious_identity, min_cov):
     
     """
     This function takes:
@@ -120,7 +119,7 @@ def minimap_against_all(assembly, ref_file, gene_info, min_ident, min_spurious_c
     """
     
     hits_dict = collections.defaultdict(list)  # key = class, value = list
-    alignment_hits = align_query_to_ref(ref_file, assembly, min_identity=min_ident, min_query_coverage=None)
+    alignment_hits = align_query_to_ref(ref_file, assembly,ref_index=minimap2_index,  min_identity=min_ident, min_query_coverage=None)
     alignment_hits = call_redundant_hits(alignment_hits)
     
     # calculate alignment coverage
@@ -262,7 +261,7 @@ def get_bases_per_ref_pos(alignment):
 def check_for_mgrb_pmrb_gene_truncations(hits_dict, assembly, trunc, min_ident):
     best_mgrb_cov, best_pmrb_cov = 0.0, 0.0
 
-    alignment_hits = align_query_to_ref(trunc, assembly, min_identity=None)
+    alignment_hits = align_query_to_ref(trunc, assembly, min_identity=min_ident)
     for hit in alignment_hits:
         assert hit.query_name == 'pmrB' or hit.query_name == 'mgrB'
         _, coverage, _ = truncation_check(hit)
@@ -287,7 +286,7 @@ def check_omp_genes(hits_dict, assembly, omp, min_ident, min_cov):
 
     best_ompk35_cov, best_ompk36_cov = 0.0, 0.0
     
-    alignment_hits = align_query_to_ref(omp, assembly, min_identity=None, min_query_coverage=None)
+    alignment_hits = align_query_to_ref(omp, assembly, min_identity=min_ident, min_query_coverage=None)
     
     for hit in  alignment_hits:
         _, coverage, translation = truncation_check(hit)
