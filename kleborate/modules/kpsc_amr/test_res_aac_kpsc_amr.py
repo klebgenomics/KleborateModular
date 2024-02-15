@@ -26,23 +26,23 @@ def get_test_genome_dir():
     return pathlib.Path(__file__).parents[3] / 'test' / 'test_res_aac'
 
 def test_get_results_1():
-    Args = collections.namedtuple('Args', ['min_identity', 'min_coverage','min_spurious_identity', 'min_spurious_coverage'])
+    Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage','kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / '01.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0,min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0,kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
     assert results['AGly_acquired'] == '-'
 
 
 def test_get_results_2():
-    Args = collections.namedtuple('Args', ['min_identity', 'min_coverage','min_spurious_identity', 'min_spurious_coverage'])
+    Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage','kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / '02.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0,min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0,kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
     assert results['AGly_acquired'] == 'Aac6-31'
 
 
 def test_get_results_3():
-    Args = collections.namedtuple('Args', ['min_identity', 'min_coverage','min_spurious_identity', 'min_spurious_coverage'])
+    Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage','kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / '03.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0,min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0,kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
     assert results['AGly_acquired'] == 'Aac6-31*'
 
 def test_get_results_4():
@@ -52,9 +52,9 @@ def test_get_results_4():
     match is for a partial hit to Ant3''Ih-Aac6-IId, but the correct answer is Aac6Ib-cr, which
     has a full coverage hit
     """
-    Args = collections.namedtuple('Args', ['min_identity', 'min_coverage','min_spurious_identity', 'min_spurious_coverage'])
+    Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage','kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / '04.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0,min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0,kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
     assert results['AGly_acquired'] == 'Aac6Ib-cr^'
 
 
@@ -62,7 +62,7 @@ def test_get_results_5():
     """
     Same as test_get_results_4, but with the hit on the other strand
     """
-    Args = collections.namedtuple('Args', ['min_identity', 'min_coverage','min_spurious_identity', 'min_spurious_coverage'])
+    Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage','kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / '05.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0,min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0,kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
     assert results['AGly_acquired'] == 'Aac6Ib-cr^'

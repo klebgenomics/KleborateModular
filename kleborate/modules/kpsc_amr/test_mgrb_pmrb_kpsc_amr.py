@@ -17,7 +17,6 @@ import collections
 import pytest
 import pathlib
 
-
 from kleborate.shared.resMinimap import read_class_file, get_res_headers, resminimap_assembly
 from kleborate.modules.kpsc_amr.kpsc_amr import get_headers, get_results
 
@@ -25,38 +24,44 @@ from kleborate.modules.kpsc_amr.kpsc_amr import get_headers, get_results
 def get_test_genome_dir():
     return pathlib.Path(__file__).parents[3] / 'test' / 'test_res_mgrb_pmrb'
 
+"""
+Tests calling of colistin resistance via the truncation of mgrB/pmrB.
+"""
 
 def test_get_results_1():
-    Args = collections.namedtuple('Args', ['min_identity', 'min_coverage', 'min_spurious_identity', 'min_spurious_coverage'])
+    Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage', 'kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / 'test_res_mgrb_pmrb_1.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0, kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
     assert results['Col_mutations'] == '-'
 
 
 def test_get_results_2():
-    Args = collections.namedtuple('Args', ['min_identity', 'min_coverage', 'min_spurious_identity', 'min_spurious_coverage'])
+    #A frameshift in pmrB should cause an early stop and lead to a colisitin resistance call.
+    Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage', 'kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / 'test_res_mgrb_pmrb_2.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0, kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
     assert results['Col_mutations'] == 'PmrB-42%'
 
 
 def test_get_results_3():
-    Args = collections.namedtuple('Args', ['min_identity', 'min_coverage', 'min_spurious_identity', 'min_spurious_coverage'])
+    #This tests an early stop mutation (without a frameshift) in pmrB.
+
+    Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage', 'kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / 'test_res_mgrb_pmrb_3.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0, kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
     assert results['Col_mutations'] == 'PmrB-38%'
 
 
 def test_get_results_4():
-    Args = collections.namedtuple('Args', ['min_identity', 'min_coverage', 'min_spurious_identity', 'min_spurious_coverage'])
+    Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage', 'kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / 'test_res_mgrb_pmrb_4.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0, kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
     assert results['Col_mutations'] == 'MgrB-0%'
 
 
 def test_get_results_5():
-    Args = collections.namedtuple('Args', ['min_identity', 'min_coverage', 'min_spurious_identity', 'min_spurious_coverage'])
+    Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage', 'kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / 'SRR2098701.fasta', None,
-                          Args(min_identity=90.0, min_coverage=80.0, min_spurious_identity=80.0, min_spurious_coverage=40.0), {})
+                          Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0, kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
     assert results['Col_mutations'] == 'PmrB-58%'
 

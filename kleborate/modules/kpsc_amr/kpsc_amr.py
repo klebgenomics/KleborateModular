@@ -42,26 +42,26 @@ def add_cli_options(parser):
     module_name = os.path.basename(__file__)[:-3]
     group = parser.add_argument_group(f'{module_name} module')
 
-    group.add_argument('--min_identity', type=float, default=90.0,
-                       help='Minimum alignment percent identity for main results')
-    group.add_argument('--min_coverage', type=float, default=80.0,
-                       help='Minimum alignment percent coverage for main results')
-    group.add_argument('--min_spurious_identity', type=float, default=80.0,
-                       help='Minimum alignment percent identity for spurious results')
-    group.add_argument('--min_spurious_coverage', type=float, default=40.0,
-                       help='Minimum alignment percent coverage for spurious results')
+    group.add_argument('--kpsc_amr_min_identity', type=float, default=90.0,
+                       help='Minimum alignment percent identity for KpSC Amr results')
+    group.add_argument('--kpsc_amr_min_coverage', type=float, default=80.0,
+                       help='Minimum alignment percent coverage for KpSC Amr  results')
+    group.add_argument('--kpsc_amr_min_spurious_identity', type=float, default=80.0,
+                       help='Minimum alignment percent identity for KpSC Amr spurious results')
+    group.add_argument('--kpsc_amr_min_spurious_coverage', type=float, default=40.0,
+                       help='Minimum alignment percent coverage for KpSC Amr spurious results')
     
     return group
 
 
 def check_cli_options(args):
-    if args.min_identity <= 50.0 or args.min_identity >= 100.0:
+    if args.kpsc_amr_min_identity <= 50.0 or args.kpsc_amr_min_identity >= 100.0:
         sys.exit('Error: --min_identity must be between 50.0 and 100.0')
-    if args.min_coverage <= 50.0 or args.min_coverage >= 100.0:
+    if args.kpsc_amr_min_coverage <= 50.0 or args.kpsc_amr_min_coverage >= 100.0:
         sys.exit('Error: --min_coverage must be between 50.0 and 100.0')
-    if args.min_spurious_identity <= 50.0 or args.min_spurious_identity >= 100.0:
+    if args.kpsc_amr_min_spurious_identity <= 50.0 or args.kpsc_amr_min_spurious_identity >= 100.0:
         sys.exit('Error: --min_spurious_identity must be between 50.0 and 100.0')
-    if args.min_spurious_coverage <= 30.0 or args.min_spurious_coverage >= 100.0:
+    if args.kpsc_amr_min_spurious_coverage <= 30.0 or args.kpsc_amr_min_spurious_coverage >= 100.0:
         sys.exit('Error: --min_spurious__coverage  must be between 40.0 and 100.0')
 
 
@@ -85,16 +85,17 @@ def get_results(assembly, minimap2_index, args, previous_results):
     ref_file = data_dir() / 'CARD_v3.1.13.fasta'
 
     res_hits = resminimap_assembly(
-        assembly, 
+        assembly,
+        minimap2_index, 
         ref_file, 
         gene_info, 
         qrdr, 
         trunc, 
         omp, 
-        args.min_identity,  
-        args.min_coverage,
-        args.min_spurious_identity, 
-        args.min_spurious_coverage
+        args.kpsc_amr_min_identity,  
+        args.kpsc_amr_min_coverage, 
+        args.kpsc_amr_min_spurious_coverage,
+        args.kpsc_amr_min_spurious_identity
     )
 
     # Double check that there weren't any results without a corresponding output header.

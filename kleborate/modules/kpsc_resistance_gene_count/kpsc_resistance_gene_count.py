@@ -54,7 +54,6 @@ def get_results(assembly, minimap2_index, args, previous_results):
     Counts up all resistance genes, excluding the 'Bla' class which is intrinsic.
     """
 
-
     _, res_classes, bla_classes = read_class_file(data_dir() / 'CARD_AMR_clustered.csv')
     res_headers = get_res_headers(res_classes, bla_classes)
 

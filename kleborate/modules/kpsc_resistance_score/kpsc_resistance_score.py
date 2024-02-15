@@ -48,7 +48,6 @@ def data_dir():
     return pathlib.Path(__file__).parents[0] / 'data'
 
 
-
 def get_results(assembly, minimap2_index, args, previous_results):
     _, res_classes, bla_classes = read_class_file(data_dir() / 'CARD_AMR_clustered.csv')
     res_headers = get_res_headers(res_classes, bla_classes)
@@ -61,9 +60,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
       * 3 = Carbapenemase and colistin resistance
     """
 
-
     res_hits = {key.split('__')[1]: value for key, value in previous_results.items() if key.startswith('kpsc_amr__')}
-
 
     if not res_headers:
         return '-'
