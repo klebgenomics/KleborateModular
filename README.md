@@ -12,7 +12,7 @@ This version of Kleborate is **not yet complete**, so most users will probably w
 ## Software requirements
 Before using KleborateModular, make sure you have these installed:
 
-* [Python](https://www.python.org/) v3.6 or later
+* [Python](https://www.python.org/) v3.9 or later
 * [Biopython](https://biopython.org/) v1.75 or later
 	*  The `Bio.pairwise2` module will be replaced with Bio.Align.PairwiseAligner in the near future
 * [Mash](https://github.com/marbl/Mash) v2.0 or later
@@ -44,7 +44,7 @@ Kleborate directory contains:
 * Modules directory - available modules for Kleborate
 * Shared directory - scripts shared by different modules
 
-list modules
+List modules
 ```bash
 ./kleborate-runner.py --list_modules
 ```
@@ -57,13 +57,13 @@ Available modules for Kleborate
 * Chromosomal MLST for Escherichia coli using the Pasteur scheme
 * Mash-based species detection for Klebsiella and closely-related genera
 * Chromosomal MLST for the Klebsiella oxytoca species complex
-* Genotyping acquired genes and mutations for the Klebsiella pneumoniae species complex
 * Chromosomal MLST for the Klebsiella pneumoniae species complex
-* Resistance score (0-3) for the Klebsiella pneumoniae species complex, based on the results of the kpsc_amr module
 * Virulence score (0-5) for the Klebsiella pneumoniae species complex, based on the results of the abst, cbst and ybst modules
 * MLST on the KpSC Rmp locus (rmp genes)
 * MLST on the KpSC salmochelin locus (iro genes)
 * MLST on the KpSC yersiniabactin locus (ybt and irp genes)
+* Genotyping acquired genes and mutations for the Klebsiella pneumoniae species complex
+* Resistance score (0-3) for the Klebsiella pneumoniae species complex, based on the results of the kpsc_amr module
 * Resistance gene classes count
 * Resistance genes count
 
