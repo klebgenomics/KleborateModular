@@ -5,8 +5,9 @@ This file contains tests for Kleborate. To run all tests, go the repo's root dir
 To get code coverage stats:
   coverage run --source . -m pytest && coverage report -m
 
-Copyright 2023 Kat Holt
-Copyright 2020 Ryan Wick (rrwick@gmail.com)
+Copyright 2024 Kat Holt
+Copyright 2024 Ryan Wick (rrwick@gmail.com)
+Copyright 2024 (gathonimaranga@gmail.com)
 https://github.com/katholt/Kleborate/
 
 This file is part of Kleborate. Kleborate is free software: you can redistribute it and/or modify
@@ -24,13 +25,13 @@ import pytest
 import pathlib
 
 
-from .shv_mutations import*
+from kleborate.modules.kpsc_amr.shv_mutations import*
 from kleborate.shared.resMinimap import read_class_file, get_res_headers, resminimap_assembly
 from kleborate.modules.kpsc_amr.kpsc_amr import get_headers, get_results
 
 
 def get_test_genome_dir():
-    return pathlib.Path(__file__).parents[3] / 'test' / 'test_shv'
+    return pathlib.Path(__file__).parents[4] / 'test' / 'test_shv'
 
 
 def test_get_results_1():

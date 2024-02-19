@@ -1,8 +1,10 @@
 
 """
-Copyright 2023 Kat Holt
-Copyright 2023 Ryan Wick (rrwick@gmail.com)
+Copyright 2024 Kat Holt
+Copyright 2024 Ryan Wick (rrwick@gmail.com)
+Copyright 2024 (gathonimaranga@gmail.com)
 https://github.com/katholt/Kleborate/
+
 
 This file is part of Kleborate. Kleborate is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the Free Software Foundation,
@@ -18,7 +20,7 @@ import pathlib
 from ...shared.resMinimap import read_class_file, get_res_headers
 
 def description():
-    return 'Counts up all resistance gene classes, excluding the Bla_chr class which is intrinsic' \
+    return 'Resistance gene classes count, excluding the Bla_chr class which is intrinsic' \
            'results of the kpsc_amr module'
 
 
@@ -44,7 +46,7 @@ def check_external_programs():
     return []
 
 def data_dir():
-    return pathlib.Path(__file__).parents[0] / 'data'
+    return pathlib.Path(__file__).parents[1] / 'kpsc_amr' / 'data'
 
 
 

@@ -1,6 +1,7 @@
 """
-Copyright 2023 Kat Holt
-Copyright 2023 Ryan Wick (rrwick@gmail.com)
+Copyright 2024 Kat Holt
+Copyright 2024 Ryan Wick (rrwick@gmail.com)
+Copyright 2024 (gathonimaranga@gmail.com)
 https://github.com/katholt/Kleborate/
 
 This file is part of Kleborate. Kleborate is free software: you can redistribute it and/or modify
@@ -45,7 +46,7 @@ def check_external_programs():
     return []
 
 def data_dir():
-    return pathlib.Path(__file__).parents[0] / 'data'
+    return pathlib.Path(__file__).parents[1] / 'kpsc_amr' / 'data'
 
 
 def get_results(assembly, minimap2_index, args, previous_results):
