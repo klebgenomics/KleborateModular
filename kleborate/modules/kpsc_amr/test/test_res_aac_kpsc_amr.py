@@ -1,7 +1,14 @@
 
 """
-Copyright 2023 Kat Holt
-Copyright 2020 Ryan Wick (rrwick@gmail.com)
+This file contains tests for Kleborate. To run all tests, go the repo's root directory and run:
+  python3 -m pytest
+
+To get code coverage stats:
+  coverage run --source . -m pytest && coverage report -m
+
+Copyright 2024 Kat Holt
+Copyright 2024 Ryan Wick (rrwick@gmail.com)
+Copyright 2024 (gathonimaranga@gmail.com)
 https://github.com/katholt/Kleborate/
 
 This file is part of Kleborate. Kleborate is free software: you can redistribute it and/or modify
@@ -23,7 +30,7 @@ from kleborate.shared.resMinimap import read_class_file, get_res_headers, resmin
 from kleborate.modules.kpsc_amr.kpsc_amr import get_headers, get_results
 
 def get_test_genome_dir():
-    return pathlib.Path(__file__).parents[3] / 'test' / 'test_res_aac'
+    return pathlib.Path(__file__).parents[4] / 'test' / 'test_res_aac'
 
 def test_get_results_1():
     Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage','kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
@@ -36,14 +43,14 @@ def test_get_results_2():
     Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage','kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / '02.fasta', None,
                           Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0,kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
-    assert results['AGly_acquired'] == 'Aac6-31'
+    assert results['AGly_acquired'] == "aac(6')-31"
 
 
 def test_get_results_3():
     Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage','kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / '03.fasta', None,
                           Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0,kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
-    assert results['AGly_acquired'] == 'Aac6-31*'
+    assert results['AGly_acquired'] == "aac(6')-31*"
 
 def test_get_results_4():
 
@@ -55,7 +62,7 @@ def test_get_results_4():
     Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage','kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / '04.fasta', None,
                           Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0,kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
-    assert results['AGly_acquired'] == 'Aac6Ib-cr^'
+    assert results['AGly_acquired'] == "aac(6')-Ib-cr.v2"
 
 
 def test_get_results_5():
@@ -65,4 +72,4 @@ def test_get_results_5():
     Args = collections.namedtuple('Args', ['kpsc_amr_min_identity', 'kpsc_amr_min_coverage','kpsc_amr_min_spurious_identity', 'kpsc_amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / '05.fasta', None,
                           Args(kpsc_amr_min_identity=90.0, kpsc_amr_min_coverage=80.0,kpsc_amr_min_spurious_identity=80.0, kpsc_amr_min_spurious_coverage=40.0), {})
-    assert results['AGly_acquired'] == 'Aac6Ib-cr^'
+    assert results['AGly_acquired'] == "aac(6')-Ib-cr.v2"
