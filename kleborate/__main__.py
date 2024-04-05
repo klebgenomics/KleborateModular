@@ -29,6 +29,7 @@ import uuid
 
 from .shared.help_formatter import MyParser, MyHelpFormatter
 from .shared.misc import get_compression_type, load_fasta,reverse_complement
+from .shared.species_defs import is_kp_complex, is_ko_complex, is_escherichia
 
 
 def parse_arguments(args, all_module_names, modules):
@@ -52,7 +53,7 @@ def parse_arguments(args, all_module_names, modules):
     module_args = parser.add_argument_group('Modules')
     module_args.add_argument('--list_modules', action='store_true',
                              help='Print a list of all available modules and then quit')
-    module_args.add_argument('-p', '--preset', type=str,
+    module_args.add_argument('-s', '--preset', type=str,
                              help=f'Module presets, choose from: ' + ', '.join(get_presets()))
     module_args.add_argument('-m', '--modules', type=str,
                              help='Comma-delimited list of Kleborate modules to use')
@@ -74,6 +75,7 @@ def parse_arguments(args, all_module_names, modules):
     return parser.parse_args(args)
 
 
+
 def main():
     """
     Kleborate's main function - execution starts here!
@@ -83,6 +85,7 @@ def main():
     print_modules(args, all_module_names, modules)
     module_names = get_used_module_names(args, all_module_names, get_presets())
     module_names, module_run_order, external_programs = check_modules(args, modules, module_names)
+    #print(module_run_order)
     check_assemblies(args)
 
     top_headers, full_headers, stdout_headers = get_headers(module_names, modules)
@@ -94,9 +97,24 @@ def main():
             minimap2_index = build_minimap2_index(assembly, unzipped_assembly, external_programs,
                                                   temp_dir)
             results = {'assembly': assembly}
+            #print(results)
+        
             for module in module_run_order:
+                print(module)
+                species = None
+                kp_complex = is_kp_complex(results)
+                ko_complex = is_ko_complex(results)
+                escherichia = is_escherichia(results)
+
+                if kp_complex:
+                    species = 'Klebsiella'
+                elif ko_complex:
+                    species = 'Klebsiella oxytoca'
+                elif escherichia:
+                    species = 'Escherichia coli'
+
                 module_results = modules[module].get_results(unzipped_assembly, minimap2_index,
-                                                             args, results)
+                                                             args, results, species)
                 results.update({f'{module}__{header}': result
                                 for header, result in module_results.items()})
             output_results(full_headers, stdout_headers, args.outfile, results)
@@ -119,16 +137,76 @@ def print_modules(args, all_module_names, modules):
         sys.exit('Error: you must provide one or more assembly files using --assemblies')
 
 
+
 def get_presets():
-    """
-    This function defines the module presets as a dictionary. The keys are the valid choices for
-    the --preset option, and the values are a list of modules for the preset.
-    """
-    return {'kpsc': ['contig_stats', 'klebsiella_species', 'kpsc_virulence_score', 'kpsc_mlst',
-                     'ybst', 'cbst', 'abst', 'smst', 'rmst', 'kpsc_amr', 'kpsc_resistance_gene_count',
-                     'kpsc_resistance_score', 'kpsc_resistance_class_count'],
-            'kosc': ['contig_stats', 'klebsiella_species', 'kosc_mlst'],
-            'escherichia': ['contig_stats', 'escherichia_mlst_achtman', 'escherichia_mlst_pasteur']}
+    kpsc_modules = {
+        'check': ('enterobacterales__species', is_kp_complex),
+        'pass': [
+            'enterobacterales__species',
+            'general__contig_stats', 'klebsiella_pneumo_complex__mlst',
+            'klebsiella__ybst', 'klebsiella__cbst', 'klebsiella__abst', 'klebsiella__smst', 'klebsiella__rmst', 'klebsiella_pneumo_complex__virulence_score',
+            'klebsiella_pneumo_complex__amr', 'klebsiella_pneumo_complex__resistance_score', 'klebsiella_pneumo_complex__resistance_class_count', 'klebsiella_pneumo_complex__resistance_gene_count',
+            'klebsiella_pneumo_complex__kaptive'
+        ]
+    }
+
+    kosc_modules = {
+        'check': ('enterobacterales__species', is_ko_complex),
+        'pass': [
+            'enterobacterales__species',
+            'general__contig_stats', 'klebsiella_oxytoca_complex__mlst', 'klebsiella__ybst', 'klebsiella__cbst', 'klebsiella__abst', 'klebsiella__smst', 'klebsiella__rmst'
+        ]
+    }
+
+    escherichia_modules = {
+        'check': ('enterobacterales__species', is_escherichia),
+        'pass': [
+            'enterobacterales__species',
+            'general__contig_stats', 'escherichia__mlst_achtman', 'escherichia__mlst_pasteur'
+        ]
+    }
+
+    return {
+        'kpsc': kpsc_modules,
+        'kosc': kosc_modules,
+        'escherichia': escherichia_modules
+    }
+
+
+
+# def get_species():
+#     """
+#     This function defines the module species as a dictionary. The keys are the valid choices for
+#     the --species option, and the values are a list of modules for the species.
+#     """
+
+#     kpsc_modules = {'check': [('enterobacterales__species', 'is_kp_complex')], 
+#                     'pass': ['general__contig_stats', 'klebsiella_pneumo_complex__mlst', 
+#                              'klebsiella__ybst', 'klebsiella__cbst', 'klebsiella__abst', 'klebsiella__smst', 'klebsiella__rmst', 'klebsiella_pneumo_complex__virulence_score',
+#                              'klebsiella_pneumo_complex__amr', 'klebsiella_pneumo_complex__resistance_score', 'klebsiella_pneumo_complex__resistance_class_count', 'klebsiella_pneumo_complex__resistance_gene_count',
+#                              'klebsiella_pneumo_complex__kaptive'] }
+
+#     kosc_modules = {'check': ['enterobacterales__species', 'is_ko_complex'], 
+#                     'pass': ['general__contig_stats', 'klebsiella_oxytoca_complex__mlst', 'klebsiella__ybst', 'klebsiella__cbst', 'klebsiella__abst', 'klebsiella__smst', 'klebsiella__rmst'] }
+
+#     escherichia_modules = {'check': ['enterobacterales__species', 'is_escherichia'], 
+#                            'pass': ['general__contig_stats', 'escherichia__mlst_achtman', 'escherichia__mlst_pasteur'] }
+
+#     return {'kpsc': kpsc_modules,
+#             'kosc': kosc_modules,
+#             'escherichia': escherichia_modules}
+
+
+# def get_presets():
+#     """
+#     This function defines the module presets as a dictionary. The keys are the valid choices for
+#     the --preset option, and the values are a list of modules for the preset.
+#     """
+#     return {'kpsc': ['kpsc_contig_stats', 'klebsiella_species', 'kpsc_virulence_score', 'kpsc_mlst',
+#                      'ybst', 'cbst', 'abst', 'smst', 'rmst', 'kpsc_amr', 'kpsc_resistance_gene_count',
+#                      'kpsc_resistance_score', 'kpsc_resistance_class_count'],
+#             'kosc': ['contig_stats', 'klebsiella_species', 'kosc_mlst'],
+#             'escherichia': ['contig_stats', 'escherichia_mlst_achtman', 'escherichia_mlst_pasteur']}
 
 
 def add_module_cli_arguments(parser, args, all_module_names, modules):
@@ -143,20 +221,16 @@ def add_module_cli_arguments(parser, args, all_module_names, modules):
             for a in group._group_actions:
                 a.help = argparse.SUPPRESS
 
-
 def get_used_module_names(args, all_module_names, presets):
-    """
-    Returns a list of the modules names used in this run of Kleborate. The user can select modules
-    using --preset (pre-selected group of modules), --modules (listing individual modules) or both
-    (preset modules plus additional user-selected modules).
-    """
     if args.preset is None and args.modules is None:
         sys.exit('Error: either --preset or --modules is required')
     module_names = []
     if args.preset:
         if args.preset not in presets:
             sys.exit(f'Error: {args.preset} is not a valid preset')
-        module_names += presets[args.preset]
+        # Skip 'check' and other non-module keys when adding preset modules
+        preset_modules = [m for m in presets[args.preset]['pass'] if m in all_module_names]
+        module_names += preset_modules
     if args.modules:
         for m in args.modules.split(','):
             if m not in all_module_names:
@@ -164,6 +238,28 @@ def get_used_module_names(args, all_module_names, presets):
             if m not in module_names:
                 module_names.append(m)
     return module_names
+
+
+# def get_used_module_names(args, all_module_names, presets):
+#     """
+#     Returns a list of the modules names used in this run of Kleborate. The user can select modules
+#     using --preset (pre-selected group of modules), --modules (listing individual modules) or both
+#     (preset modules plus additional user-selected modules).
+#     """
+#     if args.preset is None and args.modules is None:
+#         sys.exit('Error: either --preset or --modules is required')
+#     module_names = []
+#     if args.preset:
+#         if args.preset not in presets:
+#             sys.exit(f'Error: {args.preset} is not a valid preset')
+#         module_names += presets[args.preset]
+#     if args.modules:
+#         for m in args.modules.split(','):
+#             if m not in all_module_names:
+#                 sys.exit(f'Error: {m} is not a valid module name')
+#             if m not in module_names:
+#                 module_names.append(m)
+#     return module_names
 
 
 def get_all_module_names():
@@ -208,6 +304,8 @@ def check_modules(args, modules, module_names):
     * A list of all external programs used.
     """
     all_external_programs = set()
+    #print(f"Initial module_names: {module_names}")
+
     for m in module_names:
         modules[m].check_cli_options(args)
         all_external_programs.update(modules[m].check_external_programs())
@@ -218,6 +316,8 @@ def check_modules(args, modules, module_names):
             if prereq not in new_module_names:
                 new_module_names.append(prereq)
     module_names = new_module_names
+
+    #print(f"Final module_names (after including prerequisites): {module_names}")
 
     dependency_graph = {m: modules[m].prerequisite_modules() for m in module_names}
     return module_names, get_run_order(dependency_graph), sorted(all_external_programs)

@@ -23,21 +23,23 @@ from Bio.Data.CodonTable import TranslationError
  
 from .alignment import align_query_to_ref, call_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
 from .misc import load_fasta, reverse_complement
-from kleborate.modules.kpsc_amr.shv_mutations import*
+from kleborate.modules.klebsiella_pneumo_complex__amr.shv_mutations import*
+from kleborate.modules.klebsiella_pneumo_complex__amr.qrdr_mutations import*
+from kleborate.modules.klebsiella_pneumo_complex__amr.omp_mutations import*
+from kleborate.modules.klebsiella_pneumo_complex__amr.col_mutations import*
 
 
-
-def resminimap_assembly(assembly, minimap2_index, ref_file, gene_info, qrdr, trunc, omp,  min_cov, min_ident,
-                          min_spurious_cov, min_spurious_identity):
-    hits_dict = minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_ident, min_spurious_cov, min_spurious_identity, min_cov)
+def resminimap_assembly(assembly, minimap2_index, ref_file, gene_info, qrdr, trunc, omp,  min_coverage, min_identity,
+                          min_spurious_coverage, min_spurious_identity):
+    hits_dict = minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_identity, min_spurious_coverage, min_spurious_identity, min_coverage)
     
     if qrdr:
-        check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_ident, 90.0)
+        check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_identity, 90.0)
         
     if trunc:
-        check_for_mgrb_pmrb_gene_truncations(hits_dict, assembly, trunc, min_ident)
+        check_for_mgrb_pmrb_gene_truncations(hits_dict, assembly, trunc, min_identity)
     if omp:
-        check_omp_genes(hits_dict, assembly, omp, min_ident, 90.0)
+        check_omp_genes(hits_dict, assembly, omp, min_identity, 90.0)
     return hits_dict
 
 
@@ -105,7 +107,7 @@ def get_res_headers(res_classes, bla_classes):
     return res_headers
 
 
-def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_ident, min_spurious_cov, min_spurious_identity, min_cov):
+def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_identity, min_spurious_coverage, min_spurious_identity, min_coverage):
     
     """
     This function takes:
@@ -119,14 +121,15 @@ def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_ident
     """
     
     hits_dict = collections.defaultdict(list)  # key = class, value = list
-    alignment_hits = align_query_to_ref(ref_file, assembly,ref_index=minimap2_index,  min_identity=min_ident, min_query_coverage=None)
+    alignment_hits = align_query_to_ref(ref_file, assembly,ref_index=minimap2_index,  min_identity=min_identity, min_query_coverage=None)
     alignment_hits = call_redundant_hits(alignment_hits)
     
     # calculate alignment coverage
     for hit in alignment_hits:
         alignment_length = hit.ref_end - hit.ref_start
         coverage = (alignment_length / hit.query_length) * 100
-        if coverage >= min_spurious_cov:
+        #coverage = (hit.ref_end - hit.ref_start) / hit.query_length * 100
+        if coverage >= min_spurious_coverage:
             if hit.percent_identity < 100.0:
                 aa_result = check_for_exact_aa_match(ref_file, hit, assembly)
                 if aa_result is not None:
@@ -172,7 +175,8 @@ def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_ident
                 if hit.percent_identity < 100:
                     hit_allele += '*'
                     
-                if hit.ref_length < hit.query_length:
+                #if hit.ref_length < hit.query_length: # commented out this code for tests
+                if (hit.ref_end - hit.ref_start) < hit.query_length:
                         hit_allele += '?'
                 trunc_suffix, trunc_cov, _ = truncation_check(hit)
                 hit_allele += trunc_suffix
@@ -183,12 +187,12 @@ def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_ident
             
             # If the hit is decent (above the min coverage and identity thresholds), it goes in the
             # column for the class.
-            if coverage >= min_cov and hit.percent_identity >= min_ident and trunc_cov >= 90.0:
+            if coverage >= min_coverage and hit.percent_identity >= min_identity and trunc_cov >= 90.0:
                 hits_dict[hit_class].append(hit_allele)
                 
             # If the hit is decent but the gene is truncated, it goes in the
             # truncated_resistance_hits column.
-            elif coverage >= min_cov and hit.percent_identity >= min_ident and trunc_cov < 90.0:
+            elif coverage >= min_coverage and hit.percent_identity >= min_identity and trunc_cov < 90.0:
                 hits_dict['truncated_resistance_hits'].append(hit_allele)
                 
             # If the hit is bad (below the min coverage and identity thresholds but above the
@@ -197,131 +201,3 @@ def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_ident
                 hits_dict['spurious_resistance_hits'].append(hit_allele)
     
     return hits_dict
-
-
-def check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_ident, min_cov):
-    
-    """
-    This function checks for qrdr mutations
-    
-    This function returns:
-    * a hits dictionary with Fluoroquinolone(Qrdr) mutations
-    """
-
-    qrdr_loci = {'GyrA': [(83, 'S'), (87, 'D')],
-                     'ParC': [(80, 'S'), (84, 'E')]}
-
-    gyra_ref = 'MSDLAREITPVNIEEELKNSYLDYAMSVIVGRALPDVRDGLKPVHRRVLYAMNVLGNDWN' \
-               'KAYKKSARVVGDVIGKYHPHGDSAVYDTIVRMAQPFSLRYMLVDGQGNFGSIDGDSAAAM'
-    parc_ref = 'MSDMAERLALHEFTENAYLNYSMYVIMDRALPFIGDGLKPVQRRIVYAMSELGLNASAKF' \
-               'KKSARTVGDVLGKYHPHGDSACYEAMVLMAQPFSYRYPLVDGQGNWGAPDDPKSFAAMRY'
-
-    blosum62 = substitution_matrices.load('BLOSUM62')
-
-    snps = []
-
-    alignment_hits = align_query_to_ref(qrdr, assembly)
-    for hit in alignment_hits:
-        _, coverage, translation = truncation_check(hit)
-        
-        if coverage > min_cov:
-            if hit.query_name == 'GyrA':
-                alignments = pairwise2.align.globalds(gyra_ref, translation, blosum62, -10, -0.5)
-            elif hit.query_name == 'ParC':
-                alignments = pairwise2.align.globalds(parc_ref, translation, blosum62, -10, -0.5)
-            else:
-                assert False
-            bases_per_ref_pos = get_bases_per_ref_pos(alignments[0])
-            loci = qrdr_loci[hit.query_name]
-
-            for pos, wt_base in loci:
-                assembly_base = bases_per_ref_pos[pos]
-                if pos in bases_per_ref_pos and assembly_base != wt_base \
-                        and assembly_base != '-' and assembly_base != '.':
-                    snps.append(hit.query_name + '-' + str(pos) + assembly_base)
-
-        
-    if snps:
-        hits_dict['Flq_mutations'] += snps
-
-
-def get_bases_per_ref_pos(alignment):
-    aligned_seq1, aligned_seq2 = alignment[0], alignment[1]
-    bases_per_ref_pos = {}
-    ref_pos = 1
-    for i, ref_b in enumerate(aligned_seq1):
-        if ref_b == '-' or ref_b == '.':
-            continue
-        assembly_b = aligned_seq2[i]
-        bases_per_ref_pos[ref_pos] = assembly_b
-        ref_pos += 1
-    return bases_per_ref_pos
-
-
-def check_for_mgrb_pmrb_gene_truncations(hits_dict, assembly, trunc, min_ident):
-    best_mgrb_cov, best_pmrb_cov = 0.0, 0.0
-
-    alignment_hits = align_query_to_ref(trunc, assembly, min_identity=min_ident)
-    for hit in alignment_hits:
-        assert hit.query_name == 'pmrB' or hit.query_name == 'mgrB'
-        _, coverage, _ = truncation_check(hit)
-        
-        if hit.query_name == 'mgrB' and coverage > best_mgrb_cov:
-            best_mgrb_cov = coverage
-        elif hit.query_name == 'pmrB' and coverage > best_pmrb_cov:
-            best_pmrb_cov = coverage
-            
-
-    truncations = []
-    if best_mgrb_cov < 90.0:
-        truncations.append('MgrB-' + ('%.0f' % best_mgrb_cov) + '%')
-    if best_pmrb_cov < 90.0:
-        truncations.append('PmrB-' + ('%.0f' % best_pmrb_cov) + '%')
-
-    if truncations:
-        hits_dict['Col_mutations'] += truncations
-
-
-def check_omp_genes(hits_dict, assembly, omp, min_ident, min_cov):
-
-    best_ompk35_cov, best_ompk36_cov = 0.0, 0.0
-    
-    alignment_hits = align_query_to_ref(omp, assembly, min_identity=min_ident, min_query_coverage=None)
-    
-    for hit in  alignment_hits:
-        _, coverage, translation = truncation_check(hit)
-        
-        if hit.query_name == 'OmpK35':
-            if coverage > best_ompk35_cov:
-                best_ompk35_cov = coverage
-
-        elif hit.query_name == 'OmpK36':
-            if coverage > best_ompk36_cov:
-                best_ompk36_cov = coverage
-
-            if coverage >= min_cov:
-                if 'GDGDTY' in translation:
-                    hits_dict['Omp_mutations'].append('OmpK36GD')
-                    
-                elif 'GDTDTY' in translation:
-                    hits_dict['Omp_mutations'].append('OmpK36TD')
-        else:
-            assert False
-
-
-    truncations = []
-    if best_ompk35_cov < 90.0:
-        truncations.append('OmpK35-' + ('%.0f' % best_ompk35_cov) + '%')
-   
-    if best_ompk36_cov < 90.0:
-        truncations.append('OmpK36-' + ('%.0f' % best_ompk36_cov) + '%')
-    
-
-    if truncations:
-        if 'Omp_mutations' not in hits_dict:
-            hits_dict['Omp_mutations'] = []
-        hits_dict['Omp_mutations'] += truncations
-
-
-
-

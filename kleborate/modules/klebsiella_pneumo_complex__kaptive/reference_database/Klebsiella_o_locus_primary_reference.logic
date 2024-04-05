@@ -1,0 +1,7 @@
+loci	genes	phenotype
+O1/O2v1;O1/O2v2;O1/O2v3	wbbY	O1a
+O1/O2v1;O1/O2v2;O1/O2v3	wbbY;wbbZ	O1ab
+O8	wbbY	O8
+O1/O2v1;O1/O2v2;O1/O2v3;O8	wbmV;wbmW	O2ac
+O1/O2v1;O1/O2v2;O1/O2v3;O8	gmlA;gmlB;gmlD	O2aeh
+O1/O2v1;O1/O2v2;O1/O2v3;O8	wbbY;wbmV;wbmW	O1a (O2ac)
