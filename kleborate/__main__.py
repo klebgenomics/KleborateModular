@@ -377,11 +377,11 @@ def output_results(full_headers, stdout_headers, outfile, results):
     """
     This function writes the results to stdout and the output file.
     """
-    print('\t'.join([str(results.get(x, "-")).strip("[] ").replace("'", "") for x in stdout_headers]))
+    print('\t'.join([str(results.get(x, "-")).strip("[] ") for x in stdout_headers]))
     with open(outfile, 'at') as o:
         if o.tell() > 0:  # Check if the file is not empty
-            o.write('\n')  # Add a newline to separate from previous content
-        o.write('\t'.join([str(results.get(x, "-")).strip("[] ").replace("'", "") for x in full_headers]))
+            o.write('\n')
+        o.write('\t'.join([str(results.get(x, "-")).strip("[] ") for x in full_headers]))
 
     for h in results.keys():
         if h not in full_headers:
