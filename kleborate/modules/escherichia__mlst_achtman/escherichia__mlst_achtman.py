@@ -69,7 +69,7 @@ def data_dir():
     return pathlib.Path(__file__).parents[0] / 'data'
 
 
-def get_results(assembly, minimap2_index, args, previous_results, species):
+def get_results(assembly, minimap2_index, args, previous_results):
     genes = ['adk', 'fumC', 'gyrB', 'icd', 'mdh', 'purA', 'recA']
     profiles = data_dir() / 'profiles.tsv'
     alleles = {gene: data_dir() / f'{gene}.fasta' for gene in genes}

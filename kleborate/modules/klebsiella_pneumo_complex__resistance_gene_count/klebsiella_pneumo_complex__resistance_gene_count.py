@@ -50,16 +50,19 @@ def data_dir():
 
 
 
-def get_results(assembly, minimap2_index, args, previous_results, species):
+def get_results(assembly, minimap2_index, args, previous_results):
 
     """
     Counts up all resistance genes, excluding the 'Bla' class which is intrinsic.
     """
-
+    #print(previous_results)
     _, res_classes, bla_classes = read_class_file(data_dir() / 'CARD_AMR_clustered.csv')
     res_headers = get_res_headers(res_classes, bla_classes)
 
-    res_hits = {key.split('__')[1]: value for key, value in previous_results.items() if key.startswith('klebsiella_pneumo_complex__amr__')}
+    res_hits = {key.split('__')[2]: value for key, value in previous_results.items() if key.startswith('klebsiella_pneumo_complex__amr__')}
+
+
+    #res_hits = {key.split('__')[1]: value for key, value in previous_results.items() if key.startswith('klebsiella_pneumo_complex__amr__')}
 
 
     if not res_headers:

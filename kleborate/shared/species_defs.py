@@ -1,8 +1,6 @@
 """
-Copyright 2024 Kat Holt
-Copyright 2024 Ryan Wick (rrwick@gmail.com)
-Copyright 2024 (gathonimaranga@gmail.com)
-https://github.com/katholt/Kleborate/
+Copyright 2024 Mary Maranga, Kat Holt, Ryan Wick
+https://github.com/klebgenomics/KleborateModular/
 
 This file is part of Kleborate. Kleborate is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the Free Software Foundation,
@@ -13,14 +11,12 @@ details. You should have received a copy of the GNU General Public License along
 not, see <https://www.gnu.org/licenses/>.
 """
 
-
 def is_kp_complex(results):
     """
     Returns True if the species call is in the Kp-complex, otherwise false.
     """
     assert 'species' in results
     species = results['species']
-    
     if species.startswith('Klebsiella pneumoniae'):
         return True
     if species.startswith('Klebsiella quasipneumoniae'):
@@ -32,7 +28,6 @@ def is_kp_complex(results):
     if species.startswith('Klebsiella africana'):
         return True
     return False
-
 
 
 def is_ko_complex(results):
@@ -49,7 +44,12 @@ def is_ko_complex(results):
         return True
     if species.startswith('Klebsiella pasteurii'):
         return True
+    if species.startswith('Klebsiella huaxiensis'):
+        return True
+    if species.startswith('Klebsiella spallanzanii'):
+        return True
     return False
+
 
 def is_escherichia(results):
     """

@@ -1,7 +1,6 @@
 """
-Copyright 2023 Kat Holt
-Copyright 2023 Ryan Wick (rrwick@gmail.com)
-https://github.com/katholt/Kleborate/
+Copyright 2023 Kat Holt, Ryan Wick (rrwick@gmail.com), Mary Maranga (gathonimaranga@gmail.com)
+https://github.com/klebgenomics/KleborateModular/
 
 This file is part of Kleborate. Kleborate is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the Free Software Foundation,
@@ -52,10 +51,10 @@ def check_external_programs():
 def data_dir():
     return pathlib.Path(__file__).parents[0] 
 
-def get_results(assembly, minimap2_index, args, previous_results, species):
+def get_results(assembly, minimap2_index, args, previous_results):
     species_file = data_dir() / 'species_specification.txt'
     species_specification_dict = load_species_specifications(species_file)
-    #print(previous_results)
+    species=previous_results['enterobacterales__species__species']
     
     contig_count, n50, longest_contig, total_size, ambiguous_bases = get_contig_stats(assembly)
     qc_warnings = get_qc_warnings(total_size, n50, ambiguous_bases, species, species_specification_dict)
@@ -114,22 +113,41 @@ def load_species_specifications(file_path):
     return species_specifications
 
 
-def get_qc_warnings(total_size, n50, ambiguous_bases, species, species_specification_dict): 
+def get_qc_warnings(total_size, n50, ambiguous_bases, species, species_specification_dict):
     warnings = []
-    species_spec = species_specification_dict[species]
-    min_size, max_size = species_spec['min_genome_size'], species_spec['max_genome_size']
-
-    if total_size < min_size:
-        warnings.append('total_size below min threshold')
-    elif total_size > max_size:
-        warnings.append('total_size above max threshold')
-    
+    if species in species_specification_dict:
+        species_spec = species_specification_dict[species]
+        min_size, max_size = species_spec['min_genome_size'], species_spec['max_genome_size']
+        if total_size < min_size:
+            warnings.append('total_size')
+        elif total_size > max_size:
+            warnings.append('total_size')
+    else:
+        return '-'  # Skip QC for species not in the dictionary
 
     if n50 < 10000:
         warnings.append('N50')
     if 'yes' in ambiguous_bases:
         warnings.append('ambiguous_bases')
-    if warnings:
-        return ','.join(warnings)
-    else:
-        return '-'
+    return ','.join(warnings) if warnings else '-'
+
+
+# def get_qc_warnings(total_size, n50, ambiguous_bases, species, species_specification_dict): 
+#     warnings = []
+#     species_spec = species_specification_dict[species]
+#     min_size, max_size = species_spec['min_genome_size'], species_spec['max_genome_size']
+
+#     if total_size < min_size:
+#         warnings.append('total_size')
+#     elif total_size > max_size:
+#         warnings.append('total_size')
+    
+
+#     if n50 < 10000:
+#         warnings.append('N50')
+#     if 'yes' in ambiguous_bases:
+#         warnings.append('ambiguous_bases')
+#     if warnings:
+#         return ','.join(warnings)
+#     else:
+#         return '-'

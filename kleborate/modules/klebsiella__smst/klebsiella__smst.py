@@ -29,7 +29,7 @@ def prerequisite_modules():
 
 
 def get_headers():
-    full_headers = ['st', 'lineage', 'iroB', 'iroC', 'iroD', 'iroN']
+    full_headers = ['SmST', 'sm_lineage', 'iroB', 'iroC', 'iroD', 'iroN']
     stdout_headers = []
     return full_headers, stdout_headers
 
@@ -37,22 +37,22 @@ def get_headers():
 def add_cli_options(parser):
     module_name = os.path.basename(__file__)[:-3]
     group = parser.add_argument_group(f'{module_name} module')
-    group.add_argument('--smst_min_identity', type=float, default=90.0,
+    group.add_argument('--klebsiella__smst_min_identity', type=float, default=90.0,
                        help='Minimum alignment percent identity for salmochelin MLST')
-    group.add_argument('--smst_min_coverage', type=float, default=80.0,
+    group.add_argument('--klebsiella__smst_min_coverage', type=float, default=80.0,
                        help='Minimum alignment percent coverage for salmochelin MLST')
-    group.add_argument('--smst_required_exact_matches', type=int, default=2,
+    group.add_argument('--klebsiella__smst_required_exact_matches', type=int, default=2,
                        help='At least this many exact matches are required to call an ST')
     return group
 
 
 def check_cli_options(args):
-    if args.smst_min_identity <= 50.0 or args.smst_min_identity >= 100.0:
-        sys.exit('Error: --smst_min_identity must be between 50.0 and 100.0')
-    if args.smst_min_coverage <= 50.0 or args.smst_min_coverage >= 100.0:
-        sys.exit('Error: --smst_min_coverage must be between 50.0 and 100.0')
-    if args.smst_required_exact_matches < 0:
-        sys.exit('Error: --smst_required_exact_matches must be a positive integer')
+    if args.klebsiella__smst_min_identity <= 50.0 or args.klebsiella__smst_min_identity >= 100.0:
+        sys.exit('Error: --klebsiella__smst_min_identity must be between 50.0 and 100.0')
+    if args.klebsiella__smst_min_coverage <= 50.0 or args.klebsiella__smst_min_coverage >= 100.0:
+        sys.exit('Error: --klebsiella__smst_min_coverage must be between 50.0 and 100.0')
+    if args.klebsiella__smst_required_exact_matches < 0:
+        sys.exit('Error: --klebsiella__smst_required_exact_matches must be a positive integer')
 
 
 def check_external_programs():
@@ -65,16 +65,16 @@ def data_dir():
     return pathlib.Path(__file__).parents[0] / 'data'
 
 
-def get_results(assembly, minimap2_index, args, previous_results, species):
+def get_results(assembly, minimap2_index, args, previous_results):
     genes = ['iroB', 'iroC', 'iroD', 'iroN']
     profiles = data_dir() / 'profiles.tsv'
     alleles = {gene: data_dir() / f'{gene}.fasta' for gene in genes}
 
     st, lineage, alleles = multi_mlst(assembly, minimap2_index, profiles, alleles, genes,
-                                      'iro_lineage', args.smst_min_identity,
-                                      args.smst_min_coverage, args.smst_required_exact_matches,
+                                      'iro_lineage', args.klebsiella__smst_min_identity,
+                                      args.klebsiella__smst_min_coverage, args.klebsiella__smst_required_exact_matches,
                                       check_for_truncation=True, report_incomplete=True)
 
-    return {'st': st, 'lineage': lineage,
+    return {'SmST': st, 'sm_lineage': lineage,
             'iroB': alleles['iroB'], 'iroC': alleles['iroC'], 'iroD': alleles['iroD'],
             'iroN': alleles['iroN']}

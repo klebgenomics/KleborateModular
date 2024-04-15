@@ -2,7 +2,8 @@
 This module contains classes for interacting with bacterial genome assemblies and contigs and a pipeline
 to type them.
 
-Copyright 2023 Tom Stanton (tomdstanton@gmail.com)
+Copyright 2024 Mary Maranga, Kat Holt, Tom Stanton, Ryan Wick
+https://github.com/klebgenomics/KleborateModular/
 https://github.com/klebgenomics/Kaptive
 
 This file is part of Kaptive. Kaptive is free software: you can redistribute it and/or modify
@@ -36,44 +37,28 @@ def prerequisite_modules():
 
 def get_headers():
     full_headers = [
-        'Assembly', 'Best match locus', 'Best match type', 'Confidence', 'Problems', 'Identity', 'Coverage',
-        'Length discrepancy', 'Expected genes in locus', 'Expected genes in locus, details', 'Missing expected genes',
-        'Other genes in locus', 'Other genes in locus, details', 'Expected genes outside locus',
-        'Expected genes outside locus, details', 'Other genes outside locus', 'Other genes outside locus, details',
-        'Truncated genes, details'
+        'K_locus', 'K_type', 'K_Confidence', 'K_Problems', 'K_Identity', 
+        'K_Coverage', 'K_Length discrepancy', 'K_Expected genes in locus', 
+        'K_Expected genes in locus, details', 'K_Missing expected genes', 
+        'K_Other genes in locus', 'K_Other genes in locus, details', 
+        'K_Expected genes outside locus', 'K_Expected genes outside locus, details', 
+        'K_Other genes outside locus', 'K_Other genes outside locus, details',
+        'O_locus', 'O_type', 'O_Confidence', 'O_Problems', 'O_Identity', 
+        'O_Coverage', 'O_Length discrepancy', 'O_Expected genes in locus', 
+        'O_Expected genes in locus, details', 'O_Missing expected genes', 
+        'O_Other genes in locus', 'O_Other genes in locus, details', 
+        'O_Expected genes outside locus', 'O_Expected genes outside locus, details', 
+        'O_Other genes outside locus', 'O_Other genes outside locus, details'
     ]
     stdout_headers = []
     return full_headers, stdout_headers
 
 
-
-
 def add_cli_options(parser):
     module_name = os.path.basename(__file__)[:-3]
     group = parser.add_argument_group(f'{module_name} module')
-
-    #group.add_argument('db', type=get_database, help='Kaptive database path or keyword')
-    #group.add_argument('input', nargs='+', type=check_file, help='Assemblies in fasta(.gz) format')
-
-
-    # group.add_argument("--score-metric", type=str, default='AS', metavar='',
-    #                   help="Alignment metric to use for scoring (default: %(default)s)")
-    # group.add_argument("--weight-metric", type=str, metavar='', default='prop_genes_found',
-    #                   help="Weighting for scoring metric (default: %(default)s)\n"
-    #                        " - none: No weighting\n"
-    #                        " - locus_length: length of the locus\n"
-    #                        " - genes_expected: # of genes expected in the locus\n"
-    #                        " - genes_found: # of genes found in the locus\n"
-    #                        " - prop_genes_found: genes_found / genes_expected")
-    # group.add_argument("--min-zscore", type=float, metavar='', default=3.0,
-    #                   help="Minimum zscore for confidence (default: %(default)s)")
-    # group.add_argument('--min-cov', type=float, required=False, default=50.0, metavar='',
-    #                   help='Minimum gene %%coverage to be used for scoring (default: %(default)s)')
-    # group.add_argument("--gene-threshold", type=float, metavar='',
-    #                   help="Species-level locus gene identity threshold (default: database specific)")
     group.add_argument('-t', '--threads', type=check_cpus, default=1, metavar='',
-                      help="Number of threads for alignment (default: %(default)s)")
-
+                      help="Kaptive number of threads for alignment (default: %(default)s)")
 
     return group
 
@@ -81,10 +66,6 @@ def add_cli_options(parser):
 def check_cli_options(args):
     if args.threads < 1:
         raise ValueError("The number of threads must be at least 1.")
-#     if args.min-zscore <= 3.0 or args.min-zscore >= 10.0:
-#         sys.exit('Error: --min_identity must be between 3 and 10.0')
-#     if args.min-cov <= 50.0 or args.min-cov >= 60.0:
-#         sys.exit('Error: --min_coverage must be between 50.0 and 60.0')
     
 
 def check_external_programs():
@@ -97,45 +78,97 @@ def data_dir():
     return pathlib.Path(__file__).parents[0] / 'reference_database'
 
 
+def get_results(assembly, minimap2_index, args, previous_results):
+    full_headers, _ = get_headers()
+    
+    # Filter for k_ and o_ prefixed headers
+    k_headers = [h for h in full_headers if h.startswith('K_')]
+    o_headers = [h for h in full_headers if h.startswith('O_')]
 
-#def get_results(assembly:Path, minimap2_index, args, previous_results):
-def get_results(assembly, minimap2_index, args, previous_results, species):
+    if not isinstance(assembly, list):
+        assembly = [assembly]
 
-    k_database_path = Path(data_dir() / 'Klebsiella_k_locus_primary_reference.gbk')
-    o_database_path = Path(data_dir() / 'Klebsiella_o_locus_primary_reference.gbk')
+    ref_database = Path(data_dir())
+    k_database_path = ref_database / 'Klebsiella_k_locus_primary_reference.gbk'
+    o_database_path = ref_database / 'Klebsiella_o_locus_primary_reference.gbk'
 
     k_db, o_db = Database.from_genbank(k_database_path, load_seq=False), Database.from_genbank(o_database_path, load_seq=False)
 
+    assembly_paths = [Path(asmbly) if not isinstance(asmbly, Path) else asmbly for asmbly in assembly]
 
-    # k_results = [typing_pipeline(assembly, k_db, threads=8) for assembly in assemblies]
-    # o_results = [typing_pipeline(assembly, o_db, threads=8) for assembly in assemblies]
+    results_dict = {}
 
-
-    k_results = [typing_pipeline(Path(ass), k_db, threads=8) for ass in assembly]
-    o_results = [typing_pipeline(Path(ass), o_db, threads=8) for ass in assembly]
-
-    
-    
-    k_result_dicts = []
-    for result in k_results:
-        k_result_dict = {}
-        k_result_table = result.as_table()  
+    for assembly_path in assembly_paths:
+        # Process k typing results
+        k_results = typing_pipeline(assembly_path, k_db, threads=args.threads)
+        k_result_table = k_results.as_table()
         for line in k_result_table.split('\n'):
             if line:
-                parts = line.split('\t')
-                k_result_dict = {'k_' + key: value for key, value in zip(full_headers, parts)}
-                k_result_dicts.append(k_result_dict)
+                parts = line.split('\t')[1:-1]  # Slice to exclude the first and last fiels
+                for key, value in zip(k_headers, parts):  
+                    results_dict[key] = value
 
-    o_result_dicts = []
-    for result in o_results:
-        o_result_dict = {}
-        o_result_table = result.as_table()  
+        # Process O typing results
+        o_results = typing_pipeline(assembly_path, o_db, threads=args.threads)
+        o_result_table = o_results.as_table()
         for line in o_result_table.split('\n'):
             if line:
-                parts = line.split('\t')
-                o_result_dict = {'o_' + key: value for key, value in zip(full_headers, parts)}
-                o_result_dicts.append(o_result_dict)
-    return k_result_dicts, o_result_dicts
+                parts = line.split('\t')[1:-1]  # Slice to exclude the first and last field
+                for key, value in zip(o_headers, parts):  
+                    results_dict[key] = value
+    return results_dict
+
+
+# def get_results(assembly, minimap2_index, args, previous_results):
+
+#     full_headers, _ = get_headers()
+
+#     if not isinstance(assembly, list):
+#         assembly = [assembly]
+
+#     ref_database = Path(data_dir())
+#     k_database_path = ref_database / 'Klebsiella_k_locus_primary_reference.gbk'
+#     o_database_path = ref_database / 'Klebsiella_o_locus_primary_reference.gbk'
+
+#     k_db, o_db = Database.from_genbank(k_database_path, load_seq=False), Database.from_genbank(o_database_path, load_seq=False)
+
+#     assembly_paths = [Path(asmbly) if not isinstance(asmbly, Path) else asmbly for asmbly in assembly]
+
+#     results_dict = {}
+
+#     for assembly_path in assembly_paths:
+#         k_results = typing_pipeline(assembly_path, k_db, threads=args.threads)
+#         k_result_table = k_results.as_table()
+#         for line in k_result_table.split('\n'):
+#             if line:
+#                 parts = line.split('\t')
+#                 for key, value in zip(full_headers, parts):
+#                     results_dict['k_' + key] = value
+
+#     for assembly_path in assembly_paths:
+#         o_results = typing_pipeline(assembly_path, o_db, threads=args.threads)
+#         o_result_table = o_results.as_table()
+#         for line in o_result_table.split('\n'):
+#             if line:
+#                 parts = line.split('\t')
+#                 for key, value in zip(full_headers, parts):
+#                     results_dict['o_' + key] = value
+
+#     for key, value in results_dict.items():
+#         print(f"{key}: {value}")
+
+#     return results_dict
+
+
+
+
+
+
+
+
+
+
+    
 
 
 

@@ -22,7 +22,7 @@ from .kpsc_virulence_score import *
 
 
 def test_prerequisite_modules():
-    assert sorted(prerequisite_modules()) == ['abst', 'cbst', 'ybst']
+    assert sorted(prerequisite_modules()) == ['klebsiella__abst', 'klebsiella__cbst', 'klebsiella__ybst']
 
 
 def test_empty_functions():
@@ -33,40 +33,40 @@ def test_empty_functions():
 
 
 def test_get_results_1():
-    previous_results = {'ybst__st': 'NA', 'abst__st': 'NA', 'cbst__st': 'NA'}
+    previous_results = {'klebsiella__ybst__st': 'NA', 'klebsiella__abst__st': 'NA', 'klebsiella__cbst__st': 'NA'}
     assert get_results(None, None, None, previous_results)['virulence_score'] == '0'
 
 
 def test_get_results_2():
-    previous_results = {'ybst__st': 'ST1', 'abst__st': 'NA', 'cbst__st': 'NA'}
+    previous_results = {'klebsiella__ybst__st': 'ST1', 'klebsiella__abst__st': 'NA', 'klebsiella__cbst__st': 'NA'}
     assert get_results(None, None, None, previous_results)['virulence_score'] == '1'
 
 
 def test_get_results_3():
-    previous_results = {'ybst__st': 'NA', 'abst__st': 'NA', 'cbst__st': 'ST1'}
+    previous_results = {'klebsiella__ybst__st': 'NA', 'klebsiella__abst__st': 'NA', 'klebsiella__cbst__st': 'ST1'}
     assert get_results(None, None, None, previous_results)['virulence_score'] == '2'
 
 
 def test_get_results_4():
-    previous_results = {'ybst__st': 'ST1', 'abst__st': 'NA', 'cbst__st': 'ST1'}
+    previous_results = {'klebsiella__ybst__st': 'ST1', 'klebsiella__abst__st': 'NA', 'klebsiella__cbst__st': 'ST1'}
     assert get_results(None, None, None, previous_results)['virulence_score'] == '2'
 
 
 def test_get_results_5():
-    previous_results = {'ybst__st': 'NA', 'abst__st': 'ST1', 'cbst__st': 'NA'}
+    previous_results = {'klebsiella__ybst__st': 'NA', 'klebsiella__abst__st': 'ST1', 'klebsiella__cbst__st': 'NA'}
     assert get_results(None, None, None, previous_results)['virulence_score'] == '3'
 
 
 def test_get_results_6():
-    previous_results = {'ybst__st': 'ST1', 'abst__st': 'ST1', 'cbst__st': 'NA'}
+    previous_results = {'klebsiella__ybst__st': 'ST1', 'klebsiella__abst__st': 'ST1', 'klebsiella__cbst__st': 'NA'}
     assert get_results(None, None, None, previous_results)['virulence_score'] == '4'
 
 
 def test_get_results_7():
-    previous_results = {'ybst__st': 'NA', 'abst__st': 'ST1', 'cbst__st': 'ST1'}
+    previous_results = {'klebsiella__ybst__st': 'NA', 'klebsiella__abst__st': 'ST1', 'cklebsiella__bst__st': 'ST1'}
     assert get_results(None, None, None, previous_results)['virulence_score'] == '5'
 
 
 def test_get_results_8():
-    previous_results = {'ybst__st': 'ST1', 'abst__st': 'ST1', 'cbst__st': 'ST1'}
+    previous_results = {'klebsiella__ybst__st': 'ST1', 'klebsiella__abst__st': 'ST1', 'klebsiella__cbst__st': 'ST1'}
     assert get_results(None, None, None, previous_results)['virulence_score'] == '5'

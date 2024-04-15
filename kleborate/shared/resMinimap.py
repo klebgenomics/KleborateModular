@@ -1,8 +1,8 @@
 """
 Search for resistance genes, summarise by class (one class per column)
 
-Copyright 2024 Kat Holt
-https://github.com/katholt/Kleborate/
+Copyright 2023 Kat Holt, Ryan Wick (rrwick@gmail.com), Mary Maranga (gathonimaranga@gmail.com)
+https://github.com/klebgenomics/KleborateModular/
 
 This file is part of Kleborate. Kleborate is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the Free Software Foundation,
@@ -121,7 +121,7 @@ def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_ident
     """
     
     hits_dict = collections.defaultdict(list)  # key = class, value = list
-    alignment_hits = align_query_to_ref(ref_file, assembly,ref_index=minimap2_index,  min_identity=min_identity, min_query_coverage=None)
+    alignment_hits = align_query_to_ref(ref_file, assembly,ref_index=minimap2_index,  min_identity=min_spurious_identity, min_query_coverage=min_spurious_coverage)
     alignment_hits = call_redundant_hits(alignment_hits)
     
     # calculate alignment coverage
@@ -174,9 +174,9 @@ def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_ident
             else:
                 if hit.percent_identity < 100:
                     hit_allele += '*'
-                    
-                #if hit.ref_length < hit.query_length: # commented out this code for tests
-                if (hit.ref_end - hit.ref_start) < hit.query_length:
+                
+                if alignment_length < hit.query_length:   
+                #if (hit.ref_end - hit.ref_start) < hit.query_length:
                         hit_allele += '?'
                 trunc_suffix, trunc_cov, _ = truncation_check(hit)
                 hit_allele += trunc_suffix

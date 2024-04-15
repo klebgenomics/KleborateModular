@@ -1,7 +1,6 @@
 """
-Copyright 2023 Kat Holt
-Copyright 2023 Ryan Wick (rrwick@gmail.com)
-https://github.com/katholt/Kleborate/
+Copyright 2023 Kat Holt, Ryan Wick (rrwick@gmail.com), Mary Maranga (gathonimaranga@gmail.com)
+https://github.com/klebgenomics/KleborateModular/
 
 This file is part of Kleborate. Kleborate is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the Free Software Foundation,
@@ -29,30 +28,30 @@ def prerequisite_modules():
 
 
 def get_headers():
-    full_headers = ['st', 'gapA', 'infB', 'mdh', 'pgi', 'phoE', 'rpoB', 'tonB']
-    stdout_headers = ['st']
+    full_headers = ['ST', 'gapA', 'infB', 'mdh', 'pgi', 'phoE', 'rpoB', 'tonB']
+    stdout_headers = ['ST']
     return full_headers, stdout_headers
 
 
 def add_cli_options(parser):
     module_name = os.path.basename(__file__)[:-3]
     group = parser.add_argument_group(f'{module_name} module')
-    group.add_argument('--kpsc_mlst_min_identity', type=float, default=90.0,
-                       help='Minimum alignment percent identity for KpSC MLST')
-    group.add_argument('--kpsc_mlst_min_coverage', type=float, default=80.0,
-                       help='Minimum alignment percent coverage for KpSC MLST')
-    group.add_argument('--kpsc_mlst_required_exact_matches', type=int, default=3,
+    group.add_argument('--klebsiella_pneumo_complex__mlst_min_identity', type=float, default=90.0,
+                       help='Minimum alignment percent identity for klebsiella_pneumo_complex_ MLST')
+    group.add_argument('--klebsiella_pneumo_complex__mlst_min_coverage', type=float, default=80.0,
+                       help='Minimum alignment percent coverage for klebsiella_pneumo_complex_ MLST')
+    group.add_argument('--klebsiella_pneumo_complex__mlst_required_exact_matches', type=int, default=3,
                        help='At least this many exact matches are required to call an ST')
     return group
 
 
 def check_cli_options(args):
-    if args.kpsc_mlst_min_identity <= 50.0 or args.kpsc_mlst_min_identity >= 100.0:
-        sys.exit('Error: --kpsc_mlst_min_identity must be between 50.0 and 100.0')
-    if args.kpsc_mlst_min_coverage <= 50.0 or args.kpsc_mlst_min_coverage >= 100.0:
-        sys.exit('Error: --kpsc_mlst_min_coverage must be between 50.0 and 100.0')
-    if args.kpsc_mlst_required_exact_matches < 0:
-        sys.exit('Error: --kpsc_mlst_required_exact_matches must be a positive integer')
+    if args.klebsiella_pneumo_complex__mlst_min_identity <= 50.0 or args.klebsiella_pneumo_complex__mlst_min_identity >= 100.0:
+        sys.exit('Error: --klebsiella_pneumo_complex__mlst_min_identity must be between 50.0 and 100.0')
+    if args.klebsiella_pneumo_complex__mlst_min_coverage <= 50.0 or args.klebsiella_pneumo_complex__mlst_min_coverage >= 100.0:
+        sys.exit('Error: --klebsiella_pneumo_complex__mlst_min_coverage must be between 50.0 and 100.0')
+    if args.klebsiella_pneumo_complex__mlst_required_exact_matches < 0:
+        sys.exit('Error: --klebsiella_pneumo_complex__mlst_required_exact_matches must be a positive integer')
 
 
 def check_external_programs():
@@ -65,16 +64,18 @@ def data_dir():
     return pathlib.Path(__file__).parents[0] / 'data'
 
 
-def get_results(assembly, minimap2_index, args, previous_results, species):
+def get_results(assembly, minimap2_index, args, previous_results):
     genes = ['gapA', 'infB', 'mdh', 'pgi', 'phoE', 'rpoB', 'tonB']
     profiles = data_dir() / 'profiles.tsv'
     alleles = {gene: data_dir() / f'{gene}.fasta' for gene in genes}
 
-    st, _, alleles = mlst(assembly, minimap2_index, profiles, alleles, genes, None,
-                          args.kpsc_mlst_min_identity, args.kpsc_mlst_min_coverage,
-                          args.kpsc_mlst_required_exact_matches)
+    #print(previous_results)
 
-    return {'st': st,
+    st, _, alleles = mlst(assembly, minimap2_index, profiles, alleles, genes, None,
+                          args.klebsiella_pneumo_complex__mlst_min_identity, args.klebsiella_pneumo_complex__mlst_min_coverage,
+                          args.klebsiella_pneumo_complex__mlst_required_exact_matches)
+
+    return {'ST': st,
             'gapA': alleles['gapA'], 'infB': alleles['infB'], 'mdh': alleles['mdh'],
             'pgi': alleles['pgi'], 'phoE': alleles['phoE'], 'rpoB': alleles['rpoB'],
             'tonB': alleles['tonB']}

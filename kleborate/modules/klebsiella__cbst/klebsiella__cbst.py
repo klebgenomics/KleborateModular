@@ -29,7 +29,7 @@ def prerequisite_modules():
 
 
 def get_headers():
-    full_headers = ['st', 'lineage', 'clbA', 'clbB', 'clbC', 'clbD', 'clbE', 'clbF', 'clbG',
+    full_headers = ['CbST', 'cb_lineage', 'clbA', 'clbB', 'clbC', 'clbD', 'clbE', 'clbF', 'clbG',
                     'clbH', 'clbI', 'clbL', 'clbM', 'clbN', 'clbO', 'clbP', 'clbQ']
     stdout_headers = []
     return full_headers, stdout_headers
@@ -38,21 +38,21 @@ def get_headers():
 def add_cli_options(parser):
     module_name = os.path.basename(__file__)[:-3]
     group = parser.add_argument_group(f'{module_name} module')
-    group.add_argument('--cbst_min_identity', type=float, default=90.0,
+    group.add_argument('--klebsiella__cbst_min_identity', type=float, default=90.0,
                        help='Minimum alignment percent identity for colibactin MLST')
-    group.add_argument('--cbst_min_coverage', type=float, default=80.0,
+    group.add_argument('--klebsiella__cbst_min_coverage', type=float, default=80.0,
                        help='Minimum alignment percent coverage for colibactin MLST')
-    group.add_argument('--cbst_required_exact_matches', type=int, default=8,
+    group.add_argument('--klebsiella__cbst_required_exact_matches', type=int, default=8,
                        help='At least this many exact matches are required to call an ST')
     return group
 
 
 def check_cli_options(args):
-    if args.cbst_min_identity <= 50.0 or args.cbst_min_identity >= 100.0:
-        sys.exit('Error: --cbst_min_identity must be between 50.0 and 100.0')
-    if args.cbst_min_coverage <= 50.0 or args.cbst_min_coverage >= 100.0:
-        sys.exit('Error: --cbst_min_coverage must be between 50.0 and 100.0')
-    if args.cbst_required_exact_matches < 0:
+    if args.klebsiella__cbst_min_identity <= 50.0 or args.klebsiella__cbst_min_identity >= 100.0:
+        sys.exit('Error: --klebsiella__cbst_min_identity must be between 50.0 and 100.0')
+    if args.klebsiella__cbst_min_coverage <= 50.0 or args.klebsiella__cbst_min_coverage >= 100.0:
+        sys.exit('Error: --klebsiella__cbst_min_coverage must be between 50.0 and 100.0')
+    if args.klebsiella__cbst_required_exact_matches < 0:
         sys.exit('Error: --cbst_required_exact_matches must be a positive integer')
 
 
@@ -66,18 +66,18 @@ def data_dir():
     return pathlib.Path(__file__).parents[0] / 'data'
 
 
-def get_results(assembly, minimap2_index, args, previous_results, species):
+def get_results(assembly, minimap2_index, args, previous_results):
     genes = ['clbA', 'clbB', 'clbC', 'clbD', 'clbE', 'clbF', 'clbG', 'clbH', 'clbI', 'clbL',
              'clbM', 'clbN', 'clbO', 'clbP', 'clbQ']
     profiles = data_dir() / 'profiles.tsv'
     alleles = {gene: data_dir() / f'{gene}.fasta' for gene in genes}
 
     st, lineage, alleles = multi_mlst(assembly, minimap2_index, profiles, alleles, genes,
-                                      'clb_lineage', args.cbst_min_identity,
-                                      args.cbst_min_coverage, args.cbst_required_exact_matches,
+                                      'clb_lineage', args.klebsiella__cbst_min_identity,
+                                      args.klebsiella__cbst_min_coverage, args.klebsiella__cbst_required_exact_matches,
                                       check_for_truncation=True, report_incomplete=True)
 
-    return {'st': st, 'lineage': lineage,
+    return {'CbST': st, 'cb_lineage': lineage,
             'clbA': alleles['clbA'], 'clbB': alleles['clbB'], 'clbC': alleles['clbC'],
             'clbD': alleles['clbD'], 'clbE': alleles['clbE'], 'clbF': alleles['clbF'],
             'clbG': alleles['clbG'], 'clbH': alleles['clbH'], 'clbI': alleles['clbI'],

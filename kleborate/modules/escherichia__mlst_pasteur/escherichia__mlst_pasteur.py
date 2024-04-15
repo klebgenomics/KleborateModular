@@ -29,7 +29,7 @@ def prerequisite_modules():
 
 
 def get_headers():
-    full_headers = ['st',
+    full_headers = ['ST',
                     'dinB', 'icdA', 'pabB', 'polB', 'putP', 'trpA', 'trpB', 'uidA']
     stdout_headers = ['st']
     return full_headers, stdout_headers
@@ -69,7 +69,7 @@ def data_dir():
     return pathlib.Path(__file__).parents[0] / 'data'
 
 
-def get_results(assembly, minimap2_index, args, previous_results, species):
+def get_results(assembly, minimap2_index, args, previous_results):
     genes = ['dinB', 'icdA', 'pabB', 'polB', 'putP', 'trpA', 'trpB', 'uidA']
     profiles = data_dir() / 'profiles.tsv'
     alleles = {gene: data_dir() / f'{gene}.fasta' for gene in genes}
@@ -79,7 +79,7 @@ def get_results(assembly, minimap2_index, args, previous_results, species):
              args.escherichia_mlst_pasteur_min_identity, args.escherichia_mlst_pasteur_min_coverage,
              args.escherichia_mlst_pasteur_required_exact_matches)
 
-    return {'st': st,
+    return {'ST': st,
             'dinB': alleles['dinB'], 'icdA': alleles['icdA'], 'pabB': alleles['pabB'],
             'polB': alleles['polB'], 'putP': alleles['putP'], 'trpA': alleles['trpA'],
             'trpB': alleles['trpB'], 'uidA': alleles['uidA']}

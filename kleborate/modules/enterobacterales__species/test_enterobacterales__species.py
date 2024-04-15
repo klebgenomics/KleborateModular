@@ -21,7 +21,7 @@ not, see <https://www.gnu.org/licenses/>.
 import collections
 import pytest
 
-from .klebsiella_species import *
+from .enterobacterales__species import *
 
 
 def get_test_genome_dir():
@@ -37,26 +37,26 @@ def test_prerequisite_modules():
 
 
 def test_check_cli_options_1():
-    Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
-    check_cli_options(Args(klebsiella_species_strong=0.01, klebsiella_species_weak=0.05))
+    Args = collections.namedtuple('Args', ['enterobacterales__species_strong', 'enterobacterales__species_weak'])
+    check_cli_options(Args(enterobacterales__species_strong=0.01, enterobacterales__species_weak=0.05))
 
 
 def test_check_cli_options_2():
-    Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
+    Args = collections.namedtuple('Args', ['enterobacterales__species_strong', 'enterobacterales__species_weak'])
     with pytest.raises(SystemExit):
-        check_cli_options(Args(klebsiella_species_strong=0.05, klebsiella_species_weak=0.01))
+        check_cli_options(Args(enterobacterales__species_strong=0.05, enterobacterales__species_weak=0.01))
 
 
 def test_check_cli_options_3():
-    Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
+    Args = collections.namedtuple('Args', ['enterobacterales__species_strong', 'enterobacterales__species_weak'])
     with pytest.raises(SystemExit):
-        check_cli_options(Args(klebsiella_species_strong=-0.01, klebsiella_species_weak=0.05))
+        check_cli_options(Args(enterobacterales__species_strong=-0.01, enterobacterales__species_weak=0.05))
 
 
 def test_check_cli_options_4():
-    Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
+    Args = collections.namedtuple('Args', ['enterobacterales__species_strong', 'enterobacterales__species_weak'])
     with pytest.raises(SystemExit):
-        check_cli_options(Args(klebsiella_species_strong=0.01, klebsiella_species_weak=1.5))
+        check_cli_options(Args(enterobacterales__species_strong=0.01, enterobacterales__species_weak=1.5))
 
 
 def test_check_external_programs_1(mocker):
@@ -79,145 +79,145 @@ def test_check_external_programs_2(mocker):
 
 
 def test_get_results_1():
-    Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
+    Args = collections.namedtuple('Args', ['enterobacterales__species_strong', 'enterobacterales__species_weak'])
     results = get_results(get_test_genome_dir() / 'GCF_000016305.1.fna.gz', None,
-                          Args(klebsiella_species_strong=0.01, klebsiella_species_weak=0.04), {})
+                          Args(enterobacterales__species_strong=0.01, enterobacterales__species_weak=0.04), {})
     assert results['species'] == 'Klebsiella pneumoniae'
     assert results['species_match'] == 'strong'
 
 
 def test_get_results_2():
-    Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
+    Args = collections.namedtuple('Args', ['enterobacterales__species_strong', 'enterobacterales__species_weak'])
     results = get_results(get_test_genome_dir() / 'GCF_000016305.1.fna.gz', None,
-                          Args(klebsiella_species_strong=0.001, klebsiella_species_weak=0.004), {})
+                          Args(enterobacterales__species_strong=0.001, enterobacterales__species_weak=0.004), {})
     assert results['species'] == 'Klebsiella pneumoniae'
     assert results['species_match'] == 'weak'
 
 
 def test_get_results_3():
-    Args = collections.namedtuple('Args', ['klebsiella_species_strong', 'klebsiella_species_weak'])
+    Args = collections.namedtuple('Args', ['enterobacterales__species_strong', 'enterobacterales__species_weak'])
     results = get_results(get_test_genome_dir() / 'GCF_000016305.1.fna.gz', None,
-                          Args(klebsiella_species_strong=0.0001, klebsiella_species_weak=0.0004),
+                          Args(enterobacterales__species_strong=0.0001, enterobacterales__species_weak=0.0004),
                           {})
     assert results['species'] == 'unknown'
     assert results['species_match'] == ''
 
 
-def test_klebsiella_aerogenes():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_000215745.1.fna.gz',
+def test_enterobacterales__aerogenes():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_000215745.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella aerogenes'
 
 
-def test_klebsiella_grimontii():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_000733495.1.fna.gz',
+def test_enterobacterales__grimontii():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_000733495.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella grimontii'
 
 
-def test_klebsiella_indica():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_005860775.1.fna.gz',
+def test_enterobacterales__indica():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_005860775.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella indica'
 
 
-def test_klebsiella_michiganensis():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_000240325.1.fna.gz',
+def test_enterobacterales__michiganensis():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_000240325.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella michiganensis'
 
 
-def test_klebsiella_oxytoca():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_000247855.1.fna.gz',
+def test_enterobacterales__oxytoca():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_000247855.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella oxytoca'
 
 
-def test_klebsiella_pasteurii():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCA_902158585.1.fna.gz',
+def test_enterobacterales__pasteurii():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCA_902158585.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella pasteurii'
 
 
-def test_klebsiella_pneumoniae():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_000016305.1.fna.gz',
+def test_enterobacterales__pneumoniae():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_000016305.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella pneumoniae'
 
 
-def test_klebsiella_quasipneumoniae_subsp_quasipneumoniae():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_000492415.1.fna.gz',
+def test_enterobacterales__quasipneumoniae_subsp_quasipneumoniae():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_000492415.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella quasipneumoniae subsp. quasipneumoniae'
 
 
-def test_klebsiella_quasipneumoniae_subsp_similipneumoniae():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_000492795.1.fna.gz',
+def test_enterobacterales__quasipneumoniae_subsp_similipneumoniae():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_000492795.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella quasipneumoniae subsp. similipneumoniae'
 
 
-def test_klebsiella_quasivariicola():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_000523395.1.fna.gz',
+def test_enterobacterales__quasivariicola():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_000523395.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella quasivariicola'
 
 
-def test_klebsiella_spallanzanii():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCA_901563875.1.fna.gz',
+def test_enterobacterales__spallanzanii():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCA_901563875.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella spallanzanii'
 
 
-def test_klebsiella_variicola_subsp_variicola():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_000019565.1.fna.gz',
+def test_enterobacterales__variicola_subsp_variicola():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_000019565.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella variicola subsp. variicola'
 
 
-def test_klebsiella_variicola_subsp_tropica():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_002806645.1.fna.gz',
+def test_enterobacterales__variicola_subsp_tropica():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_002806645.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella variicola subsp. tropica'
 
 
-def test_klebsiella_africana():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_016804125.1.fna.gz',
+def test_enterobacterales__africana():
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_016804125.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella africana'
 
 
 def test_raoultella_planticola():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_000648315.1.fna.gz',
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_000648315.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella planticola'
 
 
 def test_raoultella_ornithinolytica():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_000247895.1.fna.gz',
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_000247895.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella ornithinolytica'
 
 
 def test_raoultella_terrigena():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_000829965.1.fna.gz',
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_000829965.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Klebsiella terrigena'
 
 
 def test_salmonella():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_004010735.1.fna.gz',
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_004010735.1.fna.gz',
                                         get_sketch_file())
     assert 'Salmonella' in species
 
 
 def test_citrobacter():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_003937345.1.fna.gz',
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_003937345.1.fna.gz',
                                         get_sketch_file())
     assert 'Citrobacter' in species
 
 
 def test_yersinia_unknown():
-    species, _ = get_klebsiella_species(get_test_genome_dir() / 'GCF_001123825.1.fna.gz',
+    species, _ = get_enterobacterales__species(get_test_genome_dir() / 'GCF_001123825.1.fna.gz',
                                         get_sketch_file())
     assert species == 'Yersinia (unknown species)'

@@ -1,8 +1,6 @@
 """
-Copyright 2024 Kat Holt
-Copyright 2024 Ryan Wick (rrwick@gmail.com)
-Copyright 2024 (gathonimaranga@gmail.com)
-https://github.com/katholt/Kleborate/
+Copyright 2023 Kat Holt, Ryan Wick (rrwick@gmail.com), Mary Maranga (gathonimaranga@gmail.com)
+https://github.com/klebgenomics/KleborateModular/
 
 This file is part of Kleborate. Kleborate is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the Free Software Foundation,
@@ -43,26 +41,26 @@ def add_cli_options(parser):
     module_name = os.path.basename(__file__)[:-3]
     group = parser.add_argument_group(f'{module_name} module')
 
-    group.add_argument('--kpsc_amr_min_identity', type=float, default=90.0,
-                       help='Minimum alignment percent identity for KpSC Amr results')
-    group.add_argument('--kpsc_amr_min_coverage', type=float, default=80.0,
-                       help='Minimum alignment percent coverage for KpSC Amr  results')
-    group.add_argument('--kpsc_amr_min_spurious_identity', type=float, default=80.0,
-                       help='Minimum alignment percent identity for KpSC Amr spurious results')
-    group.add_argument('--kpsc_amr_min_spurious_coverage', type=float, default=40.0,
-                       help='Minimum alignment percent coverage for KpSC Amr spurious results')
+    group.add_argument('--klebsiella_pneumo_complex__amr_min_identity', type=float, default=90.0,
+                       help='Minimum alignment percent identity for klebsiella_pneumo_complex Amr results')
+    group.add_argument('--klebsiella_pneumo_complex__amr_min_coverage', type=float, default=80.0,
+                       help='Minimum alignment percent coverage for klebsiella_pneumo_complex Amr  results')
+    group.add_argument('--klebsiella_pneumo_complex__amr_min_spurious_identity', type=float, default=80.0,
+                       help='Minimum alignment percent identity for klebsiella_pneumo_complex Amr spurious results')
+    group.add_argument('--klebsiella_pneumo_complex__amr_min_spurious_coverage', type=float, default=40.0,
+                       help='Minimum alignment percent coverage for klebsiella_pneumo_complex Amr spurious results')
     
     return group
 
 
 def check_cli_options(args):
-    if args.kpsc_amr_min_identity <= 50.0 or args.kpsc_amr_min_identity >= 100.0:
+    if args.klebsiella_pneumo_complex__amr_min_identity <= 50.0 or args.klebsiella_pneumo_complex__amr_min_identity >= 100.0:
         sys.exit('Error: --min_identity must be between 50.0 and 100.0')
-    if args.kpsc_amr_min_coverage <= 50.0 or args.kpsc_amr_min_coverage >= 100.0:
+    if args.klebsiella_pneumo_complex__amr_min_coverage <= 50.0 or args.klebsiella_pneumo_complex__amr_min_coverage >= 100.0:
         sys.exit('Error: --min_coverage must be between 50.0 and 100.0')
-    if args.kpsc_amr_min_spurious_identity <= 50.0 or args.kpsc_amr_min_spurious_identity >= 100.0:
+    if args.klebsiella_pneumo_complex__amr_min_spurious_identity <= 50.0 or args.klebsiella_pneumo_complex__amr_min_spurious_identity >= 100.0:
         sys.exit('Error: --min_spurious_identity must be between 50.0 and 100.0')
-    if args.kpsc_amr_min_spurious_coverage <= 30.0 or args.kpsc_amr_min_spurious_coverage >= 100.0:
+    if args.klebsiella_pneumo_complex__amr_min_spurious_coverage <= 30.0 or args.klebsiella_pneumo_complex__amr_min_spurious_coverage >= 100.0:
         sys.exit('Error: --min_spurious__coverage  must be between 30.0 and 100.0')
 
 
@@ -77,7 +75,7 @@ def data_dir():
     return pathlib.Path(__file__).parents[0] / 'data'
 
 
-def get_results(assembly, minimap2_index, args, previous_results, species):
+def get_results(assembly, minimap2_index, args, previous_results):
     gene_info, _, _ = read_class_file(data_dir() / 'CARD_AMR_clustered.csv')
     full_headers, _ = get_headers() 
     qrdr = data_dir() / 'QRDR_120.fasta'
@@ -94,10 +92,10 @@ def get_results(assembly, minimap2_index, args, previous_results, species):
         qrdr, 
         trunc, 
         omp, 
-        args.kpsc_amr_min_identity,  
-        args.kpsc_amr_min_coverage, 
-        args.kpsc_amr_min_spurious_coverage,
-        args.kpsc_amr_min_spurious_identity
+        args.klebsiella_pneumo_complex__amr_min_identity,  
+        args.klebsiella_pneumo_complex__amr_min_coverage, 
+        args.klebsiella_pneumo_complex__amr_min_spurious_coverage,
+        args.klebsiella_pneumo_complex__amr_min_spurious_identity
     )
 
     # Double check that there weren't any results without a corresponding output header.
