@@ -130,24 +130,3 @@ def get_qc_warnings(total_size, n50, ambiguous_bases, species, species_specifica
     if 'yes' in ambiguous_bases:
         warnings.append('ambiguous_bases')
     return ','.join(warnings) if warnings else '-'
-
-
-# def get_qc_warnings(total_size, n50, ambiguous_bases, species, species_specification_dict): 
-#     warnings = []
-#     species_spec = species_specification_dict[species]
-#     min_size, max_size = species_spec['min_genome_size'], species_spec['max_genome_size']
-
-#     if total_size < min_size:
-#         warnings.append('total_size')
-#     elif total_size > max_size:
-#         warnings.append('total_size')
-    
-
-#     if n50 < 10000:
-#         warnings.append('N50')
-#     if 'yes' in ambiguous_bases:
-#         warnings.append('ambiguous_bases')
-#     if warnings:
-#         return ','.join(warnings)
-#     else:
-#         return '-'
