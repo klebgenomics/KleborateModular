@@ -121,7 +121,7 @@ def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_ident
     """
     
     hits_dict = collections.defaultdict(list)  # key = class, value = list
-    alignment_hits = align_query_to_ref(ref_file, assembly,ref_index=minimap2_index,  min_identity=min_spurious_identity, min_query_coverage=min_spurious_coverage)
+    alignment_hits = align_query_to_ref(ref_file, assembly,ref_index=minimap2_index,  min_identity=min_identity, min_query_coverage==None)
     alignment_hits = call_redundant_hits(alignment_hits)
     
     # calculate alignment coverage
