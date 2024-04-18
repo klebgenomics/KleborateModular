@@ -20,11 +20,15 @@ import sys
 import re
 import argparse
 from pathlib import Path
+from json import dumps, loads
+
+from Bio import SeqIO
 
 from kaptive.version import __version__
 from kaptive.log import bold, quit_with_error
 from kaptive.misc import check_python_version, check_programs, get_logo, check_cpus, check_dir, check_file
 from kaptive.database import Database, get_database
+from kaptive.assembly import typing_pipeline, TypingResult
 
 # Constants -----------------------------------------------------------------------------------------------------------
 _ASSEMBLY_HEADERS = [
@@ -34,16 +38,17 @@ _ASSEMBLY_HEADERS = [
     'Expected genes outside locus, details', 'Other genes outside locus', 'Other genes outside locus, details',
     'Truncated genes, details'
 ]
-_ASSEMBLY_EXTRA_HEADERS = [
-    'Extra genes', 'Contigs', 'Pieces', 'Pieces, details', 'Score', 'Zscore', 'All scores', 'Args'
-]
+_ASSEMBLY_EXTRA_HEADERS = ['Extra genes', 'Pieces, details', 'Score', 'Zscore', 'All scores', 'Scoring args',
+                           'Confidence args']
+_URL = 'https://kaptive.readthedocs.io/en/latest/'
 
 
 # Functions -----------------------------------------------------------------------------------------------------------
 def parse_args(a):
     parser = argparse.ArgumentParser(
         description=get_logo('In silico serotyping'), usage="%(prog)s <command>", add_help=False,
-        prog="kaptive", formatter_class=argparse.RawDescriptionHelpFormatter, epilog=f"%(prog)s version {__version__}")
+        prog="kaptive", formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=f'For more help, visit: {bold(_URL)}')
 
     subparsers = parser.add_subparsers(title=bold('Command'), dest='subparser_name', metavar="")
     assembly_subparser(subparsers)
@@ -78,11 +83,11 @@ def parse_args(a):
 def assembly_subparser(subparsers):
     assembly_parser = subparsers.add_parser(
         'assembly', description=get_logo('In silico serotyping of assemblies'),
-        epilog=f'kaptive assembly v{__version__}', add_help=False, formatter_class=argparse.RawTextHelpFormatter,
-        help='In silico serotyping of assemblies', usage="kaptive assembly <db> <input> [<input> ...] [options]")
+        epilog=f'For more help, visit: {bold(_URL)}', add_help=False, formatter_class=argparse.RawTextHelpFormatter,
+        help='In silico serotyping of assemblies', usage="kaptive assembly <db> <fasta> [<fasta> ...] [options]")
     opts = assembly_parser.add_argument_group(bold('Inputs'), "")
-    opts.add_argument('db', type=get_database, help='Kaptive database path or keyword')
-    opts.add_argument('input', nargs='+', type=check_file, help='Assemblies in fasta(.gz) format')
+    opts.add_argument('db', type=get_database, metavar='db path/keyword', help='Kaptive database path or keyword')
+    opts.add_argument('input', nargs='+', metavar='fasta', type=check_file, help='Assemblies in fasta format')
 
     opts = assembly_parser.add_argument_group(bold('Output options'), "")
     output_opts(opts)
@@ -97,12 +102,17 @@ def assembly_subparser(subparsers):
                            " - genes_expected: # of genes expected in the locus\n"
                            " - genes_found: # of genes found in the locus\n"
                            " - prop_genes_found: genes_found / genes_expected")
-    opts.add_argument("--min-zscore", type=float, metavar='', default=3.0,
-                      help="Minimum zscore for confidence (default: %(default)s)")
     opts.add_argument('--min-cov', type=float, required=False, default=50.0, metavar='',
                       help='Minimum gene %%coverage to be used for scoring (default: %(default)s)')
+
+    opts = assembly_parser.add_argument_group(bold('Confidence options'), "")
     opts.add_argument("--gene-threshold", type=float, metavar='',
                       help="Species-level locus gene identity threshold (default: database specific)")
+    opts.add_argument("--max-other-genes", type=int, metavar='', default=1,
+                      help="Typeable if <= other genes (default: %(default)s)")
+    opts.add_argument("--percent-expected-genes", type=float, metavar='', default=50,
+                      help="Typeable if >= %% expected genes (default: %(default)s)")
+    opts.add_argument("--allow-below-threshold", action='store_true', help="Typeable if any genes are below threshold")
 
     opts = assembly_parser.add_argument_group(bold('Database options'), "")
     db_opts(opts)
@@ -113,8 +123,8 @@ def assembly_subparser(subparsers):
     other_opts(opts)
     # opts.add_argument('-@', '--mp', const=8, nargs='?', type=int, metavar='#',
     #                   help="Process multiple samples in parallel, optionally pass max workers (default: %(const)s)")
-    opts.add_argument('-t', '--threads', type=check_cpus, default=1, metavar='',
-                      help="Number of threads for alignment (default: %(default)s)")
+    opts.add_argument('-t', '--threads', type=check_cpus, default=check_cpus(None), metavar='',
+                      help="Number of threads for alignment (default: maximum available CPUs)")
 
 
 # def reads_subparser(subparsers):
@@ -140,16 +150,22 @@ def assembly_subparser(subparsers):
 def extract_subparser(subparsers):
     extract_parser = subparsers.add_parser(
         'extract', description=get_logo('Extract entries from a Kaptive database'),
-        epilog=f'kaptive extract v{__version__}', add_help=False, formatter_class=argparse.RawTextHelpFormatter,
+        epilog=f'For more help, visit: {bold(_URL)}', add_help=False, formatter_class=argparse.RawTextHelpFormatter,
         help='Extract entries from a Kaptive database', usage="kaptive extract <db> <format> [options]")
     opts = extract_parser.add_argument_group(bold('Inputs'), "\n - Note: combine with --filter to select loci")
-    opts.add_argument('db', help='Kaptive database path or keyword', type=get_database)
-    opts.add_argument('format', choices=['loci', 'genes', 'proteins', 'gbk', 'gff', 'ids'], metavar='format',
+    opts.add_argument('db', type=get_database, metavar='db path/keyword', help='Kaptive database path or keyword')
+    opts.add_argument('format', choices=['loci', 'genes', 'proteins', 'genbank'], metavar='format',
                       help='Format to extract database\n - loci: Loci (fasta nucleotide)\n'
                            ' - genes: Genes (fasta nucleotide)\n - proteins: Proteins (fasta amino acid)\n'
-                           ' - gbk: Genbank format\n - gff: GFF in NCBI format\n - ids: List of Locus IDs')
+                           ' - genbank: Genbank format')
     opts = extract_parser.add_argument_group(bold('Output options'), "")
-    opts.add_argument('-o', '--out', metavar='', default=sys.stdout, type=Path, help='Output file (default: stdout)')
+    opts.add_argument('-o', '--out', metavar='', default=sys.stdout, type=argparse.FileType('at'),
+                      help='Output file to write/append loci to (default: stdout)')
+    opts.add_argument('-d', '--outdir', metavar='', type=check_dir,
+                      help='Output directory for converted results\n'
+                           ' - Note: This forces the output to be written to files (instead of stdout)\n'
+                           '         and one file will be written per locus.'
+                      )
     opts = extract_parser.add_argument_group(bold('Database options'), "")
     db_opts(opts)
     opts = extract_parser.add_argument_group(bold('Other options'), "")
@@ -159,33 +175,42 @@ def extract_subparser(subparsers):
 def convert_subparser(subparsers):
     convert_parser = subparsers.add_parser(
         'convert', description=get_logo('Convert Kaptive results into different formats'),
-        epilog=f'kaptive convert v{__version__}', add_help=False, formatter_class=argparse.RawTextHelpFormatter,
-        help='Convert Kaptive results into different formats',
-        usage="kaptive convert <result> [<result> ...] [options]")
+        epilog=f'For more help, visit: {bold(_URL)}', add_help=False, formatter_class=argparse.RawTextHelpFormatter,
+        help='Convert Kaptive results into different formats', usage="kaptive convert <db> <json> <format> [options]")
     opts = convert_parser.add_argument_group(
-        bold('Inputs'),
-        "\n - Note: If you used --is-seqs during the run, make sure to provide the same fasta file here")
-    opts.add_argument('db', help='Kaptive database in genbank format', type=get_database)
-    opts.add_argument('json', help='Kaptive result files', type=check_file, nargs='+')
-
+        bold('Inputs'), ""
+        # "\n - Note: If you used --is-seqs during the run, make sure to provide the same fasta file here"
+    )
+    opts.add_argument('db', type=get_database, metavar='db path/keyword', help='Kaptive database path or keyword')
+    opts.add_argument('input', help='Kaptive JSON lines file or - for stdin', type=argparse.FileType('rt'),
+                      metavar='json')
+    opts.add_argument('format', metavar='format',
+                      choices=['json', 'tsv', 'loci', 'genes', 'proteins', 'png', 'svg'],
+                      help='Output format\n'
+                           ' - json: JSON lines format (same as input but optionally filtered)\n'
+                           ' - tsv: Tab-separated values (results table)\n'
+                           ' - loci: Locus nucleotide sequence in fasta format\n'
+                           ' - proteins: Locus proteins in fasta format\n - genes: Locus genes in fasta format\n'
+                           ' - png: Locus plot in PNG format\n - svg: Locus plot in SVG format'
+                      )
     opts = convert_parser.add_argument_group(bold('Filter options'),
                                              "\n - Note: filters take precedence in descending order")
     opts.add_argument('-r', '--regex', metavar='', type=re.compile,
-                      help='Regex to filter the string interpretation of the result (default: All)')
+                      help='Python regular-expression to select JSON lines (default: All)')
     opts.add_argument('-l', '--loci', metavar='', nargs='+',
                       help='Space-separated list to filter locus names (default: All)')
     opts.add_argument('-s', '--samples', metavar='', nargs='+',
                       help='Space-separated list to filter sample names (default: All)')
 
     opts = convert_parser.add_argument_group(bold('Output options'), "")
-    # opts.add_argument('-o', '--out', metavar='', default=sys.stdout, type=argparse.FileType('wt'),
-    #                   help='Output file (default: stdout)')
-    opts.add_argument('-f', '--format', metavar='', default='json',
-                      choices=['json', 'tsv', 'locus', 'genes', 'proteins'],
-                      help='Output format (default: %(default)s)\n - json: JSON format\n - tsv: Tab-separated values\n'
-                           ' - locus: Locus nucleotide sequence in fasta format\n'
-                           ' - proteins: Proteins in fasta format\n - genes: Genes in fasta format')
-
+    opts.add_argument('-o', '--out', metavar='', default=sys.stdout, type=argparse.FileType('at'),
+                      help='Output file to write/append results to (default: stdout)\n'
+                           ' - Note: Only for text formats, figures will be written to files')
+    opts.add_argument('-d', '--outdir', metavar='', type=check_dir,
+                      help='Output directory for converted results\n'
+                           ' - Note: This forces the output to be written to files\n'
+                           '         If used with locus, proteins or genes, one file will be written per sample'
+                      )
     opts = convert_parser.add_argument_group(bold('Database options'), "")
     db_opts(opts)
     opts = convert_parser.add_argument_group(bold('Other options'), "")
@@ -194,30 +219,30 @@ def convert_subparser(subparsers):
 
 def db_opts(opts: argparse.ArgumentParser):
     opts.add_argument('--locus-regex', type=re.compile, metavar='',
-                      help='Pattern to match locus names in db source note, (default: %(default)s)')
+                      help=f'Python regular-expression to match locus names in db source note')
     opts.add_argument('--type-regex', type=re.compile, metavar='',
-                      help='Pattern to match locus types in db source note, (default: %(default)s)')
+                      help=f'Python regular-expression to match locus types in db source note')
     opts.add_argument('--filter', type=re.compile, metavar='',
-                      help='Pattern to select loci to include in the database (default: All)')
+                      help='Python regular-expression to select loci to include in the database')
 
 
 def output_opts(opts: argparse.ArgumentParser):
-    opts.add_argument('-o', '--out', metavar='', default=sys.stdout, type=argparse.FileType('at'),
-                      help='Output file (default: stdout)')
-    opts.add_argument('--fasta', metavar='path', nargs='?', default=None, const='.', type=check_dir,
-                      help='Output locus sequence to "{input}_kaptive_results.fna"\n'
-                           'Optionally pass output directory (default: current directory)')
-    opts.add_argument('--json', metavar='path', nargs='?', default=None, const='kaptive_results.json',
+    opts.add_argument('-o', '--out', metavar='file', default=sys.stdout, type=argparse.FileType('at'),
+                      help='Output file to write/append tabular results to (default: stdout)')
+    opts.add_argument('-f', '--fasta', metavar='dir', nargs='?', default=None, const='.', type=check_dir,
+                      help='Turn on fasta output, defaulting "{input}_kaptive_results.fna"\n'
+                           ' - Optionally choose the output directory (default: cwd)')
+    opts.add_argument('-j', '--json', metavar='file', nargs='?', default=None, const='kaptive_results.json',
                       type=argparse.FileType('at'),
-                      help='Output results to JSON lines\n'
-                           'Optionally pass file name (default: %(const)s)')
-    opts.add_argument('--draw', metavar='path', nargs='?', default=None, const='.', type=check_dir,
-                      help='Output locus figures to "{input}_kaptive_results.{fmt}"\n'
-                           'Optionally pass output directory (default: current directory)')
-    opts.add_argument('--draw-fmt', default='png', metavar='png,svg',
-                      help='Format for locus figures (default: %(default)s)')
+                      help='Turn on JSON lines output\n'
+                           ' - Optionally choose file (can be existing) (default: %(const)s)')
+    opts.add_argument('-p', '--plot', metavar='dir', nargs='?', default=None, const='.', type=check_dir,
+                      help='Turn on plot output, defaulting to "{input}_kaptive_results.{fmt}"\n'
+                           ' - Optionally choose the output directory (default: cwd)')
+    opts.add_argument('--plot-fmt', default='png', metavar='png,svg', choices=['png', 'svg'],
+                      help='Format for locus plots (default: %(default)s)')
     # opts.add_argument('--bokeh', action='store_true', help='Plot locus figures using bokeh')
-    opts.add_argument('--no-header', action='store_true', help='Do not print header line')
+    opts.add_argument('--no-header', action='store_true', help='Suppress header line')
     opts.add_argument('--debug', action='store_true', help='Append debug columns to table output')
 
 
@@ -238,59 +263,114 @@ def write_headers(out: io.TextIOWrapper, no_header: bool = False, subparser_name
             out.write('\t'.join(_ASSEMBLY_HEADERS + _ASSEMBLY_EXTRA_HEADERS if debug else _ASSEMBLY_HEADERS) + '\n')
 
 
+def plot_result(result: TypingResult, outdir: Path, fmt: str):
+    """
+    Convienence function to plot a TypingResult and save to file
+    """
+    ax = result.as_graphic_record().plot(figure_width=18)[0]  # type: 'matplotlib.axes.Axes'
+    ax.set_title(  # Add title to figure
+        f"{result.sample_name} {result.best_match} ({result.phenotype}) - {result.confidence}")
+    ax.figure.savefig(outdir / f'{result.sample_name}_kaptive_results.{fmt}', bbox_inches='tight')
+    ax.figure.clear()  # Close figure to prevent memory leak
+
+
 # Main -----------------------------------------------------------------------------------------------------------------
 def main():
     check_python_version()
     args = parse_args(sys.argv[1:])
 
+    # Assembly mode ----------------------------------------------------------------------------------------------------
     if args.subparser_name == 'assembly':
         check_programs(['minimap2'], verbose=args.verbose)  # Check for minimap2
-
-        # Load database in memory, we don't need to load the full sequences (False)
-        db = Database.from_genbank(
+        args.db = Database.from_genbank(
             path=args.db, gene_threshold=args.gene_threshold, locus_filter=args.filter, verbose=args.verbose,
-            load_seq=False, locus_regex=args.locus_regex, type_regex=args.type_regex)
+            load_seq=True, locus_regex=args.locus_regex, type_regex=args.type_regex)
 
-        # Write headers to output file if not already written
         write_headers(args.out, args.no_header, args.subparser_name, args.debug)
-
-        from kaptive.assembly import typing_pipeline  # Import here to avoid circular import
-        if args.draw:
-            from matplotlib import pyplot as plt  # Import here to avoid unnecessary imports
-
-        for assembly in args.input:  # type: 'Path'
+        for sample in args.input:
             if (result := typing_pipeline(
-                    assembly, db, args.threads, args.min_cov, args.min_zscore, args.score_metric, args.weight_metric, args.verbose)):
+                    sample, args.db, args.threads, args.min_cov, args.score_metric, args.weight_metric,
+                    args.max_other_genes, args.percent_expected_genes, args.allow_below_threshold, args.debug,
+                    args.verbose
+
+            )):
                 args.out.write(result.as_table(args.debug))  # type: 'TextIOWrapper'
                 if args.fasta:  # Create and write locus pieces to fasta file
-                    (args.fasta / f'{result.assembly.name}_kaptive_results.fna').write_text(result.as_fasta())
+                    (args.fasta / f'{result.sample_name}_kaptive_results.fna').write_text(result.as_fasta())
                 if args.json:  # type: 'TextIOWrapper'
-                    args.json.write(result.as_json())
-                if args.draw:  # type: 'Path'
-                    ax = result.as_GraphicRecord().plot()[0]  # Create figure and axis
-                    ax.set_title(
-                        f"{result.assembly.name} {result.best_match} ({result.phenotype}) - {result.confidence}")  # Add title
-                    ax.figure.savefig(args.draw / f'{result.assembly.name}_kaptive_results.{args.draw_fmt}')  # Save figure
-                    plt.close()  # Close figure to prevent memory leaks
+                    args.json.write(dumps(result.as_dict()) + '\n')
+                if args.plot:  # type: 'Path'
+                    plot_result(result, args.plot, args.plot_fmt)
 
+    # Extract mode -----------------------------------------------------------------------------------------------------
     elif args.subparser_name == 'extract':
-        from kaptive.database import extract
-        extract(args)
-
-    elif args.subparser_name == 'convert':
-        from kaptive.typing import parse_results
-        args.db = Database.from_genbank(  # Load database in memory, we don't need to load the full sequences (False)
-            args.db, args.is_seqs,  args.filter, False, locus_regex=args.locus_regex, type_regex=args.type_regex)
-        for result_file in args.json:
-            for result in parse_results(result_file, args.db, args.regex, args.samples, args.loci):
-                if args.format == 'json':
-                    sys.stdout.write(result.as_json())
-                elif args.format == 'tsv':
-                    sys.stdout.write(result.as_table())
-                elif args.format == 'locus':
-                    sys.stdout.write(result.as_fasta())
+        from kaptive.database import parse_database, name_from_record
+        if args.format == "genbank":
+            for record in SeqIO.parse(args.db, 'genbank'):
+                locus_name, type_name = name_from_record(record, args.locus_regex, args.type_regex)
+                record.name = locus_name  # Set the name of the record to the locus name
+                if args.filter and not args.filter.search(locus_name):
+                    continue
+                if args.outdir:
+                    (args.outdir / f'{locus_name.replace("/", "_")}.gbk').write_text(record.format('genbank'))
+                else:
+                    args.out.write(record.format('genbank'))  # Do we need to add a newline?
+        else:  # load seqs == True if format == 'loci' else False
+            for locus in parse_database(
+                    args.db, args.filter, args.format == 'loci', locus_regex=args.locus_regex, type_regex=args.type_regex):
+                if args.format == 'loci':
+                    format_func, ext = locus.as_fasta, 'fna'
                 elif args.format == 'genes':
-                    sys.stdout.write(result.as_gene_fasta())
+                    format_func, ext = locus.as_gene_fasta, 'ffn'
                 elif args.format == 'proteins':
-                    sys.stdout.write(result.as_protein_fasta())
+                    format_func, ext = locus.as_protein_fasta, 'faa'
+                else:
+                    quit_with_error(f"Invalid format: {args.format}")
+                if args.outdir:  # Perform a replacement "/" with "_" here as some O-loci names have '/'
+                    (args.outdir / f'{locus.name.replace("/", "_")}.{ext}').write_text(format_func())
+                else:
+                    args.out.write(format_func())
+
+    # Convert mode -----------------------------------------------------------------------------------------------------
+    elif args.subparser_name == 'convert':
+        args.db = Database.from_genbank(  # Load database in memory, we don't need to load the full sequences (False)
+            args.db, args.filter, False, verbose=args.verbose, locus_regex=args.locus_regex, type_regex=args.type_regex)
+        if args.format in ['png', 'svg'] and not args.outdir:  # Check if output directory is required and not set
+            args.outdir = Path('.')  # Set output directory to current directory
+        for line in args.input:
+            if args.regex and not args.regex.search(line):
+                return
+            try:
+                if (d := loads(line)):
+                    if args.samples and d['sample_name'] not in args.samples:
+                        return
+                    if args.loci and d['best_match'] not in args.loci:
+                        return
+                    result = TypingResult.from_dict(d, args.db)
+                    if args.format == 'loci':  # Create and write locus pieces to fasta file
+                        if args.outdir:
+                            (args.outdir / f'{result.sample_name}_kaptive_results.fna').write_text(result.as_fasta())
+                        else:
+                            args.out.write(result.as_fasta())
+                    elif args.format == 'genes':
+                        if args.outdir:
+                            (args.outdir / f'{result.sample_name}_kaptive_results.ffn').write_text(
+                                result.as_gene_fasta())
+                        else:
+                            args.out.write(result.as_gene_fasta())
+                    elif args.format == 'proteins':
+                        if args.outdir:
+                            (args.outdir / f'{result.sample_name}_kaptive_results.faa').write_text(
+                                result.as_protein_fasta())
+                        else:
+                            args.out.write(result.as_protein_fasta())
+                    elif args.format == 'json':
+                        if args.outdir:
+                            (args.outdir / 'kaptive_results.json').write_text(dumps(result.as_dict()))
+                        else:
+                            args.out.write(dumps(result.as_dict()) + '\n')
+                    elif args.format in ['png', 'svg']:
+                        plot_result(result, args.outdir, args.format)
+            except Exception as e:
+                quit_with_error(f"Invalid JSON: {e}\n{line}")
 

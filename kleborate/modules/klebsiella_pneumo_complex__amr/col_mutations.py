@@ -19,11 +19,10 @@ from Bio.Align import substitution_matrices
 from ...shared.alignment import align_query_to_ref, call_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
 
 
-
-def check_for_mgrb_pmrb_gene_truncations(hits_dict, assembly, ref_file, min_identity):
+def check_for_mgrb_pmrb_gene_truncations(hits_dict, assembly, trunc, min_ident):
     best_mgrb_cov, best_pmrb_cov = 0.0, 0.0
 
-    alignment_hits = align_query_to_ref(ref_file, assembly, min_query_coverage=None, min_identity=min_identity)
+    alignment_hits = align_query_to_ref(trunc, assembly, min_identity=min_ident)
     alignment_hits = call_redundant_hits(alignment_hits)
     for hit in alignment_hits:
         assert hit.query_name == 'pmrB' or hit.query_name == 'mgrB'
@@ -36,10 +35,11 @@ def check_for_mgrb_pmrb_gene_truncations(hits_dict, assembly, ref_file, min_iden
             
 
     truncations = []
-    if best_mgrb_cov > 0.0 and best_mgrb_cov < 90.0:
+    if best_mgrb_cov < 90.0:
         truncations.append('MgrB-' + ('%.0f' % best_mgrb_cov) + '%')
-    if best_pmrb_cov > 0.0 and best_pmrb_cov < 90.0:
+    if best_pmrb_cov < 90.0:
         truncations.append('PmrB-' + ('%.0f' % best_pmrb_cov) + '%')
 
     if truncations:
         hits_dict['Col_mutations'] += truncations
+

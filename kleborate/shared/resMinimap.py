@@ -31,7 +31,7 @@ from kleborate.modules.klebsiella_pneumo_complex__amr.col_mutations import*
 
 def resminimap_assembly(assembly, minimap2_index, ref_file, gene_info, qrdr, trunc, omp,  min_coverage, min_identity,
                           min_spurious_coverage, min_spurious_identity):
-    hits_dict = minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_identity, min_spurious_coverage, min_spurious_identity, min_coverage)
+    hits_dict = minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_coverage, min_identity, min_spurious_coverage, min_spurious_identity)
     
     if qrdr:
         check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_identity, 90.0)
@@ -107,7 +107,7 @@ def get_res_headers(res_classes, bla_classes):
     return res_headers
 
 
-def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_identity, min_spurious_coverage, min_spurious_identity, min_coverage):
+def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_coverage, min_identity, min_spurious_coverage, min_spurious_identity):
     
     """
     This function takes:
@@ -121,14 +121,13 @@ def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_ident
     """
     
     hits_dict = collections.defaultdict(list)  # key = class, value = list
-    alignment_hits = align_query_to_ref(ref_file, assembly,ref_index=minimap2_index,  min_identity=min_identity, min_query_coverage==None)
+    alignment_hits = align_query_to_ref(ref_file, assembly,ref_index=minimap2_index,  min_identity=min_identity, min_query_coverage=None)
     alignment_hits = call_redundant_hits(alignment_hits)
     
     # calculate alignment coverage
     for hit in alignment_hits:
         alignment_length = hit.ref_end - hit.ref_start
         coverage = (alignment_length / hit.query_length) * 100
-        #coverage = (hit.ref_end - hit.ref_start) / hit.query_length * 100
         if coverage >= min_spurious_coverage:
             if hit.percent_identity < 100.0:
                 aa_result = check_for_exact_aa_match(ref_file, hit, assembly)
@@ -176,7 +175,6 @@ def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_ident
                     hit_allele += '*'
                 
                 if alignment_length < hit.query_length:   
-                #if (hit.ref_end - hit.ref_start) < hit.query_length:
                         hit_allele += '?'
                 trunc_suffix, trunc_cov, _ = truncation_check(hit)
                 hit_allele += trunc_suffix

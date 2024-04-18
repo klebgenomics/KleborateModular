@@ -193,32 +193,6 @@ def call_redundant_hits(hits):
     return filtered_minimap_hits
 
 
-# def truncation_check(alignment, cov_threshold=90.0): # original code for truncation
-#     """
-#     This function checks to see if a gene alignment is truncated at the amino acid level. It
-#     assumes that the query sequence is a full coding sequence for a gene and the reference is an
-#     assembly which may or may not be a complete coding sequence.
-
-#     It returns:
-#     * a string to be appended to the Kleborate result, e.g. '-60%'.
-#     * the amino acid coverage of the reference sequence, e.g. 60.3.
-#     """
-#     # The hit must start at the first base of the gene. If not, the gene is considered 0%.
-#     if alignment.query_start != 0:
-#         return '-0%', 0.0
-
-#     # The assumption is that the reference allele is a full CDS with a stop codon at the end. This
-#     # isn't always true (the reference sequence is sometimes broken) but will serve to make our
-#     # denominator for coverage.
-#     query_aa_length = (alignment.query_length - 3) // 3
-
-#     translation = alignment.get_translated_ref_seq()
-#     coverage = 100.0 * len(translation) / query_aa_length
-#     if coverage >= cov_threshold:
-#         return '', coverage
-#     else:
-#         return '-{:.0f}%'.format(coverage), coverage
-
 
 def truncation_check(alignment, cov_threshold=90.0): # I modified this code to return translated sequence
     """
@@ -318,72 +292,6 @@ def check_for_exact_aa_match(ref_file, hit, contigs):
     else:
         return sorted(best_matches)[0]
 
-# def check_for_exact_aa_match(ref_file, hit, contigs):
-    
-#     """
-#     This function checks to see if an exact amino acid match can be found for a sequence that had
-#     an inexact nucleotide match. If so, return the gene_id, otherwise None. If multiple references
-#     have exact amino acid matches, it returns the longest one. If multiple references have
-#     equally-long exact amino acid matches, it returns the alphabetically first.
-#     """
-#     # First, we extract the nucleotide sequence from the assembly.
-    
-#     assembly_seqs = dict(load_fasta(contigs))
-#     gene_nucl_seq = hit.ref_seq
-#     contig_start, contig_end = hit.ref_start-1, hit.ref_end
-#     contig_length = len(assembly_seqs[hit.ref_name])
-    
-#     # We also need to check whether the first few or last few bases of the sequence is missing.
-#     # This is to catch cases where an alternative start/stop codon can lead to an incomplete
-#     # nucleotide match even when there is an exact amino acid match. If we find that the hit is
-#     # missing start or end bases (relative to the reference), then we add those back on and will
-#     # include this augmented sequence in the exact amino acid check.
-    
-#     ref_seqs = load_fasta(ref_file)
-#     ref_length = len(dict(ref_seqs)[hit.query_name])
-#     ref_start, ref_end = sorted([hit.query_start, hit.query_end])
-#     ref_start -= 1  # 1-based to 0-based indexing
-#     missing_start = ref_start
-#     missing_end = ref_length - ref_end
-#     if missing_start == 0 and missing_end == 0:
-#         augmented_gene_nucl_seq = None
-#     elif missing_start > 10 and missing_end > 10:  # don't bother with too much missing start/end
-#         augmented_gene_nucl_seq = None
-        
-#     else:
-#         if hit.strand == '+':
-#             contig_start -= missing_start
-#             contig_end += missing_end
-#         elif hit.strand == '-':
-#             contig_start -= missing_end
-#             contig_end += missing_start
-#         else:
-#             assert False
-#         contig_start = max(contig_start, 0)
-#         contig_end = min(contig_end, contig_length)
-#         augmented_gene_nucl_seq = assembly_seqs[hit.ref_name][contig_start:contig_end]
-#         if hit.strand == '-':
-#             augmented_gene_nucl_seq = reverse_complement(augmented_gene_nucl_seq)
-        
-        
-#     # Look for an amino acid match between the assembly sequence and any reference sequence.
-#     best_match_length = 0
-#     best_matches = []
-#     for name, ref_nucl_seq in ref_seqs:
-#         match = is_exact_aa_match(gene_nucl_seq, ref_nucl_seq)
-#         if augmented_gene_nucl_seq is not None and \
-#                 is_exact_aa_match(augmented_gene_nucl_seq, ref_nucl_seq):
-#             match = True
-#         if match:
-#             if len(ref_nucl_seq) > best_match_length:
-#                 best_matches = [name]
-#                 best_match_length = len(ref_nucl_seq)
-#             elif len(ref_nucl_seq) == best_match_length:
-#                 best_matches.append(name)
-#     if not best_matches:
-#         return None
-#     else:
-#         return sorted(best_matches)[0]
 
 
 def is_exact_aa_match(gene_nucl_seq_1, ref_nucl_seq):

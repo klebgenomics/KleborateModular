@@ -106,8 +106,6 @@ def load_species_specifications(file_path):
     with open(file_path, 'r') as file:
         # Read the entire file content into a single string
         file_content = file.read()
-        
-        # Safely evaluate the string as a Python expression
         species_specifications = ast.literal_eval(file_content)
     
     return species_specifications

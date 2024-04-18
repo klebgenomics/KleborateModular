@@ -23,7 +23,7 @@ import sys
 import dna_features_viewer
 from dna_features_viewer import GraphicFeature, GraphicRecord
 
-from kaptive.database import Database
+from kaptive.database import Database, get_database
 from kaptive.assembly import typing_pipeline
 from kaptive.misc import check_python_version, check_programs, get_logo, check_cpus, check_dir, check_file
 
@@ -57,7 +57,7 @@ def get_headers():
 def add_cli_options(parser):
     module_name = os.path.basename(__file__)[:-3]
     group = parser.add_argument_group(f'{module_name} module')
-    group.add_argument('-t', '--threads', type=check_cpus, default=1, metavar='',
+    group.add_argument('-t', '--threads', type=check_cpus, default=8, metavar='',
                       help="Kaptive number of threads for alignment (default: %(default)s)")
 
     return group
@@ -74,10 +74,6 @@ def check_external_programs():
     return ['minimap2']
 
 
-def data_dir():
-    return pathlib.Path(__file__).parents[0] / 'reference_database'
-
-
 def get_results(assembly, minimap2_index, args, previous_results):
     full_headers, _ = get_headers()
     
@@ -85,14 +81,11 @@ def get_results(assembly, minimap2_index, args, previous_results):
     k_headers = [h for h in full_headers if h.startswith('K_')]
     o_headers = [h for h in full_headers if h.startswith('O_')]
 
+    # load databases
+    k_db, o_db = Database.from_genbank(get_database('kp_k')), Database.from_genbank(get_database('kp_o'))
+
     if not isinstance(assembly, list):
         assembly = [assembly]
-
-    ref_database = Path(data_dir())
-    k_database_path = ref_database / 'Klebsiella_k_locus_primary_reference.gbk'
-    o_database_path = ref_database / 'Klebsiella_o_locus_primary_reference.gbk'
-
-    k_db, o_db = Database.from_genbank(k_database_path, load_seq=False), Database.from_genbank(o_database_path, load_seq=False)
 
     assembly_paths = [Path(asmbly) if not isinstance(asmbly, Path) else asmbly for asmbly in assembly]
 
@@ -117,82 +110,4 @@ def get_results(assembly, minimap2_index, args, previous_results):
                 for key, value in zip(o_headers, parts):  
                     results_dict[key] = value
     return results_dict
-
-
-# def get_results(assembly, minimap2_index, args, previous_results):
-
-#     full_headers, _ = get_headers()
-
-#     if not isinstance(assembly, list):
-#         assembly = [assembly]
-
-#     ref_database = Path(data_dir())
-#     k_database_path = ref_database / 'Klebsiella_k_locus_primary_reference.gbk'
-#     o_database_path = ref_database / 'Klebsiella_o_locus_primary_reference.gbk'
-
-#     k_db, o_db = Database.from_genbank(k_database_path, load_seq=False), Database.from_genbank(o_database_path, load_seq=False)
-
-#     assembly_paths = [Path(asmbly) if not isinstance(asmbly, Path) else asmbly for asmbly in assembly]
-
-#     results_dict = {}
-
-#     for assembly_path in assembly_paths:
-#         k_results = typing_pipeline(assembly_path, k_db, threads=args.threads)
-#         k_result_table = k_results.as_table()
-#         for line in k_result_table.split('\n'):
-#             if line:
-#                 parts = line.split('\t')
-#                 for key, value in zip(full_headers, parts):
-#                     results_dict['k_' + key] = value
-
-#     for assembly_path in assembly_paths:
-#         o_results = typing_pipeline(assembly_path, o_db, threads=args.threads)
-#         o_result_table = o_results.as_table()
-#         for line in o_result_table.split('\n'):
-#             if line:
-#                 parts = line.split('\t')
-#                 for key, value in zip(full_headers, parts):
-#                     results_dict['o_' + key] = value
-
-#     for key, value in results_dict.items():
-#         print(f"{key}: {value}")
-
-#     return results_dict
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-        
-
-    
-    
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
 

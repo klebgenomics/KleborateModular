@@ -55,13 +55,14 @@ def add_cli_options(parser):
 
 def check_cli_options(args):
     if args.klebsiella_pneumo_complex__amr_min_identity <= 50.0 or args.klebsiella_pneumo_complex__amr_min_identity >= 100.0:
-        sys.exit('Error: --min_identity must be between 50.0 and 100.0')
+        sys.exit('Error: --klebsiella_pneumo_complex__amr_min_identity must be between 50.0 and 100.0')
     if args.klebsiella_pneumo_complex__amr_min_coverage <= 50.0 or args.klebsiella_pneumo_complex__amr_min_coverage >= 100.0:
-        sys.exit('Error: --min_coverage must be between 50.0 and 100.0')
+        sys.exit('Error: --klebsiella_pneumo_complex__amr_min_coverage must be between 50.0 and 100.0')
     if args.klebsiella_pneumo_complex__amr_min_spurious_identity <= 50.0 or args.klebsiella_pneumo_complex__amr_min_spurious_identity >= 100.0:
-        sys.exit('Error: --min_spurious_identity must be between 50.0 and 100.0')
+        sys.exit('Error: --klebsiella_pneumo_complex__amr_min_spurious_identity must be between 50.0 and 100.0')
     if args.klebsiella_pneumo_complex__amr_min_spurious_coverage <= 30.0 or args.klebsiella_pneumo_complex__amr_min_spurious_coverage >= 100.0:
-        sys.exit('Error: --min_spurious__coverage  must be between 30.0 and 100.0')
+        sys.exit('Error: --klebsiella_pneumo_complex__amr_min_spurious_coverage must be between 30.0 and 100.0')
+
 
 
 
@@ -91,9 +92,9 @@ def get_results(assembly, minimap2_index, args, previous_results):
         gene_info, 
         qrdr, 
         trunc, 
-        omp, 
-        args.klebsiella_pneumo_complex__amr_min_identity,  
+        omp,   
         args.klebsiella_pneumo_complex__amr_min_coverage, 
+        args.klebsiella_pneumo_complex__amr_min_identity,
         args.klebsiella_pneumo_complex__amr_min_spurious_coverage,
         args.klebsiella_pneumo_complex__amr_min_spurious_identity
     )
