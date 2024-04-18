@@ -27,9 +27,47 @@ Output of the species typing module is the following columns:
      - Species name (scientific name)
 
    * - species_match
-     - Strength of the species call indicated as **strong** (Mash distance ≤ 0.02) or **weak** (Mash distance of > 0.02 and ≤ 0.04, may be novel or hybrid species)
+     - Strength of the species call indicated as ``strong``\  (Mash distance ≤ 0.02) or ``weak``\  (Mash distance of > 0.02 and ≤ 0.04, may be novel or hybrid species)
 
+The quality and completeness of Kleborate results depends on the quality of the input genome assemblies. In general, you can expect good results from draft genomes assembled with tools like SPAdes from high-depth (>50x) Illumina data, however it is always possible that key genes subject to genotyping may be split across contigs, which can create problems for detecting and typing them accurately.
 
+Contig stats
+------------
+
+.. code-block:: Python
+
+   -m general__contig_stats
+
+This module generates some basic assembly statistics to help users understand their typing results in the context of assembly quality, although we recommend users conduct more comprehensive QC themselves before typing genomes (e.g. screen for contamination, etc).
+
+The module reports a standard set of assembly quality metrics (see Outputs below).
+
+It will also flag in the ``QC_warnings``\  column if an assembly size falls outside those specified in the ``species_specification.txt``\  in the module directory, or if N50 <10 kbp or ambiguous bases (Ns) are detected in the sequence.
+
+Outputs
++++++++
+
+Output of the contig stats module is the following columns:
+
+.. list-table::
+
+   * - contig_count
+     - Number of contigs in the input assembly
+
+   * - N50
+     - `N50 <https://en.wikipedia.org/wiki/N50,_L50,_and_related_statistics>`_ calculated from the contig sizes
+
+   * - largest_contig
+     - Size of largest contig (in bp)
+
+   * - total_size
+     - Total assembly size (in bp)
+
+   * - ambiguous_bases
+     - Detection of ambiguous bases (yes or no). If yes, the number of ambiguous bases is also provided in brackets.
+
+   * - QC_warnings
+     - List of QC issues detected, including: ``ambiguous_bases``\ (ambiguous bases detected) ``N50``\ (N50 < 10 kbp), ``total_size`` (genome size falls outside expected range).
 
 Klebsiella pneumoniae species complex
 =====================================
@@ -38,7 +76,7 @@ Klebsiella pneumoniae species complex
 
    --preset kpsc
 
-These modules will be run if the enterobacterales__species module confirms the input assembly as a member of the *K. pneumoniae* species complex (KpSC) labelled in the tree below. 
+These modules will be run if the ``enterobacterales__species``\   module confirms the input assembly as a member of the *K. pneumoniae* species complex (KpSC) labelled in the tree below. 
 
 We've included the phylogroup numbers in the table below for backwards compatibility with older literature, but these names are not used in the Kleborate output. See `this review <https://www.nature.com/articles/s41579-019-0315-1>`_ for an overview of the species complex. 
 
