@@ -42,6 +42,7 @@ This module generates some basic assembly statistics to help users understand th
 
 The module reports a standard set of assembly quality metrics (see Outputs below).
 
+
 It will also flag in the ``QC_warnings``\  column if an assembly size falls outside those specified in the ``species_specification.txt``\  in the module directory, or if N50 <10 kbp or ambiguous bases (Ns) are detected in the sequence.
 
 Outputs
@@ -68,6 +69,7 @@ Output of the contig stats module is the following columns:
 
    * - QC_warnings
      - List of QC issues detected, including: ``ambiguous_bases``\ (ambiguous bases detected) ``N50``\ (N50 < 10 kbp), ``total_size`` (genome size falls outside expected range).
+
 
 Klebsiella pneumoniae species complex
 =====================================
@@ -163,7 +165,7 @@ The relevant STs are:
 Outputs
 +++++++
 
-Output of the KpSC module is the following columns:
+Output of the KpSC MLST module is the following columns:
 
 .. list-table::
 
@@ -536,3 +538,125 @@ Resistance scores and counts are output in the following columns:
 
    * - num_resistance_classes
      - Number of drug classes to which resistance determinants have been acquired (in addition to intrinsic ampicillin)
+
+
+
+Klebsiella oxytoca species complex
+=====================================
+
+.. code-block:: Python
+
+   --preset kosc
+
+These modules will be run if the ``enterobacterales__species``\   module confirms the input assembly as a member of the *K. oxytoca* species complex (KpSC) labelled in the tree above, and listed in the table below. 
+
+.. list-table::
+
+   * - Klebsiella oxytoca
+
+   * - Klebsiella grimontii
+
+   * - Klebsiella michiganensis
+
+   * - Klebsiella pasteurii
+
+   * - Klebsiella huaxiensis
+
+   * - Klebsiella spallanzanii
+
+
+KoSC MLST
+---------
+
+.. code-block:: Python
+
+   -m klebsiella_oxytoca_complex__mlst
+
+Genomes identified as belonging to the *K. oxytoca* species complex are subjected to MLST using the 7-locus scheme described at the  *K. oxytoca* `\BIGSdb hosted at PubMLST <https://pubmlst.org/organisms/klebsiella-oxytoca>`_.
+
+A copy of the MLST alleles and ST definitions is stored in the /data directory of this module.
+
+
+Outputs
++++++++
+
+Output of the KoSC MLST module is the following columns:
+
+.. list-table::
+
+   * - ST
+     - sequence type
+
+   * - gapA, infB, mdh, pgi, phoE, rpoB, tonB
+     - allele number
+
+* Kleborate makes an effort to report the closest matching ST if a precise match is not found.
+* Imprecise allele matches are indicated with a ``*``.
+* Imprecise ST calls are indicated with ``-nLV``\ , where n indicates the number of loci that disagree with the ST reported. So ``258-1LV`` indicates a single-locus variant (SLV) of ST258, i.e. 6/7 loci match ST258.
+
+
+KoSC virulence typing
+---------------------
+Genomes identified as belonging to the *K. oxytoca* species complex are subjected to typing for yersiniabactin, colibactin, aerobactin, salmochelin and rmp loci, using the following modules:
+
+.. code-block:: Python
+
+   -m klebsiella__ybst, klebsiella__cbst, klebsiella__abst, klebsiella__smst, klebsiella__rmst
+
+These modules were primarily designed for typing of *K. pneumoniae* species complex, and the databases are populated from variation detected in KpSC genomes. However they can appear in KoSC genomes and so typing is included in the KoSC preset.
+
+
+Escherichia
+===========
+
+.. code-block:: Python
+
+   --preset escherichia
+
+These modules will be run if the ``enterobacterales__species``\   module confirms the input assembly as a member of the *Escherichia* genus. 
+
+
+E. coli MLST
+---------
+
+.. code-block:: Python
+
+   -m escherichia__mlst_achtman, escherichia__mlst_pasteur
+
+Genomes identified as belonging to the *Escherichia* genus are subjected to MLST using two 7-locus schemes.
+
+The Pasteur scheme is described at the  *Escherichia coli* `\BIGSdb hosted at the Pasteur Institute <https://bigsdb.pasteur.fr/ecoli/>`_. Please see `here <https://bigsdb.pasteur.fr/ecoli/references/>`_ for more details.
+
+The Achtman scheme is hosted at `\Enterobase <https://enterobase.warwick.ac.uk/>`_.
+
+The genes included in each scheme are noted in the Outputs table below.
+
+A copy of the MLST alleles and ST definitions used in each module is stored in the /data directory of the module.
+
+
+Outputs
++++++++
+
+Output of the Pasteur E. coli MLST module is the following columns:
+
+.. list-table::
+
+   * - ST
+     - sequence type
+
+   * - dinB, icdA, pabB, polB, putP, trpA, trpB, uidA
+     - allele number
+
+Output of the Achtman E. coli MLST module is the following columns:
+
+.. list-table::
+
+   * - ST
+     - sequence type
+
+   * - adk, fumC, gyrB, icd, mdh, purA, recA
+     - allele number
+
+* Kleborate makes an effort to report the closest matching ST if a precise match is not found.
+* Imprecise allele matches are indicated with a ``*``.
+* Imprecise ST calls are indicated with ``-nLV``\ , where n indicates the number of loci that disagree with the ST reported. So ``258-1LV`` indicates a single-locus variant (SLV) of ST258, i.e. 6/7 loci match ST258.
