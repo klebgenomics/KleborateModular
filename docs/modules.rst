@@ -617,7 +617,7 @@ These modules will be run if the ``enterobacterales__species``\   module confirm
 
 
 E. coli MLST
----------
+------------
 
 .. code-block:: Python
 
