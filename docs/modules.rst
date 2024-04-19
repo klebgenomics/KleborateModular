@@ -372,6 +372,8 @@ And here is the logic in more detail:
 * Kleborate will next translate the hit into amino acid sequence and look for truncations (expressed as % amino acid length from the start codon). If the result is less than 90%, it is added to the result (e.g. ``TEM-15*-42%``\ ) and the hit is reported in the ``truncated_resistance_hits`` column.
 * If the hit is less than 90% identity or 80% nucleotide coverage (adjustable via the ``--min_identity`` and ``--min_coverage`` options), it is reported in the ``spurious_resistance_hits`` column. Otherwise, it is reported in the column for its drug class (e.g. ``Bla_ESBL_acquired``\ ).
 
+Note that Kleborate reports resistance results for all antimicrobial classes with confidently attributable resistance mechanisms in KpSC. Not all of these are actually used clinically for treatment of KpSC infections (e.g. MLS, Rif) but they are still reported as the presence of acquired resistance determinants to these classes is of interest to researchers for other reasons (e.g. these genes can be useful markers of MGEs and MGE spread; there is potential for use of these drugs against other organisms to select for KpSC in co-infected patients or in the environment). For an overview of antimicrobial resistance and consensus definitions of multidrug resistance (MDR), extensive drug resistance (XDR) and pan drug resistance in Enterobacteriaceae, see `Magiorakos 2012 <https://www.clinicalmicrobiologyandinfection.com/article/S1198-743X(1461632-3/fulltext)>`_\ 
+
 SHV beta-lactamases
 ~~~~~~~~~~~~~~~~~~~
 
@@ -401,86 +403,73 @@ Outputs
 Results of the KpSC AMR module are grouped by drug class (according to the `ARG-Annot <https://www.ncbi.nlm.nih.gov/pubmed/24145532>`_ DB), with beta-lactamases further broken down into Lahey classes (now maintained at `BLDB <http://www.bldb.eu/>`_\ ), as follows:
 
 
-
 .. list-table::
 
    * - AGly_acquired
-     - aminoglycoside genes
+     - aminoglycoside resistance genes
 
-AGly_acquired
-Col_acquired
-Fcyn_acquired
-Flq_acquired
-Gly_acquired
-MLS_acquired
-Phe_acquired
-Rif_acquired
-Sul_acquired
-Tet_acquired
-Tgc_acquired
-Tmt_acquired
-Bla_acquired
-Bla_inhR_acquired
-Bla_ESBL_acquired
-Bla_ESBL_inhR_acquired
-Bla_Carb_acquired
-Bla_chr
-SHV_mutations
-Omp_mutations
-Col_mutations
-Flq_mutations
-truncated_resistance_hits
-spurious_resistance_hits
-
+   * - Col_acquired
+     - colistin resistance genes
+     
+   * - Fcyn_acquired
+     - fosfomycin resistance genes
+     
+   * - Flq_acquired
+     - fluoroquinolone resistance genes
+     
+   * - Gly_acquired
+     - glycopeptide resistance genes
+     
+   * - MLS_acquired
+     - macrolide resistance genes
+     
+   * - Phe_acquired
+     - phenicol resistance genes
+     
+   * - Rif_acquired
+     - rifampin resistance genes
+     
+   * - Sul_acquired
+     - sulfonamide resistance genes
+     
+   * - Tet_acquired
+     - tetracycline resistance genes
+     
+   * - Tgc_acquired
+     - tigecycline resistance genes
+     
+   * - Tmt_acquired
+     - trimethoprim resistance genes
+     
    * - Bla_acquired
-     - beta-lactamases
+     - beta-lactamases (other than SHV) that have no known extended-spectrum, carbapenemase, or inhibitor-resistance activity
 
-   * - Bla_inhR
-     - beta-lactamases with resistance to beta-lactamase inhibitors
+   * - Bla_ESBL_acquired
+     - extended-spectrum beta-lactamases, including SHV alleles with known ESBL activity
+   
+   * - Bla_ESBL_inhR_acquired
+     - extended spectrum beta-lactamases with resistance to beta-lactamase inhibitors, including SHV alleles associated with these traits 
 
-   * - Bla_Carb
-     - carbapenemase
+   * - Bla_Carb_acquired
+     - carbapenemases
 
-   * - Bla_ESBL
-     - extended spectrum beta-lactamases
-
-   * - Bla_ESBL_inhR
-     - extended spectrum beta-lactamases with resistance to beta-lactamase inhibitors
-
-   * - Fcyn
-     - fosfomycin
-
-   * - Flq
-     - fluoroquinolones
-
-   * - Gly
-     - glycopeptides
-
-   * - MLS
-     - macrolides
-
-   * - Phe
-     - phenicols
-
-   * - Rif
-     - rifampin
-
-   * - Sul
-     - sulfonamides
-
-   * - Tet
-     - tetracyclines
-
-   * - Tmt
-     - trimethoprim
-
-   * - Tgc
-     - tigecycline
-
+   * - Bla_chr
+     - SHV alleles associated with ampicillin resistance only (assumed core chromosomal genes)
+   
+   * - SHV_mutations
+     - mutations in the SHV beta-lactamase known to be associated with expansion of enzyme activity
+   
    * - Omp_mutations
-
-Note there is a separate column ``Omp_mutations`` reporting known resistance-related mutations in the OmpK35 and OmpK36 osmoporins. See above for details.
-
-Note that Kleborate reports resistance results for all antimicrobial classes with confidently attributable resistance mechanisms in KpSC. Not all of these are actually used clinically for treatment of KpSC infections (e.g. MLS, Rif) but they are still reported as the presence of acquired resistance determinants to these classes is of interest to researchers for other reasons (e.g. these genes can be useful markers of MGEs and MGE spread; there is potential for use of these drugs against other organisms to select for KpSC in co-infected patients or in the environment). For an overview of antimicrobial resistance and consensus definitions of multidrug resistance (MDR), extensive drug resistance (XDR) and pan drug resistance in Enterobacteriaceae, see `Magiorakos 2012 <https://www.clinicalmicrobiologyandinfection.com/article/S1198-743X(1461632-3/fulltext)>`_\ 
-
-
+     - resistance-related mutations in the OmpK35 and OmpK36 osmoporins
+     
+   * - Col_mutations
+     - reports if MgrB or PmrB genes are not intact
+     
+   * - Flq_mutations
+     - reports mutations found in the quinolone-resistance determining regions of GyrA and ParC
+     
+   * - truncated_resistance_hits
+     - list of acquired resistance genes in which the encoded protein is predicted to be truncated (e.g. due to a stop codon or frameshift mutation within the open reading frame)
+     
+   * - spurious_resistance_hits
+     - list of acquired resistance genes detected below the identity or coverage thresholds (default <90% identity or <80% nucleotide coverage)
