@@ -18,7 +18,7 @@ Kleborate was primarily developed to screen genome assemblies of *Klebsiella pne
 Kleborate v3 includes a rewrite of the code to (i) replace the use of BLAST with minimap (faster and less buggy); and (ii) introduce a modular structure making it easy to add new typing modules, including for other species.
 
 
-Kleborate v3 can reproduce the outputs of Kleborate v2, by running the preset modules for KpSC via: ``-preset kpsc``.
+**For K. pneumoniae species complex, Kleborate v3 can reproduce the outputs of Kleborate v2 by running the preset modules for KpSC via: ** ``-preset kpsc``
 
 
 New modules for other species are in development, for now these include MLST schemes for *Klebsiella oxytoca* species complex and *Escherichia coli*.
