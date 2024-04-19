@@ -30,7 +30,7 @@ For *Klebsiella oxytoca* species complex, set ``-preset kosc`` to confirm the sp
 * *ICE* : *Kp* associated virulence loci: yersiniabactin (*ybt*), colibactin (*clb*), salmochelin (*iro*), hypermucoidy (*rmpA*)
 * virulence plasmid associated loci: salmochelin (\ *iro*\ ), aerobactin (\ *iuc*\ ), hypermucoidy (\ *rmpA*\ , *rmpA2*\ )
 
-For *Escherichia coli*, set ``-preset ecoli`` to confirm the species and report MLST using achtman and Pasteur schemes.
+For *Escherichia coli*, set ``-preset ecoli`` to confirm the species and report MLST using Achtman and Pasteur schemes.
 
 
 Tutorial (Kleborate v2)
