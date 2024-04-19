@@ -349,6 +349,10 @@ Output of the rmst module is the following columns:
 KpSC AMR
 --------
 
+.. code-block:: Python
+
+   -m klebsiella_pneumo_complex__amr
+
 Acquired AMR genes
 ~~~~~~~~~~~~~~~~~~
 
@@ -473,3 +477,62 @@ Results of the KpSC AMR module are grouped by drug class (according to the `ARG-
      
    * - spurious_resistance_hits
      - list of acquired resistance genes detected below the identity or coverage thresholds (default <90% identity or <80% nucleotide coverage)
+
+
+Resistance scores and counts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Running the KpSC AMR module automatically runs additional modules for generating counts of resistance genes and drug classes, and calculating a resistance score. These modules can also be specified manually as follows:
+
+.. code-block:: Python
+
+   -m klebsiella_pneumo_complex__resistance_score, klebsiella_pneumo_complex__resistance_gene_count, klebsiella_pneumo_complex__resistance_class_count
+
+
+Resistance score
+~~~~~~~~~~~~~~~~
+
+This module calculates a resistance score, which ranges from 0 to 3 as follows
+
+.. list-table::
+
+   * - 0
+     - no ESBL, no carbapenemase (regardless of colistin resistance)
+
+   * - 1
+     - ESBL, no carbapenemase (regardless of colistin resistance)
+
+   * - 2
+     - Carbapenemase without colistin resistance (regardless of ESBL genes or OmpK mutations)
+
+   * - 3
+     - Carbapenemase with colistin resistance (regardless of ESBL genes or OmpK mutations)
+
+Resistance gene counts and drug class counts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This module quantifies how many acquired resistance genes are present and how many drug classes (in *addition* to ampicillin to which KpSC are intrinsically resistant) have at least one resistance determinant detected (i.e. ignoring genes recorded in the Bla_chr and Bla_acquired columns). 
+
+A few things to note:
+
+* The presence of resistance *mutations*\ , and non-ESBL forms of core genes SHV/LEN/OKP, do not contribute to the resistance *gene* count.
+* Mutations do contribute to the drug class count, e.g. fluoroquinolone resistance will be counted if a GyrA mutation is encountered regardless of whether or not an acquired quinolone resistance (\ *qnr*\ ) gene is also present. The exceptions are Omp mutations, which do not contribute to the drug class count as their effect depends on the strain background and the presence of acquired beta-lactamase enzymes; hence this information is provided in a separate column, and interpretation is left to the user (see the `Antimicrobial Resistance <https://github.com/katholt/Kleborate/wiki/Antimicrobial-resistance>`_ page).
+* Genes reported in the ``truncated_resistance_genes`` and ``spurious_resistance_genes`` columns do not contribute to the counts.
+* Note that since a drug class can have multiple resistance determinants, the gene count is typically higher than the class count.
+
+
+Outputs
++++++++
+
+Resistance scores and counts are output in the following columns:
+
+.. list-table::
+
+   * - resistance_score
+     - Score of 0-3, as defined above
+
+   * - num_resistance_genes
+     - Number of acquired resistance genes
+
+   * - num_resistance_classes
+     - Number of drug classes to which resistance determinants have been acquired (in addition to intrinsic ampicillin)
