@@ -15,7 +15,7 @@ If you have unassembled reads, you will need to assemble them before running Kle
 Basic usage
 ------------------
 
-Run with preset modules for K. pneumoniae species complex (KpSC):
+Run with preset modules for *K. pneumoniae* species complex (KpSC):
 
 .. code-block:: Python
 
@@ -27,7 +27,7 @@ Run with specified modules only:
 
    ./kleborate-runner.py -a *.fasta -o results.txt -m 
 
-Run with preset modules for E. coli, on gzipped assemblies:
+Run with preset modules for *E. coli* or other *Escherichia*, on gzipped assemblies:
 
 .. code-block:: Python
 
