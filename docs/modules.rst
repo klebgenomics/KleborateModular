@@ -17,7 +17,7 @@ Species detection
 This module will attempt to identify the species of each input assembly. It does this by comparing the assembly using `Mash <https://mash.readthedocs.io/>`_ to a curated set of *Klebsiella* and other Enterobacteriaceae assemblies from NCBI, and reporting the species of the closest match. 
 
 Outputs
-+++++++
+^^^^^^^
 
 Output of the species typing module is the following columns:
 
@@ -46,7 +46,7 @@ The module reports a standard set of assembly quality metrics (see Outputs below
 It will also flag in the ``QC_warnings``\  column if an assembly size falls outside those specified in the ``species_specification.txt``\  in the module directory, or if N50 <10 kbp or ambiguous bases (Ns) are detected in the sequence.
 
 Outputs
-+++++++
+^^^^^^^
 
 Output of the contig stats module is the following columns:
 
@@ -163,7 +163,7 @@ The relevant STs are:
 
 
 Outputs
-+++++++
+^^^^^^^
 
 Output of the KpSC MLST module is the following columns:
 
@@ -214,7 +214,7 @@ Notes on virulence sequence type reporting:
 * For genomes with multiple copies of a virulence locus (e.g. a strain that carries ICE *Kp1* and the KpVP-1 plasmid will have two copies of *iro* and *rmp*\ ), KleborateModular will report and assign a ST or closest matching ST to each of these virulence loci provided that the locus is relatively intact in the genome (i.e. >50% of the genes in a locus are present on a single contig) and according to the above criteria.  
 
 Yersiniabactin and colibactin
-+++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: Python
 
@@ -256,7 +256,7 @@ Output of the cbst module is the following columns:
      - allele number (clb / pks locus)
 
 Aerobactin and salmochelin
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: Python
 
@@ -311,7 +311,7 @@ Output of the smst module is the following columns:
 
 
 Hypermucoidy loci
-------------------
+^^^^^^^^^^^^^^^^^
 
 .. code-block:: Python
 
@@ -482,7 +482,7 @@ Results of the KpSC AMR module are grouped by drug class (according to the `ARG-
 
 
 Resistance scores and counts
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Running the KpSC AMR module automatically runs additional modules for generating counts of resistance genes and drug classes, and calculating a resistance score. These modules can also be specified manually as follows:
 
