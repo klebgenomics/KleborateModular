@@ -1,6 +1,9 @@
 .. role:: raw-html-m2r(raw)
    :format: html
 
+########################
+Introducing Kleborate v3
+########################
 
 Kleborate was primarily developed to screen genome assemblies of *Klebsiella pneumoniae* and the *Klebsiella pneumoniae* species complex (KpSC) for:
 
