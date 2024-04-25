@@ -1,5 +1,16 @@
-.. role:: raw-html-m2r(raw)
-   :format: html
+.. KleborateModular documentation master file, created by
+   sphinx-quickstart on Thu Apr 25 06:02:56 2024.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+.. toctree::
+   :hidden:
+
+   Installation
+   Usage
+   Modules
+   Creating new modules for Kleborate
+
 
 ########################
 Introducing Kleborate v3
@@ -93,4 +104,5 @@ License
 `GNU General Public License, version 3 <https://www.gnu.org/licenses/gpl-3.0.html>`_
 
 ----
+
 

@@ -35,20 +35,15 @@ def prerequisite_modules():
     return []
 
 
+
 def get_headers():
     full_headers = [
-        'K_locus', 'K_type', 'K_Confidence', 'K_Problems', 'K_Identity', 
+        'K_locus', 'K_type', 'K_locus_confidence', 'K_locus_problems', 'K_locus_identity', 
         'K_Coverage', 'K_Length discrepancy', 'K_Expected genes in locus', 
-        'K_Expected genes in locus, details', 'K_Missing expected genes', 
-        'K_Other genes in locus', 'K_Other genes in locus, details', 
-        'K_Expected genes outside locus', 'K_Expected genes outside locus, details', 
-        'K_Other genes outside locus', 'K_Other genes outside locus, details',
-        'O_locus', 'O_type', 'O_Confidence', 'O_Problems', 'O_Identity', 
-        'O_Coverage', 'O_Length discrepancy', 'O_Expected genes in locus', 
-        'O_Expected genes in locus, details', 'O_Missing expected genes', 
-        'O_Other genes in locus', 'O_Other genes in locus, details', 
-        'O_Expected genes outside locus', 'O_Expected genes outside locus, details', 
-        'O_Other genes outside locus', 'O_Other genes outside locus, details'
+        'K_Expected_genes_in_locus, details', 'K_Missing_expected_genes', 
+        'O_locus', 'O_type', 'O_locus_confidence', 'O_locus_problems', 'O_locus_identity', 
+        'O_Coverage', 'O_Length_discrepancy', 'O_Expected_genes_in_locus', 
+        'O_Expected_genes_in_locus, details', 'O_Missing_expected_genes'
     ]
     stdout_headers = []
     return full_headers, stdout_headers
@@ -97,7 +92,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
         k_result_table = k_results.as_table()
         for line in k_result_table.split('\n'):
             if line:
-                parts = line.split('\t')[1:-1]  # Slice to exclude the first and last fiels
+                parts = line.split('\t')[1:-7]  # Slice to exclude the first and last fields
                 for key, value in zip(k_headers, parts):  
                     results_dict[key] = value
 
@@ -106,7 +101,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
         o_result_table = o_results.as_table()
         for line in o_result_table.split('\n'):
             if line:
-                parts = line.split('\t')[1:-1]  # Slice to exclude the first and last field
+                parts = line.split('\t')[1:-7] 
                 for key, value in zip(o_headers, parts):  
                     results_dict[key] = value
     return results_dict

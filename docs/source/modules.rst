@@ -237,7 +237,7 @@ Output of the ybst module is the following columns:
 .. list-table::
 
    * - Yersiniabactin
-     - Lineage      s (ICEKp prediction)
+     - Lineage (ICEKp prediction)
 
    * - YbST
      - Yersiniabactin sequence type
