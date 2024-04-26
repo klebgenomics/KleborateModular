@@ -27,4 +27,4 @@ html_theme_options = {
 
 }
 html_static_path = ['_static']
-html_logo = 'https://github.com/klebgenomics/Kleborate/blob/main/images/logo.png'
+html_logo = 'https://github.com/klebgenomics/KleborateModular/blob/bacterate_development/docs/source/logo.png'
