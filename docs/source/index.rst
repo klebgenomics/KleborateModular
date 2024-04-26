@@ -4,7 +4,6 @@
    contain the root `toctree` directive.
 
 .. toctree::
-   :maxdepth: 4
 
    Installation
    Usage

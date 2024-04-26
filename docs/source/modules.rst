@@ -19,8 +19,8 @@ Species detection
 
 This module will attempt to identify the species of each input assembly. It does this by comparing the assembly using `Mash <https://mash.readthedocs.io/>`_ to a curated set of *Klebsiella* and other Enterobacteriaceae assemblies from NCBI, and reporting the species of the closest match. 
 
-Outputs
-^^^^^^^
+Species detection outputs
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Output of the species typing module is the following columns:
 
@@ -48,8 +48,8 @@ The module reports a standard set of assembly quality metrics (see Outputs below
 
 It will also flag in the ``QC_warnings``\  column if an assembly size falls outside those specified in the ``species_specification.txt``\  in the module directory, or if N50 <10 kbp or ambiguous bases (Ns) are detected in the sequence.
 
-Outputs
-^^^^^^^
+Contig stats outputs
+^^^^^^^^^^^^^^^^^^^^
 
 Output of the contig stats module is the following columns:
 
@@ -105,7 +105,7 @@ We've included the phylogroup numbers in the table below for backwards compatibi
    * - *K. quasipneumoniae* subsp *quasipneumoniae*
      - Kp2
      - KpIIa
-     - `Brisse et al. 2014 Int J Syst Evol Microbiol 64:3146-52 <https://ijs.microbiologyresearch.org/content/journal/ijsem/10.1099/ijs.0.062737-0#tab2>`_
+     - `Brisse et al., 2014 Int J Syst Evol Microbiol 64:3146-52 <https://ijs.microbiologyresearch.org/content/journal/ijsem/10.1099/ijs.0.062737-0#tab2>`_
    * - *K. quasipneumoniae* subsp *similipneumoniae*
      - Kp4
      - KpIIb
@@ -117,7 +117,7 @@ We've included the phylogroup numbers in the table below for backwards compatibi
    * - *K. variicola* subsp *tropica*
      - Kp5
      - -
-     - `Rodrigues et al. 2019 Res Microbiol ﻿S0923-2508:﻿30019-1 <https://www.sciencedirect.com/science/article/pii/S0923250819300191?via%3Dihub>`_ (described as subsp *tropicalensis* in paper)
+     - `Rodrigues et al., 2019 Res Microbiol ﻿S0923-2508:﻿30019-1 <https://www.sciencedirect.com/science/article/pii/S0923250819300191?via%3Dihub>`_ (described as subsp *tropicalensis* in paper)
    * - *K. quasivariicola*
      - Kp6
      - -
@@ -140,7 +140,7 @@ KpSC MLST
 
    -m klebsiella_pneumo_complex__mlst
 
-Genomes identified by Kleborate as belonging to the *K. pneumoniae* species complex are subjected to MLST using the 7-locus scheme described at the  *K. pneumoniae* `\BIGSdb hosted at the Pasteur Institute <http://bigsdb.pasteur.fr/klebsiella/klebsiella.html>`_. Note that this scheme is not specific to *K. pneumoniae sensu stricto* but covers the whole species complex. 
+Genomes identified by Kleborate as belonging to the *K. pneumoniae* species complex are subjected to MLST using the 7-locus scheme described at the  *K. pneumoniae* `\Bacteria Isolate Genome Sequence Database hosted at the Pasteur Institute <http://bigsdb.pasteur.fr/klebsiella/klebsiella.html>`_. Note that this scheme is not specific to *K. pneumoniae sensu stricto* but covers the whole species complex. 
 
 A copy of the MLST alleles and ST definitions is stored in the /data directory of this module.
 
@@ -165,8 +165,8 @@ The relevant STs are:
      - ST91 (subsp. ozaenae)
 
 
-Outputs
-"""""""""""""
+KpSC MLST outputs
+"""""""""""""""""
 
 Output of the KpSC MLST module is the following columns:
 
@@ -196,7 +196,7 @@ For each module, if the target locus is detected, the typer will:
 * Report the phylogenetic lineage associated with each sequence type, as outlined below and detailed in the corresponding papers
 * Report the structural variant of the mobile genetic element that is usually associated with that phylogenetic lineage (for *ybt* and *iuc* only)
 
-The *ybt*\ , *clb*\ , *iuc*\ , *iro* and *rmpADC* locus-specific ST schemes are defined in the *K. pneumoniae* `BIGSdb <http://bigsdb.pasteur.fr/klebsiella/klebsiella.html>`_.
+The *ybt*\ , *clb*\ , *iuc*\ , *iro* and *rmpADC* locus-specific ST schemes are defined in the *K. pneumoniae* ` <http://bigsdb.pasteur.fr/klebsiella/klebsiella.html>`_.
 
 Notes on virulence allele reporting:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -229,8 +229,8 @@ Note that while ICE *Kp1* is occasionally found in other species within the KpSC
 
 The allele databases and schemes were last updated in April 2024. 
 
-Outputs
-~~~~~~~
+ybst outputs
+~~~~~~~~~~~~
 
 Output of the ybst module is the following columns:
 
@@ -283,8 +283,8 @@ In Kleborate version 2.2.0 and earlier, the majority of *iucA* alleles had a seq
 
 The allele databases and schemes were last updated in April 2024. 
 
-Outputs
-~~~~~~~
+abst Outputs
+~~~~~~~~~~~~
 
 Output of the abst module is the following columns:
 
@@ -329,13 +329,13 @@ The rmpA module screens for *rmpADC* and will report a sequence type, along with
 Note:
 """""
 
-* Alleles for each gene are sourced from the `BIGSdb <http://bigsdb.pasteur.fr/klebsiella/klebsiella.html>`_\ , while additional *rmpA* alleles have also been added to Kleborate.
+* Alleles for each gene are sourced from the `BIGSdb-pasteur <http://bigsdb.pasteur.fr/klebsiella/klebsiella.html>`_\ , while additional *rmpA* alleles have also been added to Kleborate.
 * The *rmpA* and *rmpA2* genes share ~83% nucleotide identity so are easily distinguished.
 * Unique (non-overlapping) nucleotide Minimap2 hits with >95% identity and >50% coverage are reported. Note multiple hits to the same gene are reported if found. E.g. the NTUH-K2044 genome carries *rmpA* in the virulence plasmid and also in ICE *Kp1* , which is reported in the *rmpA* column as ``rmpA_11(ICEKp1),rmpA_2(KpVP-1)``.
 * As with the other virulence genes, truncations in the *rmpA* and *rmpA2* genes are expressed as a percentage of the amino acid length from the start codon, e.g. ``rmpA_5-54%`` indicates the RmpA protein is truncated after 54% length of the intact amino acid sequence. These truncations appear to be common, due to insertions and deletions within a poly-G tract, and almost certainly result in loss of protein function.
 
-Outputs
-~~~~~~~
+rmst outputs
+~~~~~~~~~~~~
 
 Output of the rmst module is the following columns:
 
@@ -406,8 +406,8 @@ Additional chromosomal mutations associated with AMR
 Note these do not count towards acquired resistance gene counts, but do count towards drug classes (with the exception of Omp mutations, whose spectrum of effects depends on the presence of acquired beta-lactamases and thus their impact on specific beta-lactam drug classes is hard to predict).
 
 
-Outputs
-"""""""
+KpSC AMR outputs
+""""""""""""""""
 
 Results of the KpSC AMR module are grouped by drug class (according to the `ARG-Annot <https://www.ncbi.nlm.nih.gov/pubmed/24145532>`_ DB), with beta-lactamases further broken down into Lahey classes (now maintained at `BLDB <http://www.bldb.eu/>`_\ ), as follows:
 
@@ -526,8 +526,8 @@ A few things to note:
 * Note that since a drug class can have multiple resistance determinants, the gene count is typically higher than the class count.
 
 
-Outputs
-~~~~~~~~~~~~~
+Resistance scores and counts outputs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Resistance scores and counts are output in the following columns:
 
@@ -575,13 +575,13 @@ KoSC MLST
 
    -m klebsiella_oxytoca_complex__mlst
 
-Genomes identified as belonging to the *K. oxytoca* species complex are subjected to MLST using the 7-locus scheme described at the  *K. oxytoca* `\BIGSdb hosted at PubMLST <https://pubmlst.org/organisms/klebsiella-oxytoca>`_.
+Genomes identified as belonging to the *K. oxytoca* species complex are subjected to MLST using the 7-locus scheme described at the  *K. oxytoca* `\at PubMLST <https://pubmlst.org/organisms/klebsiella-oxytoca>`_.
 
 A copy of the MLST alleles and ST definitions is stored in the /data directory of this module.
 
 
-Outputs
-^^^^^^^^^^
+KoSC MLST outputs
+^^^^^^^^^^^^^^^^^
 
 Output of the KoSC MLST module is the following columns:
 
@@ -628,7 +628,7 @@ E. coli MLST
 
 Genomes identified as belonging to the *Escherichia* genus are subjected to MLST using two 7-locus schemes.
 
-The Pasteur scheme is described at the *Escherichia coli* `BIGSdb hosted at Pasteur Institute <https://bigsdb.pasteur.fr/ecoli/>`_. Please see `here <https://bigsdb.pasteur.fr/ecoli/references/>`_ for more details.
+The Pasteur scheme is described at the *Escherichia coli* `Database at Pasteur Institute <https://bigsdb.pasteur.fr/ecoli/>`_. Please see `here <https://bigsdb.pasteur.fr/ecoli/references/>`_ for more details.
 
 The Achtman scheme is hosted at `\Enterobase <https://enterobase.warwick.ac.uk/>`_.
 
@@ -637,8 +637,8 @@ The genes included in each scheme are noted in the Outputs table below.
 A copy of the MLST alleles and ST definitions used in each module is stored in the /data directory of the module.
 
 
-Outputs
-^^^^^^^^^^
+E. coli MLST outputs
+^^^^^^^^^^^^^^^^^^^^
 
 Output of the Pasteur E. coli MLST module is the following columns:
 
