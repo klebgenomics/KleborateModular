@@ -8,7 +8,7 @@
 
    Installation
    Usage
-   Modules
+   modules
    Creating-New-Modules
 
 
