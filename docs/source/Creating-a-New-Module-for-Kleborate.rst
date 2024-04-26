@@ -1,6 +1,6 @@
-
+#########################################
 Steps to Create a New Module for Kleborate
-------------------------------------------
+#########################################
 
 
 #. 
@@ -15,7 +15,7 @@ Steps to Create a New Module for Kleborate
 
 
    * Inside the newly created directory, create a Python file with the same name as the directory. This file will contain the module's implementation.
-   * For example, if your module is named ``my_module``\ , create a file named ``my_module.py`` inside the ``my_module`` directory.
+   * For example, if your module is named ``enterobacterales__species``\ , create a file named ``enterobacterales__species.py`` inside the ``enterobacterales__species`` directory.
 
 #. 
    **Implement Module Functionality**\ :
@@ -67,13 +67,6 @@ Steps to Create a New Module for Kleborate
    * Implement a function to get the results produced by your module.
    * This function should accept necessary arguments like assembly, minimap2 index, command-line arguments, and other required data.
    * It should return a dictionary containing the results.
-
-#. 
-   **Update**  ``__init__.py``\ :
-
-
-   * Add an import statement for your module's Python file in the ``__init__.py`` file inside the ``modules`` directory.
-   * This ensures that your module is recognized and imported by Kleborate.
 
 #. 
    **Test Your Module**\ :

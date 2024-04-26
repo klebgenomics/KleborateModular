@@ -9,7 +9,7 @@
    Installation
    Usage
    Modules
-   Creating new modules for Kleborate
+   Creating-a-New-Module-for-Kleborate
 
 
 ########################
