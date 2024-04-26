@@ -9,6 +9,7 @@
    Installation
    Usage
    Modules
+   Creating-New-Modules
 
 
 ########################
