@@ -108,3 +108,5 @@ gh-md-toc
 *.phr
 *.pin
 *.psq
+.DS_Store
+.DS_Store
