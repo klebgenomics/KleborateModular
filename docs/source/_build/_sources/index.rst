@@ -4,12 +4,11 @@
    contain the root `toctree` directive.
 
 .. toctree::
-   :maxdepth: 2
    :hidden:
 
    Installation
    Usage
-   Modules
+   modules
    Creating-New-Modules
 
 
