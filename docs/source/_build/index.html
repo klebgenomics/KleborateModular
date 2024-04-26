@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Introducing Kleborate v3 &#8212; KleborateModular 3.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=8ebd99bd"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="Installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="toctree-wrapper compound">
+</div>
+<section id="introducing-kleborate-v3">
+<h1>Introducing Kleborate v3<a class="headerlink" href="#introducing-kleborate-v3" title="Permalink to this heading">¶</a></h1>
+<p>Kleborate was primarily developed to screen genome assemblies of <em>Klebsiella pneumoniae</em> and the <em>Klebsiella pneumoniae</em> species complex (KpSC) for:</p>
+<ul class="simple">
+<li><p>species (e.g. <em>K. pneumoniae</em>, <em>K. quasipneumoniae</em>, <em>K. variicola</em>, etc.)</p></li>
+<li><p><em>K. pneumoniae</em> MLST sequence type</p></li>
+<li><p><em>ICE</em> : <em>Kp</em> associated virulence loci: yersiniabactin (<em>ybt</em>), colibactin (<em>clb</em>), salmochelin (<em>iro</em>), hypermucoidy (<em>rmpA</em>)</p></li>
+<li><p>virulence plasmid associated loci: salmochelin (<em>iro</em>), aerobactin (<em>iuc</em>), hypermucoidy (<em>rmpA</em>, <em>rmpA2</em>)</p></li>
+<li><p>antimicrobial resistance determinants: acquired genes, SNPs, gene truncations and intrinsic β-lactamases</p></li>
+<li><p>K (capsule) and O antigen (LPS) serotype prediction, via <em>wzi</em> alleles and <a class="reference external" href="https://github.com/klebgenomics/Kaptive">Kaptive</a></p></li>
+</ul>
+<p>Kleborate v3 includes a rewrite of the code to (i) replace the use of BLAST with minimap (faster and less buggy); and (ii) introduce a modular structure making it easy to add new typing modules, including for other species.</p>
+<p>For <em>K. pneumoniae</em> species complex, Kleborate v3 can reproduce the outputs of Kleborate v2 by running the preset modules for KpSC via: <code class="docutils literal notranslate"><span class="pre">-preset</span> <span class="pre">kpsc</span></code></p>
+<p>New modules for other species are in development, for now these include MLST schemes for <em>Klebsiella oxytoca</em> species complex and <em>Escherichia coli</em>.</p>
+<p>For <em>Klebsiella oxytoca</em> species complex, set <code class="docutils literal notranslate"><span class="pre">-preset</span> <span class="pre">kosc</span></code> to confirm the species and report:</p>
+<ul class="simple">
+<li><p><em>K. oxytoca</em> MLST sequence type</p></li>
+<li><p><em>ICE</em> : <em>Kp</em> associated virulence loci: yersiniabactin (<em>ybt</em>), colibactin (<em>clb</em>), salmochelin (<em>iro</em>), hypermucoidy (<em>rmpA</em>)</p></li>
+<li><p>virulence plasmid associated loci: salmochelin (<em>iro</em>), aerobactin (<em>iuc</em>), hypermucoidy (<em>rmpA</em>, <em>rmpA2</em>)</p></li>
+</ul>
+<p>For <em>Escherichia</em>, set <code class="docutils literal notranslate"><span class="pre">-preset</span> <span class="pre">escherichia</span></code> to confirm the species and report MLST using Achtman and Pasteur schemes.</p>
+<section id="tutorial-kleborate-v2">
+<h2>Tutorial (Kleborate v2)<a class="headerlink" href="#tutorial-kleborate-v2" title="Permalink to this heading">¶</a></h2>
+<p>A step-by-step tutorial for Kleborate v2 is available at <a class="reference external" href="bit.ly/kleborate-workshop">bit.ly/kleborate-workshop</a>, covering:</p>
+<ul class="simple">
+<li><p>Kleborate’s features and their scientific rationale</p></li>
+<li><p>How to run Kleborate</p></li>
+<li><p>Examples, illustrating how to run and interpret results</p></li>
+<li><p>How to visualise results using Kleborate-Viz</p></li>
+<li><p>Performance of Kleborate on nanopore data</p></li>
+</ul>
+<p>This tutorial will be updated soon to Kleborate v3, however the functionality of Kleborate v3 remains the same if you add <code class="docutils literal notranslate"><span class="pre">-preset</span> <span class="pre">kpsc</span></code> to the run command.</p>
+</section>
+<section id="citing-kleborate-and-kaptive">
+<h2>Citing Kleborate and Kaptive<a class="headerlink" href="#citing-kleborate-and-kaptive" title="Permalink to this heading">¶</a></h2>
+<p>If you use Kleborate, please cite the paper: Lam, MMC. et al. A genomic surveillance framework and genotyping tool for <em>Klebsiella pneumoniae</em> and its related species complex, <em>Nature Communications</em> (2021). <a class="reference external" href="https://www.nature.com/articles/s41467-021-24448-3">https://www.nature.com/articles/s41467-021-24448-3</a></p>
+<p>If you use the Kaptive calls for K and O locus typing please also cite Wyres, KL. et al. Identification of <em>Klebsiella</em> capsule synthesis loci from whole genome data. <em>Microbial Genomics</em> (2016). <a class="reference external" href="http://mgen.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000102">http://mgen.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000102</a></p>
+<p>The following papers provide more information on the component schemes and genotyping incorporated in Kleborate:</p>
+<blockquote>
+<div><p>Yersiniabactin and colibactin (ICE*Kp*):
+Lam, MMC. et al. Genetic diversity, mobilisation and spread of the yersiniabactin-encoding mobile element ICE*Kp* in <em>Klebsiella pneumoniae</em> populations. <em>Microbial Genomics</em> (2018). <a class="reference external" href="http://mgen.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000196">Microbial Genomics</a></p>
+<p>Aerobactin and salmochelin:
+Lam, MMC. et al. Tracking key virulence loci encoding aerobactin and salmochelin siderophore synthesis in <em>Klebsiella pneumoniae</em>. <em>Genome Medicine</em> (2018). <a class="reference external" href="https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-018-0587-5">Genome Medicine</a></p>
+<p>Kaptive for capsule (K) serotyping:
+Wyres, KL. et al. Identification of <em>Klebsiella</em> capsule synthesis loci from whole genome data. <em>Microbial Genomics</em> (2016). <a class="reference external" href="http://mgen.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000102">Microbial Genomics 2</a></p>
+<p>Kaptive for O antigen (LPS) serotyping:
+Wick, RR et. al. Kaptive Web: user-friendly capsule and lipopolysaccharide serotype prediction for <em>Klebsiella</em> genomes. <em>Journal of Clinical Microbiology</em> (2018). <a class="reference external" href="http://jcm.asm.org/content/56/6/e00197-18">Journal of Clinical Microbiology</a></p>
+</div></blockquote>
+</section>
+<section id="interactive-kleborate-reports-on-public-data-sets">
+<h2>Interactive Kleborate reports on public data sets<a class="headerlink" href="#interactive-kleborate-reports-on-public-data-sets" title="Permalink to this heading">¶</a></h2>
+<p>The <a class="reference external" href="https://www.nature.com/articles/s41467-021-24448-3">Kleborate paper</a> reports results of genotyping ~10,000 public genomes that have been filtered to remove redundant sequences (e.g. outbreak clusters, identified as small genome-wide mash distance with same year, location and genotypes), with Kleborate v2. The results can be explored in <a class="reference external" href="https://bit.ly/klebMR">Microreact</a> (which shows the mash tree, Kleborate output &amp; curated metadata) or <a class="reference external" href="https://kleborate.erc.monash.edu/">Kleborate-Viz</a> (R shiny app). Kleborate-Viz also has the EuSCAPE dataset preloaded, or you can view your own Kleborate results.</p>
+<p>Kleborate is also included in <a class="reference external" href="https://pathogen.watch/">Klebsiella Pathogenwatch</a> which shows interactive trees, maps and line lists for <em>Klebsiella pneumoniae</em> and allows you to analyse your own data in context of the public collections. See <a class="reference external" href="https://doi.org/10.1093/cid/ciab784">this paper</a> for an example of how to use it.</p>
+</section>
+<section id="contact-us">
+<h2>Contact us<a class="headerlink" href="#contact-us" title="Permalink to this heading">¶</a></h2>
+<p>Kleborate is under active development with many other Klebs genomic analysis tools and projects in progress (see <a class="reference external" href="https://github.com/klebgenomics">github.com/klebgenomics</a>).</p>
+<p>Please get in touch via the GitHub <a class="reference external" href="https://github.com/klebgenomics/KleborateModular/issues">issues tracker</a> if you have any issues, questions or ideas.</p>
+<p>For more on our lab, including other software, see <a class="reference external" href="http://holtlab.net">http://holtlab.net</a></p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading">¶</a></h2>
+<p><a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License, version 3</a></p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="#">
+    <img class="logo" src="_static/KleborateModular/images/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Creating-New-Modules.html">Creating-New-Modules</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="Installation.html" title="next chapter">Installation</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Mary Maranga, Kathryn Holt, Ryan Wick.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
