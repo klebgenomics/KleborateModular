@@ -16,7 +16,7 @@ import pathlib
 import shutil
 import sys
 
-from rmpa2 import rmpa2_minimap
+from .rmpa2 import rmpa2_minimap
 
 
 def description():

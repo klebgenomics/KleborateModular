@@ -18,10 +18,10 @@ details. You should have received a copy of the GNU General Public License along
 not, see <https://www.gnu.org/licenses/>.
 """
 
-from .alignment import align_query_to_ref, call_redundant_hits, truncation_check
-from .misc import load_fasta, reverse_complement
+from ...shared.alignment import align_query_to_ref, call_redundant_hits, truncation_check
+from ...shared.misc import load_fasta, reverse_complement
 
-def rmpa2_minimap(ref_file, assemblies, minimap2_index, min_coverage, min_identity):
+def rmpa2_minimap(ref_file, assembly, minimap2_index, min_coverage, min_identity):
     rmpa2_calls = []
     hits = align_query_to_ref(ref_file, assembly,ref_index=minimap2_index,  min_identity=min_identity, min_query_coverage=None)
     hits = call_redundant_hits(hits)
