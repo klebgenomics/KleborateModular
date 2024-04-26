@@ -4,11 +4,11 @@
    contain the root `toctree` directive.
 
 .. toctree::
+   :hidden:
 
    Installation
    Usage
    Modules
-   Creating-New-Modules
 
 
 ########################
