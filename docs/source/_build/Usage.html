@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Usage &#8212; KleborateModular 3.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=8ebd99bd"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Modules" href="Modules.html" />
+    <link rel="prev" title="Installation" href="Installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h1>
+<section id="input-files">
+<h2>Input files<a class="headerlink" href="#input-files" title="Permalink to this heading">¶</a></h2>
+<p>KleborateModular takes genome assemblies in FASTA format (can be gzipped). It will work on either draft or completed assemblies, though completed is better because it reduces the risk of fragmented genes/loci.</p>
+<p>If you have unassembled reads, you will need to assemble them before running Kleborate. You can try our <a class="reference external" href="https://github.com/rrwick/Unicycler">Unicycler</a> assembler which works great on Illumina or hybrid Illumina + Nanopore/PacBio reads. Or check out this <a class="reference external" href="https://github.com/rrwick/Trycycler/wiki/Guide-to-bacterial-genome-assembly">guide to bacterial genome assembly</a>.</p>
+</section>
+<section id="basic-usage">
+<h2>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading">¶</a></h2>
+<p>Run with preset modules for <em>K. pneumoniae</em> species complex (KpSC):</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">kleborate</span><span class="o">-</span><span class="n">runner</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">a</span> <span class="o">*.</span><span class="n">fasta</span> <span class="o">-</span><span class="n">o</span> <span class="n">results</span><span class="o">.</span><span class="n">txt</span> <span class="o">-</span><span class="n">p</span> <span class="n">kpsc</span>
+</pre></div>
+</div>
+<p>Run with specified modules only:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">kleborate</span><span class="o">-</span><span class="n">runner</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">a</span> <span class="o">*.</span><span class="n">fasta</span> <span class="o">-</span><span class="n">o</span> <span class="n">results</span><span class="o">.</span><span class="n">txt</span> <span class="o">-</span><span class="n">m</span>
+</pre></div>
+</div>
+<p>Run with preset modules for <em>E. coli</em> or other <em>Escherichia</em>, on gzipped assemblies:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">kleborate</span><span class="o">-</span><span class="n">runner</span><span class="o">.</span><span class="n">py</span>  <span class="o">-</span><span class="n">a</span> <span class="o">*.</span><span class="n">fasta</span><span class="o">.</span><span class="n">gz</span> <span class="o">-</span><span class="n">o</span> <span class="n">results</span><span class="o">.</span><span class="n">txt</span> <span class="o">-</span><span class="n">p</span> <span class="n">escherichia</span>
+</pre></div>
+</div>
+<p>Check available modules, check version, print help:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">kleborate</span><span class="o">-</span><span class="n">runner</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">--</span><span class="n">list_modules</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl>
+<dt>Input/output:</dt><dd><dl class="simple">
+<dt>-a ASSEMBLIES [ASSEMBLIES …], –assemblies ASSEMBLIES [ASSEMBLIES …]</dt><dd><p>FASTA file(s) for assemblies</p>
+</dd>
+</dl>
+<dl class="option-list">
+<dt><kbd><span class="option">-o <var>OUTFILE</var></span>, <span class="option">--outfile <var>OUTFILE</var></span></kbd></dt>
+<dd><p>File for detailed output (default: Kleborate_results.txt)</p>
+</dd>
+</dl>
+</dd>
+<dt>Modules:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--list_modules</span></kbd></dt>
+<dd><p>Print a list of all available modules and then quit (default: False)</p>
+</dd>
+<dt><kbd><span class="option">-p <var>PRESET</var></span>, <span class="option">--preset <var>PRESET</var></span></kbd></dt>
+<dd><p>Module presets, choose from</p>
+<ul class="simple">
+<li><p>kpsc (<em>Klebsiella pnuemoniae</em> species complex)</p></li>
+<li><p>kosc (<em>Klebsiella oxytoca</em> species complex)</p></li>
+<li><p>escherichia  (<em>Escherichia</em>)</p></li>
+</ul>
+</dd>
+<dt><kbd><span class="option">-m <var>MODULES</var></span>, <span class="option">--modules <var>MODULES</var></span></kbd></dt>
+<dd><p>Comma-delimited list of Kleborate modules to use</p>
+</dd>
+</dl>
+</dd>
+<dt>Help:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></dt>
+<dd><p>Show a help message and exit</p>
+</dd>
+<dt><kbd><span class="option">--help_all</span></kbd></dt>
+<dd><p>Show a help message with all module options</p>
+</dd>
+<dt><kbd><span class="option">--version</span></kbd></dt>
+<dd><p>Show program’s version number and exit</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<section id="available-modules-and-parameters">
+<h3>Available modules and parameters<a class="headerlink" href="#available-modules-and-parameters" title="Permalink to this heading">¶</a></h3>
+<section id="generic-modules">
+<h4>Generic modules<a class="headerlink" href="#generic-modules" title="Permalink to this heading">¶</a></h4>
+<dl>
+<dt>enterobacterales__species module:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--enterobacterales__species_strong <var>ENTEROBACTERALES__SPECIES_STRONG</var></span></kbd></dt>
+<dd><p>Mash distance threshold for a strong species match (default: 0.02)</p>
+</dd>
+<dt><kbd><span class="option">--enterobacterales__species_weak <var>ENTEROBACTERALES__SPECIES_WEAK</var></span></kbd></dt>
+<dd><p>Mash distance threshold for a weak species match (default: 0.04)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="klebsiella-pneumoniae-sc-modules">
+<h4>Klebsiella pneumoniae SC modules<a class="headerlink" href="#klebsiella-pneumoniae-sc-modules" title="Permalink to this heading">¶</a></h4>
+<dl>
+<dt>klebsiella__abst module:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--klebsiella__abst_min_identity <var>KLEBSIELLA__ABST_MIN_IDENTITY</var></span></kbd></dt>
+<dd><p>Minimum alignment percent identity for aerobactin MLST (default: 90.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella__abst_min_coverage <var>KLEBSIELLA__ABST_MIN_COVERAGE</var></span></kbd></dt>
+<dd><p>Minimum alignment percent coverage for aerobactin MLST (default: 80.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella__abst_required_exact_matches <var>KLEBSIELLA__ABST_REQUIRED_EXACT_MATCHES</var></span></kbd></dt>
+<dd><p>At least this many exact matches are required to call an ST (default: 3)</p>
+</dd>
+</dl>
+</dd>
+<dt>klebsiella__cbst module:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--klebsiella__cbst_min_identity <var>KLEBSIELLA__CBST_MIN_IDENTITY</var></span></kbd></dt>
+<dd><p>Minimum alignment percent identity for colibactin MLST (default: 90.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella__cbst_min_coverage <var>KLEBSIELLA__CBST_MIN_COVERAGE</var></span></kbd></dt>
+<dd><p>Minimum alignment percent coverage for colibactin MLST (default: 80.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella__cbst_required_exact_matches <var>KLEBSIELLA__CBST_REQUIRED_EXACT_MATCHES</var></span></kbd></dt>
+<dd><p>At least this many exact matches are required to call an ST (default: 8)</p>
+</dd>
+</dl>
+</dd>
+<dt>klebsiella__rmst module:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--klebsiella__rmst_min_identity <var>KLEBSIELLA__RMST_MIN_IDENTITY</var></span></kbd></dt>
+<dd><p>Minimum alignment percent identity for Rmp MLST (default: 90.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella__rmst_min_coverage <var>KLEBSIELLA__RMST_MIN_COVERAGE</var></span></kbd></dt>
+<dd><p>Minimum alignment percent coverage for Rmp MLST (default: 80.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella__rmst_required_exact_matches <var>KLEBSIELLA__RMST_REQUIRED_EXACT_MATCHES</var></span></kbd></dt>
+<dd><p>At least this many exact matches are required to call an ST (default: 2)</p>
+</dd>
+</dl>
+</dd>
+<dt>klebsiella__smst module:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--klebsiella__smst_min_identity <var>KLEBSIELLA__SMST_MIN_IDENTITY</var></span></kbd></dt>
+<dd><p>Minimum alignment percent identity for salmochelin MLST (default: 90.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella__smst_min_coverage <var>KLEBSIELLA__SMST_MIN_COVERAGE</var></span></kbd></dt>
+<dd><p>Minimum alignment percent coverage for salmochelin MLST (default: 80.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella__smst_required_exact_matches <var>KLEBSIELLA__SMST_REQUIRED_EXACT_MATCHES</var></span></kbd></dt>
+<dd><p>At least this many exact matches are required to call an ST (default: 2)</p>
+</dd>
+</dl>
+</dd>
+<dt>klebsiella__ybst module:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--klebsiella__ybst_min_identity <var>KLEBSIELLA__YBST_MIN_IDENTITY</var></span></kbd></dt>
+<dd><p>Minimum alignment percent identity for yersiniabactin MLST (default: 90.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella__ybst_min_coverage <var>KLEBSIELLA__YBST_MIN_COVERAGE</var></span></kbd></dt>
+<dd><p>Minimum alignment percent coverage for yersiniabactin MLST (default: 80.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella__ybst_required_exact_matches <var>KLEBSIELLA__YBST_REQUIRED_EXACT_MATCHES</var></span></kbd></dt>
+<dd><p>At least this many exact matches are required to call an ST (default: 2)</p>
+</dd>
+</dl>
+</dd>
+<dt>klebsiella_pneumo_complex__mlst module:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--klebsiella_pneumo_complex__mlst_min_identity <var>KLEBSIELLA_PNEUMO_COMPLEX__MLST_MIN_IDENTITY</var></span></kbd></dt>
+<dd><p>Minimum alignment percent identity for klebsiella_pneumo_complex_MLST (default: 90.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella_pneumo_complex__mlst_min_coverage <var>KLEBSIELLA_PNEUMO_COMPLEX__MLST_MIN_COVERAGE</var></span></kbd></dt>
+<dd><p>Minimum alignment percent coverage for klebsiella_pneumo_complex_MLST (default: 80.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella_pneumo_complex__mlst_required_exact_matches <var>KLEBSIELLA_PNEUMO_COMPLEX__MLST_REQUIRED_EXACT_MATCHES</var></span></kbd></dt>
+<dd><p>At least this many exact matches are required to call an ST (default: 3)</p>
+</dd>
+</dl>
+</dd>
+<dt>klebsiella_pneumo_complex__amr module:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--klebsiella_pneumo_complex__amr_min_identity <var>KLEBSIELLA_PNEUMO_COMPLEX__AMR_MIN_IDENTITY</var></span></kbd></dt>
+<dd><p>Minimum alignment percent identity for klebsiella_pneumo_complex Amr results (default: 90.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella_pneumo_complex__amr_min_coverage <var>KLEBSIELLA_PNEUMO_COMPLEX__AMR_MIN_COVERAGE</var></span></kbd></dt>
+<dd><p>Minimum alignment percent coverage for klebsiella_pneumo_complex Amr results (default: 80.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella_pneumo_complex__amr_min_spurious_identity <var>KLEBSIELLA_PNEUMO_COMPLEX__AMR_MIN_SPURIOUS_IDENTITY</var></span></kbd></dt>
+<dd><p>Minimum alignment percent identity for klebsiella_pneumo_complex Amr spurious results (default: 80.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella_pneumo_complex__amr_min_spurious_coverage <var>KLEBSIELLA_PNEUMO_COMPLEX__AMR_MIN_SPURIOUS_COVERAGE</var></span></kbd></dt>
+<dd><p>Minimum alignment percent coverage for klebsiella_pneumo_complex Amr spurious results (default: 40.0)</p>
+</dd>
+</dl>
+</dd>
+<dt>klebsiella_pneumo_complex__kaptive module:</dt><dd><p>-t , –threads                        Number of threads for alignment (default: 1)</p>
+</dd>
+</dl>
+</section>
+<section id="klebsiella-oxytoca-sc-modules">
+<h4>Klebsiella oxytoca SC modules<a class="headerlink" href="#klebsiella-oxytoca-sc-modules" title="Permalink to this heading">¶</a></h4>
+<dl>
+<dt>klebsiella_oxytoca_complex__mlst module:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--klebsiella_oxytoca_complex__mlst_min_identity <var>KLEBSIELLA_OXYTOCA_COMPLEX__MLST_MIN_IDENTITY</var></span></kbd></dt>
+<dd><p>Minimum alignment percent identity for klebsiella_oxytoca_complex MLST (default: 90.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella_oxytoca_complex__mlst_min_coverage <var>KLEBSIELLA_OXYTOCA_COMPLEX__MLST_MIN_COVERAGE</var></span></kbd></dt>
+<dd><p>Minimum alignment percent coverage for klebsiella_oxytoca_complex MLST (default: 80.0)</p>
+</dd>
+<dt><kbd><span class="option">--klebsiella_oxytoca_complex__mlst_required_exact_matches <var>KLEBSIELLA_OXYTOCA_COMPLEX__MLST_REQUIRED_EXACT_MATCHES</var></span></kbd></dt>
+<dd><p>At least this many exact matches are required to call an ST (default: 3)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="eschericia-sc-modules">
+<h4>Eschericia SC modules<a class="headerlink" href="#eschericia-sc-modules" title="Permalink to this heading">¶</a></h4>
+<dl>
+<dt>escherichia__mlst_achtman module:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--escherichia_mlst_achtman_min_identity <var>ESCHERICHIA_MLST_ACHTMAN_MIN_IDENTITY</var></span></kbd></dt>
+<dd><p>Minimum alignment percent identity for <em>Escherchia-Achtman</em> MLST (default: 90.0)</p>
+</dd>
+<dt><kbd><span class="option">--escherichia_mlst_achtman_min_coverage <var>ESCHERICHIA_MLST_ACHTMAN_MIN_COVERAGE</var></span></kbd></dt>
+<dd><p>Minimum alignment percent coverage for Escherchia-Achtman MLST (default: 80.0)</p>
+</dd>
+<dt><kbd><span class="option">--escherichia_mlst_achtman_required_exact_matches <var>ESCHERICHIA_MLST_ACHTMAN_REQUIRED_EXACT_MATCHES</var></span></kbd></dt>
+<dd><p>At least this many exact matches are required to call an ST (default: 3)</p>
+</dd>
+</dl>
+</dd>
+<dt>escherichia__mlst_pasteur module:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--escherichia_mlst_pasteur_min_identity <var>ESCHERICHIA_MLST_PASTEUR_MIN_IDENTITY</var></span></kbd></dt>
+<dd><p>Minimum alignment percent identity for Escherchia-Pasteur MLST (default: 90.0)</p>
+</dd>
+<dt><kbd><span class="option">--escherichia_mlst_pasteur_min_coverage <var>ESCHERICHIA_MLST_PASTEUR_MIN_COVERAGE</var></span></kbd></dt>
+<dd><p>Minimum alignment percent coverage for Escherchia-Pasteur MLST (default: 80.0)</p>
+</dd>
+<dt><kbd><span class="option">--escherichia_mlst_pasteur_required_exact_matches <var>ESCHERICHIA_MLST_PASTEUR_REQUIRED_EXACT_MATCHES</var></span></kbd></dt>
+<dd><p>At least this many exact matches are required to call an ST (default: 4)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/KleborateModular/images/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#input-files">Input files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-usage">Basic usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Creating-New-Modules.html">Creating-New-Modules</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Installation.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="Modules.html" title="next chapter">Modules</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Mary Maranga, Kathryn Holt, Ryan Wick.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/Usage.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

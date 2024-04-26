@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Installation &#8212; KleborateModular 3.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=8ebd99bd"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="Usage.html" />
+    <link rel="prev" title="Introducing Kleborate v3" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h1>
+<section id="software-requirements">
+<h2>Software requirements<a class="headerlink" href="#software-requirements" title="Permalink to this heading">¶</a></h2>
+<p>Before using KleborateModular, make sure you have these installed:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.python.org/">Python</a> v3.9 or later</p></li>
+<li><p><a class="reference external" href="https://biopython.org/">Biopython</a> v1.75 or later</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Bio.pairwise2</span></code> module will be replaced with Bio.Align.PairwiseAligner in the near future</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://github.com/marbl/Mash">Mash</a> v2.0 or later</p></li>
+<li><p><a class="reference external" href="https://github.com/lh3/minimap2">Minimap2</a></p></li>
+</ul>
+<p>To verify that you’re ready to go, try running these commands from a terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>--version
+python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import Bio; print(Bio.__version__)&quot;</span>
+minimap2<span class="w"> </span>-version
+mash<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>Each of these should print a version number message. If not, troubleshoot that tool’s installation before continuing!</p>
+<p>Run KleborateModular directly from its source directory</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>klebsiella_analysis<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9<span class="w"> </span>biopython<span class="w"> </span>minimap2<span class="w">  </span>mash<span class="w"> </span>-y
+conda<span class="w"> </span>activate<span class="w"> </span>klebsiella_analysis
+git<span class="w"> </span>clone<span class="w"> </span>--recursive<span class="w"> </span>https://github.com/klebgenomics/KleborateModular.git
+<span class="nb">cd</span><span class="w"> </span>KleborateModular
+usage:<span class="w"> </span>./kleborate-runner.py<span class="w"> </span><span class="o">[</span>-a<span class="w"> </span>ASSEMBLIES<span class="w"> </span><span class="o">[</span>ASSEMBLIES<span class="w"> </span>...<span class="o">]]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OUTFILE<span class="o">]</span><span class="w"> </span><span class="o">[</span>--list_modules<span class="o">]</span><span class="w"> </span><span class="o">[</span>-p<span class="w"> </span>PRESET<span class="o">]</span><span class="w"> </span><span class="o">[</span>-m<span class="w"> </span>MODULES<span class="o">]</span><span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>--help_all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--version<span class="o">]</span>
+</pre></div>
+</div>
+<p>Kleborate directory contains:</p>
+<ul class="simple">
+<li><p>Modules directory - available modules for Kleborate</p></li>
+<li><p>Shared directory - scripts shared by different modules</p></li>
+</ul>
+<p>List modules</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./kleborate-runner.py<span class="w"> </span>--list_modules
+</pre></div>
+</div>
+<p>Available modules for Kleborate</p>
+<ul class="simple">
+<li><p>Basic stats on the assembly’s contigs</p></li>
+<li><p>Mash-based species detection for Klebsiella and closely-related genera</p></li>
+<li><p>MLST on the KpSC aerobactin locus (iuc genes)</p></li>
+<li><p>MLST on the KpSC colibactin locus (clb genes</p></li>
+<li><p>MLST on the KpSC Rmp locus (rmp genes)</p></li>
+<li><p>MLST on the KpSC salmochelin locus (iro genes)</p></li>
+<li><p>MLST on the KpSC yersiniabactin locus (ybt and irp genes)</p></li>
+<li><p>Chromosomal MLST for Escherichia coli using the Achtman scheme</p></li>
+<li><p>Chromosomal MLST for Escherichia coli using the Pasteur scheme</p></li>
+<li><p>Chromosomal MLST for the Klebsiella oxytoca species complex</p></li>
+<li><p>Chromosomal MLST for the Klebsiella pneumoniae species complex</p></li>
+<li><p>Virulence score (0-5) for the Klebsiella pneumoniae species complex, based on the results of the abst, cbst and ybst modules</p></li>
+<li><p>Genotyping acquired genes and mutations for the Klebsiella pneumoniae species complex</p></li>
+<li><p>Resistance score (0-3) for the Klebsiella pneumoniae species complex, based on the results of the kpsc_amr module</p></li>
+<li><p>Resistance gene classes count</p></li>
+<li><p>Resistance genes count</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/KleborateModular/images/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#software-requirements">Software requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Creating-New-Modules.html">Creating-New-Modules</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Introducing Kleborate v3</a></li>
+      <li>Next: <a href="Usage.html" title="next chapter">Usage</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Mary Maranga, Kathryn Holt, Ryan Wick.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/Installation.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

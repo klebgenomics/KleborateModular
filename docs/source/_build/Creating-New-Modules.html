@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Creating-New-Modules &#8212; KleborateModular 3.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=8ebd99bd"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Modules" href="Modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="creating-new-modules">
+<h1>Creating-New-Modules<a class="headerlink" href="#creating-new-modules" title="Permalink to this heading">¶</a></h1>
+<ol class="arabic simple">
+<li><p><strong>Create a New Module Directory</strong>:</p>
+<ul class="simple">
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">modules</span></code> directory in the Kleborate project.</p></li>
+<li><p>Create a new directory for your module. The directory name should be descriptive of the module’s functionality.</p></li>
+</ul>
+</li>
+<li><p><strong>Create Module Python File</strong>:</p>
+<ul class="simple">
+<li><p>Inside the newly created directory, create a Python file with the same name as the directory. This file will contain the module’s implementation.</p></li>
+<li><p>For example, if your module is named <code class="docutils literal notranslate"><span class="pre">enterobacterales__species</span></code>, create a file named <code class="docutils literal notranslate"><span class="pre">enterobacterales__species.py</span></code> inside the <code class="docutils literal notranslate"><span class="pre">enterobacterales__species</span></code> directory.</p></li>
+</ul>
+</li>
+<li><p><strong>Implement Module Functionality</strong>:</p>
+<ul class="simple">
+<li><p>Define the functionality of your module inside the Python file.</p></li>
+<li><p>You need to define functions for adding CLI options, checking CLI options, checking external program dependencies, getting module headers, getting module results, and any other functionality your module requires.</p></li>
+<li><p>Ensure that your module follows the conventions and guidelines of existing Kleborate modules.</p></li>
+</ul>
+</li>
+<li><p><strong>Add CLI Options</strong>:</p>
+<ul class="simple">
+<li><p>Implement a function to add command-line options specific to your module. This function should accept an <code class="docutils literal notranslate"><span class="pre">argparse.ArgumentParser</span></code> object as an argument and add options using its methods.</p></li>
+<li><p>The function should be named <code class="docutils literal notranslate"><span class="pre">add_cli_options(parser)</span></code> and return the argument group created for the module’s options.</p></li>
+</ul>
+</li>
+<li><p><strong>Check CLI Options</strong>:</p>
+<ul class="simple">
+<li><p>Implement a function to check the CLI options provided by the user. Ensure that the provided options are valid and meet the module’s requirements.</p></li>
+<li><p>This function should be named <code class="docutils literal notranslate"><span class="pre">check_cli_options(args)</span></code> and raise appropriate errors or warnings if the options are invalid.</p></li>
+</ul>
+</li>
+<li><p><strong>Check External Program Dependencies</strong>:</p>
+<ul class="simple">
+<li><p>Implement a function to check the external program dependencies required by your module.</p></li>
+<li><p>This function should be named <code class="docutils literal notranslate"><span class="pre">check_external_programs()</span></code> and return a set containing the names of external programs required by the module.</p></li>
+</ul>
+</li>
+<li><p><strong>Define Prerequisite Modules</strong>:</p>
+<ul class="simple">
+<li><p>Define a function named <code class="docutils literal notranslate"><span class="pre">prerequisite_modules()</span></code> that returns a list of module names that your module depends on.</p></li>
+<li><p>This ensures that prerequisite modules are executed before your module.</p></li>
+</ul>
+</li>
+<li><p><strong>Define Module Headers</strong>:</p>
+<ul class="simple">
+<li><p>Implement a function to define the headers for the module’s output.</p></li>
+<li><p>This function should return two lists: one for the full headers and one for the stdout headers.</p></li>
+</ul>
+</li>
+<li><p><strong>Define Module Results</strong>:</p>
+<ul class="simple">
+<li><p>Implement a function to get the results produced by your module.</p></li>
+<li><p>This function should accept necessary arguments like assembly, minimap2 index, command-line arguments, and other required data.</p></li>
+<li><p>It should return a dictionary containing the results.</p></li>
+</ul>
+</li>
+<li><p><strong>Test Your Module</strong>:</p>
+<ul class="simple">
+<li><p>Test your module with different inputs and scenarios to ensure that it behaves as expected.</p></li>
+<li><p>Verify that the module produces correct results and handles errors.</p></li>
+</ul>
+</li>
+<li><p><strong>Document Your Module</strong>:</p>
+<ul class="simple">
+<li><p>Write documentation for your module, including its purpose, usage, options, and any other relevant information.</p></li>
+<li><p>Update the main Kleborate documentation to include information about your module.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/KleborateModular/images/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Creating-New-Modules</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Modules.html" title="previous chapter">Modules</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024, Mary Maranga, Kathryn Holt, Ryan Wick.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/Creating-New-Modules.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

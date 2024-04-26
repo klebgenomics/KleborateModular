@@ -19,12 +19,21 @@ version = '3.0.0'
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'sphinx_book_theme'
-html_theme_options = {
-    "show_toc_level": 3,
-    "home_page_in_toc": True,
-    "navigation_depth": 4
+html_theme = 'alabaster'
 
+html_sidebars = {
+    '**': [
+        'about.html',
+        'navigation.html',
+        'relations.html',
+        'searchbox.html',
+        'donate.html',
+    ]
 }
+
+html_theme_options = { 
+    'logo': 'KleborateModular/images/logo.png',
+}
+
+
 html_static_path = ['_static']
-html_logo = 'https://github.com/klebgenomics/KleborateModular/blob/bacterate_development/docs/source/logo.png'
