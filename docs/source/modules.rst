@@ -86,7 +86,7 @@ These modules will be run if the ``enterobacterales__species``\   module confirm
 We've included the phylogroup numbers in the table below for backwards compatibility with older literature, but these names are not used in the Kleborate output. See `this review <https://www.nature.com/articles/s41579-019-0315-1>`_ for an overview of the species complex. 
 
 
-.. figure:: https://github.com/klebgenomics/KleborateModular/blob/bacterate_development/docs/kleborate_species_tree.png
+.. figure:: https://github.com/klebgenomics/KleborateModular/blob/bacterate_development/docs/source/kleborate_species_tree.png
    :align: center
    :width: 90%
    :alt: Klebsiella species tree
