@@ -29,7 +29,7 @@ def prerequisite_modules():
 
 
 def get_headers():
-    full_headers = ['RmST', 'rm_lineage', 'rmpA', 'rmpD', 'rmpC']
+    full_headers = ['RmST', 'RmpADC', 'rmpA', 'rmpD', 'rmpC']
     stdout_headers = []
     return full_headers, stdout_headers
 
@@ -75,5 +75,5 @@ def get_results(assembly, minimap2_index, args, previous_results):
                                       args.klebsiella__rmst_min_coverage, args.klebsiella__rmst_required_exact_matches,
                                       check_for_truncation=True, report_incomplete=True)
 
-    return {'RmST': st, 'rm_lineage': lineage,
+    return {'RmST': st, 'RmpADC': lineage,
             'rmpA': alleles['rmpA'], 'rmpD': alleles['rmpD'], 'rmpC': alleles['rmpC']}

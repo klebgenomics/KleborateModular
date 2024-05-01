@@ -29,7 +29,7 @@ def prerequisite_modules():
 
 
 def get_headers():
-    full_headers = ['YbST', 'yb_lineage', 'ybtS', 'ybtX', 'ybtQ', 'ybtP', 'ybtA', 'irp2', 'irp1',
+    full_headers = ['YbST', 'Yersiniabactin', 'ybtS', 'ybtX', 'ybtQ', 'ybtP', 'ybtA', 'irp2', 'irp1',
                     'ybtU', 'ybtT', 'ybtE', 'fyuA']
     stdout_headers = []
     return full_headers, stdout_headers
@@ -76,7 +76,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
                                       args.klebsiella__ybst_min_coverage, args.klebsiella__ybst_required_exact_matches,
                                       check_for_truncation=True, report_incomplete=True)
 
-    return {'YbST': st, 'yb_lineage': lineage,
+    return {'YbST': st, 'Yersiniabactin': lineage,
             'ybtS': alleles['ybtS'], 'ybtX': alleles['ybtX'], 'ybtQ': alleles['ybtQ'],
             'ybtP': alleles['ybtP'], 'ybtA': alleles['ybtA'], 'irp2': alleles['irp2'],
             'irp1': alleles['irp1'], 'ybtU': alleles['ybtU'], 'ybtT': alleles['ybtT'],

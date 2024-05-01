@@ -30,9 +30,9 @@ def prerequisite_modules():
 
 
 def get_headers():
-    full_headers = ['contig_count', 'n50', 'largest_contig', 'total_size', 'ambiguous_bases',
-                    'qc_warnings']
-    stdout_headers = ['n50']
+    full_headers = ['contig_count', 'N50', 'largest_contig', 'total_size', 'ambiguous_bases',
+                    'QC_warnings']
+    stdout_headers = ['N50']
     return full_headers, stdout_headers
 
 
@@ -56,14 +56,14 @@ def get_results(assembly, minimap2_index, args, previous_results):
     species_specification_dict = load_species_specifications(species_file)
     species=previous_results['enterobacterales__species__species']
     
-    contig_count, n50, longest_contig, total_size, ambiguous_bases = get_contig_stats(assembly)
-    qc_warnings = get_qc_warnings(total_size, n50, ambiguous_bases, species, species_specification_dict)
+    contig_count, N50, longest_contig, total_size, ambiguous_bases = get_contig_stats(assembly)
+    QC_warnings = get_qc_warnings(total_size, N50, ambiguous_bases, species, species_specification_dict)
     return {'contig_count': str(contig_count),
-            'n50': str(n50),
+            'N50': str(N50),
             'largest_contig': str(longest_contig),
             'total_size': str(total_size),
             'ambiguous_bases': ambiguous_bases,
-            'qc_warnings': qc_warnings}
+            'QC_warnings': QC_warnings}
 
 
 def get_contig_stats(assembly):
@@ -92,14 +92,14 @@ def get_contig_stats(assembly):
     half_total_length = total_size / 2
     total_so_far = 0
     segment_lengths = contig_lengths[::-1]
-    n50 = 0
+    N50 = 0
     for length in segment_lengths:
         total_so_far += length
         if total_so_far >= half_total_length:
-            n50 = length
+            N50 = length
             break
 
-    return len(contig_lengths), n50, longest, total_size, ambiguous_bases
+    return len(contig_lengths), N50, longest, total_size, ambiguous_bases
 
 
 def load_species_specifications(file_path):
@@ -111,7 +111,7 @@ def load_species_specifications(file_path):
     return species_specifications
 
 
-def get_qc_warnings(total_size, n50, ambiguous_bases, species, species_specification_dict):
+def get_qc_warnings(total_size, N50, ambiguous_bases, species, species_specification_dict):
     warnings = []
     if species in species_specification_dict:
         species_spec = species_specification_dict[species]
@@ -123,7 +123,7 @@ def get_qc_warnings(total_size, n50, ambiguous_bases, species, species_specifica
     else:
         return '-'  # Skip QC for species not in the dictionary
 
-    if n50 < 10000:
+    if N50 < 10000:
         warnings.append('N50')
     if 'yes' in ambiguous_bases:
         warnings.append('ambiguous_bases')

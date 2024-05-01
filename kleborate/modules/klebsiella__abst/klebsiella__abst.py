@@ -29,7 +29,7 @@ def prerequisite_modules():
 
 
 def get_headers():
-    full_headers = ['AbST', 'ab_lineage', 'iucA', 'iucB', 'iucC', 'iucD', 'iutA']
+    full_headers = ['AbST', 'Aerobactin', 'iucA', 'iucB', 'iucC', 'iucD', 'iutA']
     stdout_headers = []
     return full_headers, stdout_headers
 
@@ -75,6 +75,6 @@ def get_results(assembly, minimap2_index, args, previous_results):
                                       args.klebsiella__abst_min_coverage, args.klebsiella__abst_required_exact_matches,
                                       check_for_truncation=True, report_incomplete=True)
 
-    return {'AbST': st, 'ab_lineage': lineage,
+    return {'AbST': st, 'Aerobactin': lineage,
             'iucA': alleles['iucA'], 'iucB': alleles['iucB'], 'iucC': alleles['iucC'],
             'iucD': alleles['iucD'], 'iutA': alleles['iutA']}
