@@ -7,8 +7,10 @@ Kleborate v3 includes a rewrite of [Kleborate](https://github.com/klebgenomics/k
 
 This version of Kleborate is **not yet complete**, so most users will probably want the [main Kleborate repo](https://github.com/klebgenomics/kleborate) instead.
 
-Available modules for Kleborate V3
-* Basic stats on the assembly's contigs
+
+**Available modules for Kleborate V3:**
+
+* Basic contigs stats
 * Mash-based species detection for Klebsiella and closely-related genera
 * MLST on the KpSC aerobactin locus (iuc genes)
 * MLST on the KpSC colibactin locus (clb genes
@@ -25,11 +27,11 @@ Available modules for Kleborate V3
 * Resistance gene classes count
 * Resistance genes count
 * Wzi typing for K antigen prediction
-* Module to call `Kaptive <https://github.com/klebgenomics/Kaptive>`_ for K (capsule) and O antigen (LPS) serotype prediction
+* Module to call [Kaptive](https://github.com/klebgenomics/Kaptive) for K (capsule) and O antigen (LPS) serotype prediction
 
 
 **For information on how to install, and run Kleborate please visit the [Docs](https://kleboratemodular.readthedocs.io/).**
 
-A step-by-step tutorial for Kleborate v2 is available [here](http://bit.ly/kleborate-workshop).
+**A step-by-step tutorial for Kleborate v2 is available [here](http://bit.ly/kleborate-workshop).**
 
 
