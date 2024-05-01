@@ -26,7 +26,7 @@ Kleborate was primarily developed to screen genome assemblies of *Klebsiella pne
 * K (capsule) and O antigen (LPS) serotype prediction, via *wzi* alleles and `Kaptive <https://github.com/klebgenomics/Kaptive>`_
 
 
-Kleborate v3 includes a rewrite of the code to (i) replace the use of BLAST with minimap (faster and less buggy); and (ii) introduce a modular structure making it easy to add new typing modules, including for other species.
+`Kleborate v3 <https://github.com/klebgenomics/KleborateModular>`_ includes a rewrite of the code to (i) replace the use of BLAST with minimap (faster and less buggy); and (ii) introduce a modular structure making it easy to add new typing modules, including for other species.
 
 
 For *K. pneumoniae* species complex, Kleborate v3 can reproduce the outputs of Kleborate v2 by running the preset modules for KpSC via: ``-preset kpsc``
@@ -70,8 +70,8 @@ The following papers provide more information on the component schemes and genot
 
 ..
    
-   Yersiniabactin and colibactin (ICE*Kp*):
-   Lam, MMC. et al. Genetic diversity, mobilisation and spread of the yersiniabactin-encoding mobile element ICE*Kp* in *Klebsiella pneumoniae* populations. *Microbial Genomics* (2018). `Microbial Genomics <http://mgen.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000196>`_
+   Yersiniabactin and colibactin (ICE*\*Kp\**):
+   Lam, MMC. et al. Genetic diversity, mobilisation and spread of the yersiniabactin-encoding mobile element ICE*\*Kp\** in *Klebsiella pneumoniae* populations. *Microbial Genomics* (2018). `Microbial Genomics <http://mgen.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000196>`_
 
    Aerobactin and salmochelin:
    Lam, MMC. et al. Tracking key virulence loci encoding aerobactin and salmochelin siderophore synthesis in *Klebsiella pneumoniae*. *Genome Medicine* (2018). `Genome Medicine <https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-018-0587-5>`_

@@ -72,7 +72,10 @@ def get_results(assembly, minimap2_index, args, previous_results):
         args.klebsiella_pneumo_complex__rmpa2_min_coverage, 
         args.klebsiella_pneumo_complex__rmpa2_min_identity)
 
-    return {'rmpA2': rmpa2_allele}
+    if not rmpa2_allele:  
+        return {'rmpA2': '-'}  
+    else:
+        return {'rmpA2': rmpa2_allele}
    
 
 

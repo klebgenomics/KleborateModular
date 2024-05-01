@@ -119,15 +119,15 @@ We've included the phylogroup numbers in the table below for backwards compatibi
      - `Rosenblueth et al. 2004 Syst Appl Microbiol 27:27-35 <https://www.sciencedirect.com/science/article/abs/pii/S0723202004702349?via%3Dihub>`_
    * - *K. variicola* subsp *tropica*
      - Kp5
-     - "-"
+     - '-'
      - `Rodrigues et al., 2019 Res Microbiol ﻿S0923-2508:﻿30019-1 <https://www.sciencedirect.com/science/article/pii/S0923250819300191?via%3Dihub>`_ (described as subsp *tropicalensis* in paper)
    * - *K. quasivariicola*
      - Kp6
-     - "-"
+     - '-'
      - `Long et al. 2017 Genome Announc 5: ﻿e01057-17 <https://mra.asm.org/content/5/42/e01057-17>`_
    * - *K. africana*
      - Kp7
-     - "-"
+     - '-'
      - `Rodrigues et al. 2019 Res Microbiol ﻿S0923-2508:﻿30019-1 <https://www.sciencedirect.com/science/article/pii/S0923250819300191?via%3Dihub>`_ (described as *africanensis* in this paper)
 
 
@@ -288,7 +288,7 @@ In Kleborate version 2.2.0 and earlier, the majority of *iucA* alleles had a seq
 
 The allele databases and schemes were last updated in April 2024. 
 
-abst Outputs
+abst outputs
 ++++++++++++++++++
 
 Output of the abst module is the following columns:
@@ -548,6 +548,15 @@ Resistance scores and counts are output in the following columns:
    * - num_resistance_classes
      - Number of drug classes to which resistance determinants have been acquired (in addition to intrinsic ampicillin)
 
+
+KpSC Wzi typing for K antigen prediction
+-----------------------------------------
+
+.. code-block:: Python
+
+   -m klebsiella_pneumo_complex__wzi
+
+Each K locus includes a wzi gene, which encodes a protein involved in attachment of the capsular polysaccharide to the outer membrane. `Allelic variation in *wzi* genes <https://journals.asm.org/doi/10.1128/jcm.01924-13>`_ correlates with K locus structures, however due to recombination between K loci there is not a 1:1 relationship between wzi and KL/K type `see <https://www.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000102>`_ . Kleborate reports the closest matching *wzi* allele (sourced from the *K. pneumoniae* BIGSdb). This is fast, and provides a handy way of recognising the hypervirulence-associated capsule types (e.g. *wzi1*=K1, *wzi2*=K2, *wzi5*=K5), or spotting capsule switching within clones (e.g. you can tell which ST258 lineage you have from the wzi type (*wzi154*: the main lineage II; wzi29: recombinant lineage I; others: probably other recombinant lineages).
 
 
 Klebsiella oxytoca species complex
