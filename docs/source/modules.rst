@@ -19,7 +19,7 @@ Species detection
 This module will attempt to identify the species of each input assembly. It does this by comparing the assembly using `Mash <https://mash.readthedocs.io/>`_ to a curated set of *Klebsiella* and other *Enterobacteriaceae* assemblies from NCBI, and reporting the species of the closest match. 
 
 Parameters
-++++++++++
+^^^^^^^^^^^^^^^^^^
 
 ``--enterobacterales__species_strong``
 
