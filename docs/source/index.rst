@@ -18,44 +18,21 @@ Introducing Kleborate v3
 
 Kleborate was primarily developed to screen genome assemblies of *Klebsiella pneumoniae* and the *Klebsiella pneumoniae* species complex (KpSC) for:
 
-* species (e.g. *K. pneumoniae*\ , *K. quasipneumoniae*\ , *K. variicola*\ , etc.)
+* Species (e.g. *K. pneumoniae*\ , *K. quasipneumoniae*\ , *K. variicola*\ , etc.)
 * *K. pneumoniae* MLST sequence type
-* *ICE* : *Kp* associated virulence loci: yersiniabactin (*ybt*), colibactin (*clb*), salmochelin (*iro*), hypermucoidy (*rmpA*)
-* virulence plasmid associated loci: salmochelin (\ *iro*\ ), aerobactin (\ *iuc*\ ), hypermucoidy (\ *rmpA*\ , *rmpA2*\ )
-* antimicrobial resistance determinants: acquired genes, SNPs, gene truncations and intrinsic β-lactamases
+* ICEKp associated virulence loci: yersiniabactin (*ybt*), colibactin (*clb*), salmochelin (*iro*), hypermucoidy (*rmpA*)
+* Virulence plasmid associated loci: salmochelin (\ *iro*\ ), aerobactin (\ *iuc*\ ), hypermucoidy (\ *rmpA*\ , *rmpA2*\ )
+* Antimicrobial resistance determinants: acquired genes, SNPs, gene truncations and intrinsic β-lactamases
 * K (capsule) and O antigen (LPS) serotype prediction, via *wzi* alleles and `Kaptive <https://github.com/klebgenomics/Kaptive>`_
 
 
 `Kleborate v3 <https://github.com/klebgenomics/KleborateModular>`_ includes a rewrite of the code to (i) replace the use of BLAST with minimap (faster and less buggy); and (ii) introduce a modular structure making it easy to add new typing modules, including for other species.
 
 
-For *K. pneumoniae* species complex, Kleborate v3 can reproduce the outputs of Kleborate v2 by running the preset modules for KpSC via: ``-preset kpsc``
+**For K. pneumoniae species complex, Kleborate v3 can reproduce the outputs of Kleborate v2** by running the preset modules for KpSC via: ``-preset kpsc``
 
 
 New modules for other species are in development, for now these include MLST schemes for *Klebsiella oxytoca* species complex and *Escherichia coli*.
-
-
-For *Klebsiella oxytoca* species complex, set ``-preset kosc`` to confirm the species and report:
-
-* *K. oxytoca* MLST sequence type
-* *ICE* : *Kp* associated virulence loci: yersiniabactin (*ybt*), colibactin (*clb*), salmochelin (*iro*), hypermucoidy (*rmpA*)
-* virulence plasmid associated loci: salmochelin (\ *iro*\ ), aerobactin (\ *iuc*\ ), hypermucoidy (\ *rmpA*\ , *rmpA2*\ )
-
-For *Escherichia*, set ``-preset escherichia`` to confirm the species and report MLST using Achtman and Pasteur schemes.
-
-
-Tutorial (Kleborate v2)
-----------------------------------------------------------
-
-A step-by-step tutorial for Kleborate v2 is available at `bit.ly/kleborate-workshop <bit.ly/kleborate-workshop>`_\ , covering: 
-
-* Kleborate's features and their scientific rationale
-* How to run Kleborate 
-* Examples, illustrating how to run and interpret results
-* How to visualise results using Kleborate-Viz
-* Performance of Kleborate on nanopore data
-
-This tutorial will be updated soon to Kleborate v3, however the functionality of Kleborate v3 remains the same if you add ``-preset kpsc`` to the run command.
 
 
 Citing Kleborate and Kaptive
@@ -83,8 +60,22 @@ The following papers provide more information on the component schemes and genot
    Wick, RR et. al. Kaptive Web: user-friendly capsule and lipopolysaccharide serotype prediction for *Klebsiella* genomes. *Journal of Clinical Microbiology* (2018). `Journal of Clinical Microbiology <http://jcm.asm.org/content/56/6/e00197-18>`_
 
 
-Interactive Kleborate reports on public data sets
--------------------------------------------------
+Tutorial
+--------
+
+A step-by-step tutorial for Kleborate v2 is available at `bit.ly/kleborate-workshop <bit.ly/kleborate-workshop>`_\ , covering: 
+
+* Kleborate's features and their scientific rationale
+* How to run Kleborate 
+* Examples, illustrating how to run and interpret results
+* How to visualise results using Kleborate-Viz
+* Performance of Kleborate on nanopore data
+
+This tutorial will be updated soon to Kleborate v3, however the functionality of Kleborate v3 remains the same if you add ``-preset kpsc`` to the run command.
+
+
+Interactive Kleborate reports on public data
+--------------------------------------------
 
 The `Kleborate paper <https://www.nature.com/articles/s41467-021-24448-3>`_ reports results of genotyping ~10,000 public genomes that have been filtered to remove redundant sequences (e.g. outbreak clusters, identified as small genome-wide mash distance with same year, location and genotypes), with Kleborate v2. The results can be explored in `Microreact <https://bit.ly/klebMR>`_ (which shows the mash tree, Kleborate output & curated metadata) or `Kleborate-Viz <https://kleborate.erc.monash.edu/>`_ (R shiny app). Kleborate-Viz also has the EuSCAPE dataset preloaded, or you can view your own Kleborate results.
 
