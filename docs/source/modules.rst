@@ -35,7 +35,6 @@ Outputs
 Output of the species typing module is the following columns:
 
 .. list-table::
-   :header-rows: 1
 
    * - species
      - Species name (scientific name)
@@ -65,7 +64,6 @@ Outputs
 Output of the contig stats module is the following columns:
 
 .. list-table::
-   :header-rows: 1
 
    * - contig_count
      - Number of contigs in the input assembly
@@ -199,8 +197,8 @@ Output of the KpSC MLST module is the following columns:
 
 .. list-table::
 
-   * - **ST**
-     - **sequence type**
+   * - ST
+     - sequence type
 
    * - gapA, infB, mdh, pgi, phoE, rpoB, tonB
      - allele number
@@ -280,8 +278,8 @@ Output of the ybst module is the following columns:
 
 .. list-table::
 
-   * - **Yersiniabactin**
-     - **Lineage (ICEKp prediction)**
+   * - Yersiniabactin
+     - Lineage (ICEKp prediction)
 
    * - YbST
      - Yersiniabactin sequence type
@@ -313,8 +311,8 @@ Output of the cbst module is the following columns:
 
 .. list-table::
 
-   * - **Colibactin**
-     - **Lineage**
+   * - Colibactin
+     - Lineage
 
    * - CbST
      - Colibactin sequence type
@@ -371,8 +369,8 @@ Output of the abst module is the following columns:
 
 .. list-table::
 
-   * - **Aerobactin**
-     - **Lineage (plasmid prediction)**
+   * - Aerobactin
+     - Lineage (plasmid prediction)
 
    * - AbST
      - Sequence type
@@ -402,8 +400,8 @@ Output of the smst module is the following columns:
 
 .. list-table::
 
-   * - **Salmochelin**
-     - **Lineage (plasmid prediction)**
+   * - Salmochelin
+     - Lineage (plasmid prediction)
 
    * - SmST
      - Sequence type
@@ -457,8 +455,8 @@ Output of the rmst module is the following columns:
 
 .. list-table::
 
-   * - **RmpADC**
-     - **Lineage**
+   * - RmpADC
+     - Lineage
 
    * - RmST
      - Sequence type
