@@ -490,6 +490,51 @@ Output of the rmst module is the following columns:
      - best matching allele
 
 
+Virulence score
+""""""""""""""""
+
+.. code-block:: Python
+
+   -m klebsiella_pneumo_complex__virulence_score
+
+This module calculates a virulence score, which ranges from 0 to 5 as outlined below. Note neither the salmochelin (iro) locus nor rmpADC are explicitly considered in the virulence score, for simplicity. The iro and rmpADC loci typically appear alongside the aerobactin (iuc) locus on the Kp virulence plasmids, and so presence of iuc (score of 3-5) generally implies presence of iro and rmpADC. However we prioritise iuc in the calculation of the score, as aerobactin is specifically associated with growth in blood and is a stronger predictor of the hypervirulence phenotype (see this review). The iro and rmpADC loci are also occasionally present with ybt, in the ICEKp variant - ICEKp1, but this will still score 1.
+
+.. list-table::
+
+   * - 0
+     - negative for all of yersiniabactin (ybt), colibactin (clb), aerobactin (iuc)
+
+   * - 1
+     - yersiniabactin only
+
+   * - 2
+     - yersiniabactin and colibactin (or colibactin only)
+
+   * - 3
+     - aerobactin (without yersiniabactin or colibactin)
+
+   * - 4
+     - aerobactin with yersiniabactin (without colibactin)
+
+   * - 5
+     - yersiniabactin, colibactin and aerobactin
+
+
+
+Virulence score outputs
+++++++++++++++++++++++++++++++++++++++
+
+Virulence score is output in the following column:
+
+.. list-table::
+
+   * - virulence_score
+     - Score of 0-5, as defined above
+
+
+
+
+
 KpSC AMR
 --------
 
