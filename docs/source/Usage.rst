@@ -41,36 +41,59 @@ Check available modules, check version, print help:
 Parameters
 ----------
 
-Input/output:
-  -a ASSEMBLIES [ASSEMBLIES ...], --assemblies ASSEMBLIES [ASSEMBLIES ...]
-                                        FASTA file(s) for assemblies
+**Input/output:**
 
-  -o OUTFILE, --outfile OUTFILE         
-                                        File for detailed output (default: Kleborate_results.txt)
+``-a ASSEMBLIES [ASSEMBLIES ...], --assemblies ASSEMBLIES [ASSEMBLIES ...]``
 
-Modules:
-  --list_modules         
-                                        Print a list of all available modules and then quit (default: False)
+FASTA file(s) for assemblies
 
-  -p PRESET, --preset PRESET         
-                                        Module presets, choose from 
+``-o OUTFILE, --outfile OUTFILE``
 
-                                        - kpsc (*Klebsiella pnuemoniae* species complex)
-                                        - kosc (*Klebsiella oxytoca* species complex)
-                                        - escherichia  (*Escherichia*)
+File for detailed output (default: Kleborate_results.txt)
+
+**Modules:**
+
+``--list_modules``         
+
+Print a list of all available modules and then quit (default: False)
+
+``-p PRESET, --preset PRESET``         
+
+Module presets, choose from:
+
+.. list-table::
+
+   * - kpsc
+     - *Klebsiella pnuemoniae* species complex
+
+   * - kosc
+     - *Klebsiella oxytoca* species complex
+                                        
+   * - escherichia 
+     - *Escherichia* genus
 
 
-  -m MODULES, --modules MODULES         
-                                        Comma-delimited list of Kleborate modules to use
+``-m MODULES, --modules MODULES``         
+
+Comma-delimited list of Kleborate modules to use
 
 
-Help:
-     -h, --help         
-                                        Show a help message and exit
-     --help_all         
-                                        Show a help message with all module options
-     --version         
-                                        Show program's version number and exit
+**Help:**
+     
+``-h, --help``       
+
+Show a help message and exit
+
+``--help_all``         
+
+Show a help message with all module options
+
+``--version``         
+
+Show program's version number and exit
 
 
-**Module-specific parameters:** See Modules documentation
+**Module-specific parameters:** 
+
+See Modules documentation
+
