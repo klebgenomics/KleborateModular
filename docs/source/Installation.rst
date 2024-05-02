@@ -27,24 +27,16 @@ To verify that you're ready to go, try running these commands from a terminal:
 
 Each of these should print a version number message. If not, troubleshoot that tool's installation before continuing!
 
-Run KleborateModular directly from its source directory
+
+Install and run from directory
+------------------------------
 
 .. code-block:: bash
 
    conda create -n klebsiella_analysis python=3.9 biopython minimap2  mash -y
    conda activate klebsiella_analysis
    git clone --recursive https://github.com/klebgenomics/KleborateModular.git
+   
    cd KleborateModular
-   usage: ./kleborate-runner.py [-a ASSEMBLIES [ASSEMBLIES ...]] [-o OUTFILE] [--list_modules] [-p PRESET] [-m MODULES] [-h] [--help_all] [--version]
-
-The ``/kleborate``  directory contains:
-
-
-* ``/modules``  directory - available modules
-* ``/shared``  directory - scripts shared by different modules
-
-List modules
-
-.. code-block:: bash
-
    ./kleborate-runner.py --list_modules
+   ./kleborate-runner.py -h
