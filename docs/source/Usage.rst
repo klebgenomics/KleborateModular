@@ -73,7 +73,4 @@ Help:
                                         Show program's version number and exit
 
 
-Module-specific Parameters
-----------------------------
-
-See the Modules documentation
+**Module-specific parameters:** See Modules documentation
