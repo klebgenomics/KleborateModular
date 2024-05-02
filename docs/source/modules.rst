@@ -678,6 +678,37 @@ Resistance scores and counts are output in the following columns:
      - Number of drug classes to which resistance determinants have been acquired (in addition to intrinsic ampicillin)
 
 
+KpSC K and O locus typing with Kaptive
+-----------------------------------------
+
+.. code-block:: Python
+
+   -m klebsiella_pneumo_complex__kaptive
+
+This module will run the `Kaptive <https://github.com/klebgenomics/kaptive>` v3 tool to identify capsule (K) and O antigen loci. See the Kaptive `documentation <https://kaptive.readthedocs.io/en/latest/>` for more details of how Kaptive works, tutorials, and citations.
+
+Kaptive parameters
++++++++++++++++++++
+
+``-t , --threads``
+
+Number of threads for alignment (default: 1)
+
+
+Kaptive outputs
++++++++++++++++++
+
+Kaptive results are output in the following columns:
+
+.. list-table::
+
+   * - xx
+     - xx
+
+   * - xx
+     - xx
+
+
 KpSC Wzi typing for K antigen prediction
 -----------------------------------------
 
@@ -685,7 +716,9 @@ KpSC Wzi typing for K antigen prediction
 
    -m klebsiella_pneumo_complex__wzi
 
-Each K locus includes a *wzi* gene, which encodes a protein involved in attachment of the capsular polysaccharide to the outer membrane. `Allelic variation in wzi genes <https://journals.asm.org/doi/10.1128/jcm.01924-13>`_ correlates with K locus structures, however due to recombination between K loci there is not a 1:1 relationship between *wzi* and KL/K type, see `this paper <https://www.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000102>`_ . Kleborate reports the closest matching *wzi* allele (sourced from the *K. pneumoniae* BIGSdb). This is fast, and provides a handy way of recognising the hypervirulence-associated capsule types (e.g. wzi1 = K1, wzi2 = K2, wzi5 = K5), or spotting capsule switching within clones (e.g. you can tell which ST258 lineage you have from the wzi type (wzi154: the main lineage II; wzi29: recombinant lineage I; others: probably other recombinant lineages).
+This module reports the closest match amongst the *wzi* alleles in the `BIGSdb <http://bigsdb.pasteur.fr/klebsiella/klebsiella.html>`_. This is a marker of capsule locus (KL) type, which is predictive of capsule (K) serotype. Although there is not a 1-1 relationship between *wzi* allele and KL/K type, there is a strong correlation (see `Wyres et al, MGen 2016 <http://mgen.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000102>`_ and `Brisse et al, J Clin Micro 2013 <https://jcm.asm.org/content/51/12/4073.long>`_). Note the *wzi database* is populated with alleles from the *Klebsiella pneumoniae* species complex and is not reliable for other species.
+
+The *wzi* allele can provide a handy way of spotting the hypervirulence-associated capsule types (wzi=K1, wzi2=K2, wzi5=K5); or spotting capsule switching within clones, e.g. you can tell which ST258 lineage you have from the _wzi_ type (wzi154: the main lineage II; wzi29: recombinant lineage I; others: probably other recombinant lineages). But the K locus predictions from the Kaptive module are more specific and reliable.
 
 Wzi outputs
 +++++++++++++++
