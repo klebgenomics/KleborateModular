@@ -35,8 +35,8 @@ Kleborate was primarily developed to screen genome assemblies of *Klebsiella pne
 New modules for other species are in development, for now these include MLST schemes for *Klebsiella oxytoca* species complex and *Escherichia coli*.
 
 
-Citing Kleborate and Kaptive
-----------------------------
+Citations
+----------
 
 If you use Kleborate, please cite the paper: Lam, MMC. et al. A genomic surveillance framework and genotyping tool for *Klebsiella pneumoniae* and its related species complex, *Nature Communications* (2021). `<https://www.nature.com/articles/s41467-021-24448-3>`_
 
@@ -74,8 +74,8 @@ A step-by-step tutorial for Kleborate v2 is available at `bit.ly/kleborate-works
 This tutorial will be updated soon to Kleborate v3, however the functionality of Kleborate v3 remains the same if you add ``-preset kpsc`` to the run command.
 
 
-Interactive Kleborate reports on public data
---------------------------------------------
+Public reports
+----------------
 
 The `Kleborate paper <https://www.nature.com/articles/s41467-021-24448-3>`_ reports results of genotyping ~10,000 public genomes that have been filtered to remove redundant sequences (e.g. outbreak clusters, identified as small genome-wide mash distance with same year, location and genotypes), with Kleborate v2. The results can be explored in `Microreact <https://bit.ly/klebMR>`_ (which shows the mash tree, Kleborate output & curated metadata) or `Kleborate-Viz <https://kleborate.erc.monash.edu/>`_ (R shiny app). Kleborate-Viz also has the EuSCAPE dataset preloaded, or you can view your own Kleborate results.
 
