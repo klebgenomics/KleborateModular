@@ -433,7 +433,24 @@ Note:
 * Unique (non-overlapping) nucleotide Minimap2 hits with >95% identity and >50% coverage are reported. Note multiple hits to the same gene are reported if found. E.g. the NTUH-K2044 genome carries *rmpA* in the virulence plasmid and also in ICE *Kp1* , which is reported in the *rmpA* column as ``rmpA_11(ICEKp1),rmpA_2(KpVP-1)``.
 * As with the other virulence genes, truncations in the *rmpA* and *rmpA2* genes are expressed as a percentage of the amino acid length from the start codon, e.g. ``rmpA_5-54%`` indicates the RmpA protein is truncated after 54% length of the intact amino acid sequence. These truncations appear to be common, due to insertions and deletions within a poly-G tract, and almost certainly result in loss of protein function.
 
-rmst module outputs
+
+rmst Parameters
+++++++++++++++++++
+
+``--klebsiella__rmst_min_identity`` 
+
+Minimum alignment percent identity for Rmp MLST (default: 90.0)
+
+``--klebsiella__rmst_min_coverage``
+
+Minimum alignment percent coverage for Rmp MLST (default: 80.0)
+
+``--klebsiella__rmst_required_exact_matches``
+
+At least this many exact matches are required to call an ST (default: 2)
+
+
+rmst Outputs
 ++++++++++++++++++
 
 Output of the rmst module is the following columns:
@@ -505,7 +522,26 @@ Additional chromosomal mutations associated with AMR
 Note these do not count towards acquired resistance gene counts, but do count towards drug classes (with the exception of Omp mutations, whose spectrum of effects depends on the presence of acquired beta-lactamases and thus their impact on specific beta-lactam drug classes is hard to predict).
 
 
-KpSC AMR outputs
+AMR parameters
+++++++++++++++++++
+
+``--klebsiella_pneumo_complex__amr_min_identity`` 
+
+Minimum alignment percent identity for klebsiella_pneumo_complex Amr results (default: 90.0)
+
+``--klebsiella_pneumo_complex__amr_min_coverage`` 
+
+Minimum alignment percent coverage for klebsiella_pneumo_complex Amr results (default: 80.0)
+
+``--klebsiella_pneumo_complex__amr_min_spurious_identity`` 
+
+Minimum alignment percent identity for klebsiella_pneumo_complex Amr spurious results (default: 80.0)
+
+``--klebsiella_pneumo_complex__amr_min_spurious_coverage`` 
+
+Minimum alignment percent coverage for klebsiella_pneumo_complex Amr spurious results (default: 40.0)
+
+AMR outputs
 ++++++++++++++++++
 
 Results of the KpSC AMR module are grouped by drug class (according to the `ARG-Annot <https://www.ncbi.nlm.nih.gov/pubmed/24145532>`_ DB), with beta-lactamases further broken down into Lahey classes (now maintained at `BLDB <http://www.bldb.eu/>`_\ ), as follows:
