@@ -13,15 +13,24 @@ General modules
 Species detection
 -----------------
 
-.. code-block:: Python
-
-   -m enterobacterales__species
+``-m enterobacterales__species``
 
 
 This module will attempt to identify the species of each input assembly. It does this by comparing the assembly using `Mash <https://mash.readthedocs.io/>`_ to a curated set of *Klebsiella* and other *Enterobacteriaceae* assemblies from NCBI, and reporting the species of the closest match. 
 
-Species detection outputs
-+++++++++++++++++++++++++
+Parameters
+++++++++++
+
+``--enterobacterales__species_strong``
+
+Mash distance threshold for a strong species match (default: 0.02)
+
+``--enterobacterales__species_weak``
+
+Mash distance threshold for a weak species match (default: 0.04)
+
+Outputs
++++++++
 
 Output of the species typing module is the following columns:
 
@@ -50,8 +59,8 @@ The module reports a standard set of assembly quality metrics (see Outputs below
 
 It will also flag in the ``QC_warnings``\  column if an assembly size falls outside those specified in the ``species_specification.txt``\  in the module directory, or if N50 <10 kbp or ambiguous bases (Ns) are detected in the sequence.
 
-Contig stats outputs
-++++++++++++++++++++++
+Outputs
++++++++
 
 Output of the contig stats module is the following columns:
 
@@ -167,9 +176,24 @@ The relevant STs are:
        3766, 3768, 3771, 3781, 3782, 3784, 3802, 3803
      - ST91 (subsp. ozaenae)
 
+Parameters
+++++++++++
 
-KpSC MLST outputs
-++++++++++++++++++
+``--klebsiella_pneumo_complex__mlst_min_identity``
+
+Minimum alignment percent identity for klebsiella_pneumo_complex_MLST (default: 90.0)
+
+``--klebsiella_pneumo_complex__mlst_min_coverage`` 
+
+Minimum alignment percent coverage for klebsiella_pneumo_complex_MLST (default: 80.0)
+
+``--klebsiella_pneumo_complex__mlst_required_exact_matches`` 
+
+At least this many exact matches are required to call an ST (default: 3)
+
+
+Outputs
++++++++
 
 Output of the KpSC MLST module is the following columns:
 
@@ -232,7 +256,24 @@ Note that while ICE *Kp1* is occasionally found in other species within the KpSC
 
 The allele databases and schemes were last updated in April 2024. 
 
-ybst outputs
+
+ybst Parameters
++++++++++++++++
+
+``--klebsiella__ybst_min_identity``
+
+Minimum alignment percent identity for yersiniabactin MLST (default: 90.0)
+
+``--klebsiella__ybst_min_coverage``
+
+Minimum alignment percent coverage for yersiniabactin MLST (default: 80.0)
+
+``--klebsiella__ybst_required_exact_matches``
+
+At least this many exact matches are required to call an ST (default: 2)
+
+
+ybst Outputs
 ++++++++++++++++++
 
 Output of the ybst module is the following columns:
@@ -249,6 +290,24 @@ Output of the ybst module is the following columns:
      - allele number (ybt locus)
 
 
+cbst Parameters
+++++++++++++++++++
+
+``--klebsiella__cbst_min_identity``
+
+Minimum alignment percent identity for colibactin MLST (default: 90.0)
+
+``--klebsiella__cbst_min_coverage``
+
+Minimum alignment percent coverage for colibactin MLST (default: 80.0)
+
+``--klebsiella__cbst_required_exact_matches``
+
+At least this many exact matches are required to call an ST (default: 8)
+
+
+cbst Outputs
+++++++++++++++++++
 
 Output of the cbst module is the following columns:
 
@@ -262,6 +321,7 @@ Output of the cbst module is the following columns:
 
    * - clbA, clbB, clbC, clbD, clbE, clbF, clbG, clbH, clbI, clbL, clbM, clbN, clbO, clbP, clbQ
      - allele number (clb / pks locus)
+
 
 Aerobactin and salmochelin
 """"""""""""""""""""""""""
@@ -288,7 +348,23 @@ In Kleborate version 2.2.0 and earlier, the majority of *iucA* alleles had a seq
 
 The allele databases and schemes were last updated in April 2024. 
 
-abst outputs
+abst Parameters
+++++++++++++++++++
+
+``--klebsiella__abst_min_identity``
+
+Minimum alignment percent identity for aerobactin MLST (default: 90.0)
+
+``--klebsiella__abst_min_coverage`` 
+
+Minimum alignment percent coverage for aerobactin MLST (default: 80.0)
+
+``--klebsiella__abst_required_exact_matches``
+
+At least this many exact matches are required to call an ST (default: 3)
+
+
+abst Outputs
 ++++++++++++++++++
 
 Output of the abst module is the following columns:
@@ -304,6 +380,23 @@ Output of the abst module is the following columns:
    * - iucA, iucB, iucC, iucD, iutA
      - allele number (iuc locus)
 
+smst Parameters
+++++++++++++++++++
+
+``--klebsiella__smst_min_identity``
+
+Minimum alignment percent identity for salmochelin MLST (default: 90.0)
+
+``--klebsiella__smst_min_coverage``
+
+Minimum alignment percent coverage for salmochelin MLST (default: 80.0)
+
+``--klebsiella__smst_required_exact_matches`` 
+
+At least this many exact matches are required to call an ST (default: 2)
+
+smst Outputs
+++++++++++++++++++
 
 Output of the smst module is the following columns:
 
