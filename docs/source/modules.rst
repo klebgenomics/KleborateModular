@@ -668,8 +668,8 @@ Resistance scores and counts are output in the following columns:
 
 .. list-table::
 
-   * - **resistance_score**
-     - **Score of 0-3, as defined above**
+   * - resistance_score
+     - Score of 0-3, as defined above
 
    * - num_resistance_genes
      - Number of acquired resistance genes
@@ -685,7 +685,20 @@ KpSC Wzi typing for K antigen prediction
 
    -m klebsiella_pneumo_complex__wzi
 
-Each K locus includes a wzi gene, which encodes a protein involved in attachment of the capsular polysaccharide to the outer membrane. `Allelic variation in *wzi* genes <https://journals.asm.org/doi/10.1128/jcm.01924-13>`_ correlates with K locus structures, however due to recombination between K loci there is not a 1:1 relationship between wzi and KL/K type `see <https://www.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000102>`_ . Kleborate reports the closest matching *wzi* allele (sourced from the *K. pneumoniae* BIGSdb). This is fast, and provides a handy way of recognising the hypervirulence-associated capsule types (e.g. *wzi1*=K1, *wzi2*=K2, *wzi5*=K5), or spotting capsule switching within clones (e.g. you can tell which ST258 lineage you have from the wzi type (*wzi154*: the main lineage II; wzi29: recombinant lineage I; others: probably other recombinant lineages).
+Each K locus includes a *wzi* gene, which encodes a protein involved in attachment of the capsular polysaccharide to the outer membrane. `Allelic variation in wzi genes <https://journals.asm.org/doi/10.1128/jcm.01924-13>`_ correlates with K locus structures, however due to recombination between K loci there is not a 1:1 relationship between *wzi* and KL/K type, see `this paper <https://www.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000102>`_ . Kleborate reports the closest matching *wzi* allele (sourced from the *K. pneumoniae* BIGSdb). This is fast, and provides a handy way of recognising the hypervirulence-associated capsule types (e.g. wzi1 = K1, wzi2 = K2, wzi5 = K5), or spotting capsule switching within clones (e.g. you can tell which ST258 lineage you have from the wzi type (wzi154: the main lineage II; wzi29: recombinant lineage I; others: probably other recombinant lineages).
+
+Wzi outputs
++++++++++++++++
+
+Wzi typing results are output in the following columns:
+
+.. list-table::
+
+   * - wzi
+     - wzi allele
+
+   * - K_locus
+     - K locus typically associated with this wzi allele
 
 
 Klebsiella oxytoca species complex
