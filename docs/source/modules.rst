@@ -221,7 +221,7 @@ For each module, if the target locus is detected, the typer will:
 * Report the phylogenetic lineage associated with each sequence type, as outlined below and detailed in the corresponding papers
 * Report the structural variant of the mobile genetic element that is usually associated with that phylogenetic lineage (for *ybt* and *iuc* only)
 
-The *ybt*\ , *clb*\ , *iuc*\ , *iro* and *rmpADC* locus-specific ST schemes are defined in the *K. pneumoniae* `Bacterial Isolate Genome Sequence Database <https://bigsdb.pasteur.fr/klebsiella/>`_. 
+The *ybt*\ , *clb*\ , *iuc*\ , *iro* and *rmpADC* locus-specific ST schemes, and *rmpA2* alleles, are defined in the *K. pneumoniae* `Bacterial Isolate Genome Sequence Database <https://bigsdb.pasteur.fr/klebsiella/>`_. 
 
 Notes on virulence allele reporting:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -246,7 +246,7 @@ Yersiniabactin and colibactin
 
 .. code-block:: Python
 
-   -m klebsiella_pneumo_complex__ybst, klebsiella_pneumo_complex__cbst
+   -m klebsiella__ybst, klebsiella__cbst
 
 We previously explored the diversity of the *K. pneumoniae* integrative conjugative element (ICE *Kp*), which mobilises the yersiniabactin locus *ybt*, using genomic analysis of a diverse set of 2498 *Klebsiella* (see `this article <http://mgen.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000196>`_\ ). Overall, we found *ybt* in about a third of all *K. pneumoniae* genomes (and *clb* in about 14%). We identified 17 distinct lineages of *ybt* (see figure) embedded within 14 structural variants of ICE *Kp* that can integrate at any of four tRNA-Asn sites in the chromosome. One type was found to be plasmid-borne. Based on this analysis, we developed a MLST-style approach for assigning yersiniabactin sequence types (YbST) and colibactin sequence types (CbST), which is implemented in KleborateModular. 
 
@@ -326,7 +326,7 @@ Aerobactin and salmochelin
 
 .. code-block:: Python
 
-   -m klebsiella_pneumo_complex__abst, klebsiella_pneumo_complex__smst
+   -m klebsiella__abst, klebsiella__smst
 
 We further explored the genetic diversity of the aerobactin (\ *iuc*\ ) and salmochelin (\ *iro*\ ) loci among a dataset of 2733 *Klebsiella* genomes (see `this publication <https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-018-0587-5>`_\ ). We identified five *iro* and six *iuc* lineages (see figure), each of which was associated with a specific location within *K. pneumoniae* genomes (primarily virulence plasmids). Based on this analysis, we developed a MLST-style approach for assigning aerobactin sequence types (AbST) and salmochelin sequence types (SmST) which is implemented in Kleborate. 
 
@@ -415,13 +415,15 @@ Hypermucoidy loci
 
 .. code-block:: Python
 
-   -m klebsiella__rmst
+   -m klebsiella__rmst, klebsiella__rmpa2
 
 The *rmpA* locus is associated with the hypermucoidy phenotype that is a virulence feature that is often observed in hypervirulent *K. pneumoniae* strains. Recent work has revealed that *rmpA* serves as a transcriptional regulator for the *rmpD* and *rmpC* genes, and together these genes comprise the *rmpADC* (or *rmp*\ ) locus. *rmpC* is involved in the upregulation of capsule expression while *rmpD* drives hypermucoviscosity (see the paper on `rmpC <https://mbio.asm.org/content/10/2/e00089-19>`_ and this one on `rmpD <https://mbio.asm.org/content/11/5/e01750-20>`_ for more information.) 
 
-In light of this information, we screened and extracted the *rmpA*\ , *rmpD* and *rmpC* sequences from the 2733 genomes included in the aerobactin and salmochelin study, and generated a RmST typing scheme. We observed four distinct *rmp* lineages, which were associated with the KpVP-1 (\ *rmp 1*\ ), KpVP-2 (\ *rmp 2*\ ), *iuc2A* virulence plasmids (\ *rmp 2A*\ ) and ICE *Kp1* (rmp 3). The details of this novel virulence typing scheme have not yet been published. 
+In light of this information, we screened and extracted the *rmpA*\ , *rmpD* and *rmpC* sequences from the 2733 genomes included in the aerobactin and salmochelin study, and generated a RmST typing scheme. We observed four distinct *rmp* lineages, which were associated with the KpVP-1 (\ *rmp 1*\ ), KpVP-2 (\ *rmp 2*\ ), *iuc2A* virulence plasmids (\ *rmp 2A*\ ) and ICE *Kp1* (rmp 3). The details of this novel virulence typing scheme will be published shortly. 
 
-The rmpA module screens for *rmpADC* and will report a sequence type, along with the associated lineage and mobile genetic element
+The klebsiella__rmst module screens for *rmpADC* and will report a sequence type, along with the associated lineage and mobile genetic element.
+
+The *rmpA2* gene is homologous to *rmpA*, and the klebsiella__rmpa2 module screens for alleles of *rmpA2*.
 
 Note:
 """""
@@ -463,6 +465,29 @@ Output of the rmst module is the following columns:
 
    * - rmpA, rmpD, rmpC
      - allele number (rmp locus)
+
+
+rmpA2 Parameters
+++++++++++++++++++
+
+``--klebsiella__rmpa2_min_identity`` 
+
+Minimum alignment percent identity for rmpA2 alleles (default: 90.0)
+
+``--klebsiella__rmpa2_min_coverage``
+
+Minimum alignment percent coverage for rmpA2 alleles (default: 80.0)
+
+
+rmpA2 Outputs
+++++++++++++++++++
+
+Output of the rmst module is the following columns:
+
+.. list-table::
+
+   * - rmpA2
+     - best matching allele
 
 
 KpSC AMR
