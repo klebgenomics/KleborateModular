@@ -737,6 +737,22 @@ Genomes identified as belonging to the *K. oxytoca* species complex are subjecte
 A copy of the MLST alleles and ST definitions is stored in the /data directory of this module.
 
 
+KoSC MLST parameters
+++++++++++++++++++++++
+
+``--klebsiella_oxytoca_complex__mlst_min_identity`` 
+
+Minimum alignment percent identity for klebsiella_oxytoca_complex MLST (default: 90.0)
+
+``--klebsiella_oxytoca_complex__mlst_min_coverage`` 
+
+Minimum alignment percent coverage for klebsiella_oxytoca_complex MLST (default: 80.0)
+
+``--klebsiella_oxytoca_complex__mlst_required_exact_matches``
+
+At least this many exact matches are required to call an ST (default: 3)
+
+
 KoSC MLST outputs
 ++++++++++++++++++++
 
@@ -744,8 +760,8 @@ Output of the KoSC MLST module is the following columns:
 
 .. list-table::
 
-   * - **ST**
-     - **sequence type**
+   * - ST
+     - sequence type
 
    * - gapA, infB, mdh, pgi, phoE, rpoB, tonB
      - allele number
@@ -791,8 +807,35 @@ The Achtman scheme is hosted at `\Enterobase <https://enterobase.warwick.ac.uk/>
 
 The genes included in each scheme are noted in the Outputs table below.
 
-A copy of the MLST alleles and ST definitions used in each module is stored in the /data directory of the module.
+A copy of the MLST alleles and ST definitions used in each module is stored in the ``/data``  directory of the module.
 
+
+E. coli MLST parameters
+++++++++++++++++++++++++
+
+``--escherichia_mlst_achtman_min_identity`` 
+
+Minimum alignment percent identity for *Escherchia-Achtman* MLST (default: 90.0)
+
+``--escherichia_mlst_achtman_min_coverage`` 
+
+Minimum alignment percent coverage for Escherchia-Achtman MLST (default: 80.0)
+
+``--escherichia_mlst_achtman_required_exact_matches`` 
+
+At least this many exact matches are required to call an ST (default: 3)
+
+``--escherichia_mlst_pasteur_min_identity`` 
+
+Minimum alignment percent identity for Escherchia-Pasteur MLST (default: 90.0)
+
+``--escherichia_mlst_pasteur_min_coverage`` 
+
+Minimum alignment percent coverage for Escherchia-Pasteur MLST (default: 80.0)
+
+``--escherichia_mlst_pasteur_required_exact_matches`` 
+
+At least this many exact matches are required to call an ST (default: 4)
 
 E. coli MLST outputs
 ++++++++++++++++++++++
@@ -801,8 +844,8 @@ Output of the Pasteur E. coli MLST module is the following columns:
 
 .. list-table::
 
-   * - **ST**
-     - **sequence type**
+   * - ST
+     - sequence type
 
    * - dinB, icdA, pabB, polB, putP, trpA, trpB, uidA
      - allele number
