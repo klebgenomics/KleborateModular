@@ -341,7 +341,7 @@ Note on *iucA* sequence update:
 
 In Kleborate version 2.2.0 and earlier, the majority of *iucA* alleles had a sequence length of 1791 bp, with the exception being those associated with lineage *iuc 5* which have a length of 1725 bp. Related to this, *iucA* in genomes with *iuc 3* encoded a premature stop codon resulting in a significantly truncated and presumably non-functional IucA protein (i.e. at 2% length of the intact amino acid sequence), despite experimental evidence showing siderophore activity in *iuc 3*\ + isolates. In light of this evidence, the sequences of *iucA* genes with the longer ~1791 bp length were updated to ~1725 bp by removing the first 66 bp. These changes are captured in Kleborate version 2.3.0 onwards, and address the truncation issue in *iuc 3*\ + genomes. The following *iucA* alleles and AbST profiles have also been retired due to sequence redundancy following the update:
 
-* alleles: _iucA\ *48*\ , _iucA\ *49*\ , _iucA\ *52*
+* alleles: iucA48, iucA49, iucA52
 * profiles: AbST 70, 82, 83
 
 The allele databases and schemes were last updated in April 2024. 
