@@ -28,7 +28,7 @@ To verify that you're ready to go, try running these commands from a terminal:
 Each of these should print a version number message. If not, troubleshoot that tool's installation before continuing!
 
 
-Install and run from directory
+Installation
 ------------------------------
 
 .. code-block:: bash
