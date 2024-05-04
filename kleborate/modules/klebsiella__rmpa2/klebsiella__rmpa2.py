@@ -38,19 +38,19 @@ def add_cli_options(parser):
     module_name = os.path.basename(__file__)[:-3]
     group = parser.add_argument_group(f'{module_name} module')
 
-    group.add_argument('--klebsiella_pneumo_complex__rmpa2_min_identity', type=float, default=90.0,
-                       help='Minimum alignment percent identity for klebsiella_pneumo_complex rmpa2 results')
-    group.add_argument('--klebsiella_pneumo_complex__rmpa2_min_coverage', type=float, default=80.0,
-                       help='Minimum alignment percent coverage for klebsiella_pneumo_complex rmpa2 results')
+    group.add_argument('--klebsiella__rmpa2_min_identity', type=float, default=90.0,
+                       help='Minimum alignment percent identity for klebsiella__rmpa2 results')
+    group.add_argument('--klebsiella__rmpa2_min_coverage', type=float, default=80.0,
+                       help='Minimum alignment percent coverage for klebsiella__rmpa2 results')
 
     return group
 
 
 def check_cli_options(args):
-    if args.klebsiella_pneumo_complex__rmpa2_min_identity <= 50.0 or args.klebsiella_pneumo_complex__rmpa2_min_identity >= 100.0:
-        sys.exit('Error: --klebsiella_pneumo_complex__rmpa2_min_identity must be between 50.0 and 100.0')
-    if args.klebsiella_pneumo_complex__rmpa2_min_coverage <= 50.0 or args.klebsiella_pneumo_complex__rmpa2_min_coverage >= 100.0:
-        sys.exit('Error: --klebsiella_pneumo_complex__rmpa2_min_coverage must be between 50.0 and 100.0')
+    if args.klebsiella__rmpa2_min_identity <= 50.0 or args.klebsiella__rmpa2_min_identity >= 100.0:
+        sys.exit('Error: --klebsiella__rmpa2_min_identity must be between 50.0 and 100.0')
+    if args.klebsiella__rmpa2_min_coverage <= 50.0 or args.klebsiella__rmpa2_min_coverage >= 100.0:
+        sys.exit('Error: --klebsiella__rmpa2_min_coverage must be between 50.0 and 100.0')
 
 
 def check_external_programs():
@@ -69,8 +69,8 @@ def get_results(assembly, minimap2_index, args, previous_results):
         ref_file, 
         assembly,
         minimap2_index,
-        args.klebsiella_pneumo_complex__rmpa2_min_coverage, 
-        args.klebsiella_pneumo_complex__rmpa2_min_identity)
+        args.klebsiella__rmpa2_min_coverage, 
+        args.klebsiella__rmpa2_min_identity)
 
     if not rmpa2_allele:  
         return {'rmpA2': '-'}  

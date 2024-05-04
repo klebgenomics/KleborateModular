@@ -153,7 +153,7 @@ def get_presets():
         'pass': [
             'general__contig_stats','klebsiella_pneumo_complex__mlst',
             'klebsiella__ybst', 'klebsiella__cbst', 'klebsiella__abst', 'klebsiella__smst', 'klebsiella__rmst', 'klebsiella_pneumo_complex__virulence_score',
-            'klebsiella_pneumo_complex__rmpa2','klebsiella_pneumo_complex__amr', 'klebsiella_pneumo_complex__resistance_score', 'klebsiella_pneumo_complex__resistance_class_count',
+            'klebsiella__rmpa2','klebsiella_pneumo_complex__amr', 'klebsiella_pneumo_complex__resistance_score', 'klebsiella_pneumo_complex__resistance_class_count',
             'klebsiella_pneumo_complex__resistance_gene_count', 'klebsiella_pneumo_complex__wzi','klebsiella_pneumo_complex__kaptive'
         ]
     }
@@ -162,7 +162,7 @@ def get_presets():
         'check': [('enterobacterales__species', 'is_ko_complex')],
         'pass': [
             'general__contig_stats',
-            'klebsiella_oxytoca_complex__mlst', 'klebsiella__ybst', 'klebsiella__cbst', 'klebsiella__abst', 'klebsiella__smst', 'klebsiella__rmst'
+            'klebsiella_oxytoca_complex__mlst', 'klebsiella__ybst', 'klebsiella__cbst', 'klebsiella__abst', 'klebsiella__smst', 'klebsiella__rmst','klebsiella__rmpa2'
         ]
     }
 
