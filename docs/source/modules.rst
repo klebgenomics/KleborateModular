@@ -1,25 +1,3 @@
-.. toctree::
-   :hidden:
-
-General modules
-  Species detection
-  Contig stats
-Klebsiella pneumoniae species complex
-  KpSC MLST
-  KpSC Virulence modules
-    Yersiniabactin and colibactin
-    Aerobactin and salmochelin
-    Hypermucoidy
-  KpSC AMR
-  KpSC K and O locus typing with Kaptive
-  KpSC Wzi typing for K antigen prediction
-Klebsiella oxytoca species complex
-  KoSC MLST
-  KoSC virulence typing
-Escherichia
-  E. coli MLST
-
-
 **************************************
 Modules
 **************************************
