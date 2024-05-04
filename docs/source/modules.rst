@@ -1,3 +1,25 @@
+.. toctree::
+   :hidden:
+
+General modules
+  Species detection
+  Contig stats
+Klebsiella pneumoniae species complex
+  KpSC MLST
+  KpSC Virulence modules
+    Yersiniabactin and colibactin
+    Aerobactin and salmochelin
+    Hypermucoidy
+  KpSC AMR
+  KpSC K and O locus typing with Kaptive
+  KpSC Wzi typing for K antigen prediction
+Klebsiella oxytoca species complex
+  KoSC MLST
+  KoSC virulence typing
+Escherichia
+  E. coli MLST
+
+
 **************************************
 Modules
 **************************************
@@ -19,7 +41,7 @@ Species detection
 This module will attempt to identify the species of each input assembly. It does this by comparing the assembly using `Mash <https://mash.readthedocs.io/>`_ to a curated set of *Klebsiella* and other *Enterobacteriaceae* assemblies from NCBI, and reporting the species of the closest match. 
 
 Parameters
-++++++++++++++
+'''''''''''''''''''''''
 
 ``--enterobacterales__species_strong``
 
@@ -224,7 +246,7 @@ For each module, if the target locus is detected, the typer will:
 The *ybt*\ , *clb*\ , *iuc*\ , *iro* and *rmpADC* locus-specific ST schemes, and *rmpA2* alleles, are defined in the *K. pneumoniae* `Bacterial Isolate Genome Sequence Database <https://bigsdb.pasteur.fr/klebsiella/>`_. 
 
 Notes on virulence allele reporting:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Virulence alleles are treated in the same way as [MLST] alleles:
 
@@ -234,7 +256,7 @@ Virulence alleles are treated in the same way as [MLST] alleles:
 * KleborateModular will next translate the hit into amino acid sequence and look for truncations (expressed as % amino acid length from the start codon). If the result is less than 90%, it is added to the result (e.g. ``15*-42%``\ ).
 
 Notes on virulence sequence type reporting:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Virulence locus STs are only reported if >50% of the genes in a locus are detected (e.g. at least 6 of the 11 *ybt* locus genes are required to report a *ybt* ST).
 * If <50% of the genes in a locus are detected, KleborateModular reports the ST as ``0`` and the lineage as ``-``.
@@ -242,7 +264,7 @@ Notes on virulence sequence type reporting:
 * For genomes with multiple copies of a virulence locus (e.g. a strain that carries ICE *Kp1* and the KpVP-1 plasmid will have two copies of *iro* and *rmp*\ ), KleborateModular will report and assign a ST or closest matching ST to each of these virulence loci provided that the locus is relatively intact in the genome (i.e. >50% of the genes in a locus are present on a single contig) and according to the above criteria.  
 
 Yersiniabactin and colibactin
-"""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: Python
 
@@ -256,7 +278,7 @@ The allele databases and schemes were last updated in April 2024.
 
 
 ybst Parameters
-+++++++++++++++
+''''''''''''''''''
 
 ``--klebsiella__ybst_min_identity``
 
@@ -322,7 +344,7 @@ Output of the cbst module is the following columns:
 
 
 Aerobactin and salmochelin
-""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: Python
 
@@ -337,7 +359,7 @@ We further explored the genetic diversity of the aerobactin (\ *iuc*\ ) and salm
 * The salmochelin locus present in ICE *Kp1* constitutes its own lineage *iro3*\ , and the aerobactin locus present in the chromosome of ST67 *K. pneumoniae* subsp *rhinoscleromatis* strains constitutes its own lineage *iuc4*. 
 
 Note on *iucA* sequence update:
-"""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In Kleborate version 2.2.0 and earlier, the majority of *iucA* alleles had a sequence length of 1791 bp, with the exception being those associated with lineage *iuc 5* which have a length of 1725 bp. Related to this, *iucA* in genomes with *iuc 3* encoded a premature stop codon resulting in a significantly truncated and presumably non-functional IucA protein (i.e. at 2% length of the intact amino acid sequence), despite experimental evidence showing siderophore activity in *iuc 3*\ + isolates. In light of this evidence, the sequences of *iucA* genes with the longer ~1791 bp length were updated to ~1725 bp by removing the first 66 bp. These changes are captured in Kleborate version 2.3.0 onwards, and address the truncation issue in *iuc 3*\ + genomes. The following *iucA* alleles and AbST profiles have also been retired due to sequence redundancy following the update:
 
@@ -347,7 +369,7 @@ In Kleborate version 2.2.0 and earlier, the majority of *iucA* alleles had a seq
 The allele databases and schemes were last updated in April 2024. 
 
 abst Parameters
-++++++++++++++++++
+'''''''''''''''''''''''
 
 ``--klebsiella__abst_min_identity``
 
@@ -411,7 +433,7 @@ Output of the smst module is the following columns:
 
 
 Hypermucoidy loci
-""""""""""""""""""
+^^^^^^^^^^^^^^^^^^
 
 .. code-block:: Python
 
@@ -426,7 +448,7 @@ The klebsiella__rmst module screens for *rmpADC* and will report a sequence type
 The *rmpA2* gene is homologous to *rmpA*, and the klebsiella__rmpa2 module screens for alleles of *rmpA2*.
 
 Note:
-"""""
+^^^^^^^^
 
 * Alleles for each gene are sourced from the `BIGSdb-pasteur <https://bigsdb.pasteur.fr/klebsiella/>`_\ , while additional *rmpA* alleles have also been added to Kleborate.
 * The *rmpA* and *rmpA2* genes share ~83% nucleotide identity so are easily distinguished.
@@ -435,7 +457,7 @@ Note:
 
 
 rmst Parameters
-++++++++++++++++++
+'''''''''''''''''''''''
 
 ``--klebsiella__rmst_min_identity`` 
 
@@ -491,7 +513,7 @@ Output of the rmst module is the following columns:
 
 
 Virulence score
-""""""""""""""""
+^^^^^^^^^^^^^^^^^^
 
 .. code-block:: Python
 
@@ -591,7 +613,7 @@ Note these do not count towards acquired resistance gene counts, but do count to
 
 
 AMR parameters
-++++++++++++++++++
+'''''''''''''''''''''''
 
 ``--klebsiella_pneumo_complex__amr_min_identity`` 
 
@@ -698,7 +720,7 @@ Running the KpSC AMR module automatically runs additional modules for generating
 
 
 Resistance score
-""""""""""""""""
+''''''''''''''''''''''
 
 This module calculates a resistance score, which ranges from 0 to 3 as follows
 
@@ -717,7 +739,7 @@ This module calculates a resistance score, which ranges from 0 to 3 as follows
      - Carbapenemase with colistin resistance (regardless of ESBL genes or OmpK mutations)
 
 Resistance gene counts and drug class counts
-""""""""""""""""""""""""""""""""""""""""""""
+''''''''''''''''''''''''''''''''''''''''''''''
 
 This module quantifies how many acquired resistance genes are present and how many drug classes (in *addition* to ampicillin to which KpSC are intrinsically resistant) have at least one resistance determinant detected (i.e. ignoring genes recorded in the Bla_chr and Bla_acquired columns). 
 
@@ -770,11 +792,35 @@ Kaptive results are output in the following columns:
 
 .. list-table::
 
-   * - xx
-     - xx
+   * - Best match locus
+     - The locus type which most closely matches the assembly
 
-   * - xx
-     - xx
+   * - Best match type
+     - The predicted serotype/phenotype of the assembly.
+
+   * - Match confidence
+     - A categorical measure of locus call quality (see confidence score)
+
+    * - Problems
+      - Characters indicating issues with the locus match (see problems)
+
+    * - Identity
+      - Weighted percent identity of the best matching locus to the assembly.
+
+    * - Coverage
+      - Weighted percent coverage of the best matching locus in the assembly.
+
+    * - Length discrepancy
+      - If the locus was found in a single piece, this is the difference between the locus length and the assembly length.
+
+    * - Expected genes in locus
+      - A fraction indicating how many of the genes in the best matching locus were found in the locus part of the assembly.
+
+   * - Expected genes in locus, details
+     - Gene names for the expected genes found in the locus part of the assembly.
+
+   * - Missing expected genes
+     - A string listing the gene names of expected genes that were not found.
 
 
 KpSC Wzi typing for K antigen prediction
@@ -839,7 +885,7 @@ A copy of the MLST alleles and ST definitions is stored in the /data directory o
 
 
 KoSC MLST parameters
-++++++++++++++++++++++
+'''''''''''''''''''''''
 
 ``--klebsiella_oxytoca_complex__mlst_min_identity`` 
 
@@ -912,7 +958,7 @@ A copy of the MLST alleles and ST definitions used in each module is stored in t
 
 
 E. coli MLST parameters
-++++++++++++++++++++++++
+'''''''''''''''''''''''''
 
 ``--escherichia_mlst_achtman_min_identity`` 
 
