@@ -65,6 +65,17 @@ The following papers provide more information on the component schemes and genot
    Wick, RR et. al. Kaptive Web: user-friendly capsule and lipopolysaccharide serotype prediction for *Klebsiella* genomes. *Journal of Clinical Microbiology* (2018). `Journal of Clinical Microbiology <http://jcm.asm.org/content/56/6/e00197-18>`_
 
 
+Changes from v2
+----------------
+
+* MLST & virulence databases updated (April 2024)
+  * Column ``Chr_ST``  has been removed in v3, as it is redundant with ``ST`` 
+* Updated to use Kaptive v3, which has some changes to the names of output variables:
+  * ``K_locus_missing_genes``  has been renamed ``K_Missing_expected_genes`` 
+  * ``O_locus_missing_genes``  has been renamed ``O_Missing_expected_genes`` 
+  * New columns are included in Kleborate v3: ``K_Coverage`` , ``O_Coverage``
+
+
 Tutorial
 --------
 
