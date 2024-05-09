@@ -19,7 +19,7 @@ Species detection
 This module will attempt to identify the species of each input assembly. It does this by comparing the assembly using `Mash <https://mash.readthedocs.io/>`_ to a curated set of *Klebsiella* and other *Enterobacteriaceae* assemblies from NCBI, and reporting the species of the closest match. 
 
 Parameters
-'''''''''''''''''''''''
+++++++++++++++++++
 
 ``--enterobacterales__species_strong``
 
@@ -256,7 +256,7 @@ The allele databases and schemes were last updated in April 2024.
 
 
 ybst Parameters
-''''''''''''''''''
+++++++++++++++++++
 
 ``--klebsiella__ybst_min_identity``
 
@@ -347,7 +347,7 @@ In Kleborate version 2.2.0 and earlier, the majority of *iucA* alleles had a seq
 The allele databases and schemes were last updated in April 2024. 
 
 abst Parameters
-'''''''''''''''''''''''
+++++++++++++++++++
 
 ``--klebsiella__abst_min_identity``
 
@@ -435,7 +435,7 @@ Note:
 
 
 rmst Parameters
-'''''''''''''''''''''''
+++++++++++++++++++
 
 ``--klebsiella__rmst_min_identity`` 
 
@@ -533,8 +533,6 @@ Virulence score is output in the following column:
 
 
 
-
-
 KpSC AMR
 --------
 
@@ -591,7 +589,7 @@ Note these do not count towards acquired resistance gene counts, but do count to
 
 
 AMR parameters
-'''''''''''''''''''''''
+++++++++++++++++++
 
 ``--klebsiella_pneumo_complex__amr_min_identity`` 
 
@@ -863,7 +861,7 @@ A copy of the MLST alleles and ST definitions is stored in the /data directory o
 
 
 KoSC MLST parameters
-'''''''''''''''''''''''
++++++++++++++++++++++++
 
 ``--klebsiella_oxytoca_complex__mlst_min_identity`` 
 
@@ -936,7 +934,7 @@ A copy of the MLST alleles and ST definitions used in each module is stored in t
 
 
 E. coli MLST parameters
-'''''''''''''''''''''''''
++++++++++++++++++++++++++++
 
 ``--escherichia_mlst_achtman_min_identity`` 
 
