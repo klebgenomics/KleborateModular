@@ -126,7 +126,8 @@ def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_cover
     
     # calculate alignment coverage
     for hit in alignment_hits:
-        alignment_length = hit.ref_end - hit.ref_start
+        # alignment_length = hit.ref_end - hit.ref_start
+        alignment_length = hit.query_end - hit.query_start
         coverage = (alignment_length / hit.query_length) * 100
         if coverage >= min_spurious_coverage:
             if hit.percent_identity < 100.0:

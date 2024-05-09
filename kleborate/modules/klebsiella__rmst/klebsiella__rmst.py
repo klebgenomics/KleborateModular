@@ -75,5 +75,5 @@ def get_results(assembly, minimap2_index, args, previous_results):
                                       args.klebsiella__rmst_min_coverage, args.klebsiella__rmst_required_exact_matches,
                                       check_for_truncation=True, report_incomplete=True)
 
-    return {'RmST': st, 'RmpADC': lineage,
+    return {'RmST': st[2:], 'RmpADC': lineage,
             'rmpA': alleles['rmpA'], 'rmpD': alleles['rmpD'], 'rmpC': alleles['rmpC']}

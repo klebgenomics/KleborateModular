@@ -75,6 +75,6 @@ def get_results(assembly, minimap2_index, args, previous_results):
                                       args.klebsiella__abst_min_coverage, args.klebsiella__abst_required_exact_matches,
                                       check_for_truncation=True, report_incomplete=True)
 
-    return {'AbST': st, 'Aerobactin': lineage,
+    return {'AbST': st[2:], 'Aerobactin': lineage,
             'iucA': alleles['iucA'], 'iucB': alleles['iucB'], 'iucC': alleles['iucC'],
             'iucD': alleles['iucD'], 'iutA': alleles['iutA']}

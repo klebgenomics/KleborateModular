@@ -42,8 +42,10 @@ def add_cli_options(parser):
                        help='Minimum alignment percent identity for yersiniabactin MLST')
     group.add_argument('--klebsiella__ybst_min_coverage', type=float, default=80.0,
                        help='Minimum alignment percent coverage for yersiniabactin MLST')
-    group.add_argument('--klebsiella__ybst_required_exact_matches', type=int, default=2,
+    group.add_argument('--klebsiella__ybst_required_exact_matches', type=int, default=6,
                        help='At least this many exact matches are required to call an ST')
+    # group.add_argument('--klebsiella__ybst_required_exact_matches', type=int, default=2,
+    #                    help='At least this many exact matches are required to call an ST')
     return group
 
 
@@ -76,7 +78,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
                                       args.klebsiella__ybst_min_coverage, args.klebsiella__ybst_required_exact_matches,
                                       check_for_truncation=True, report_incomplete=True)
 
-    return {'YbST': st, 'Yersiniabactin': lineage,
+    return {'YbST': st[2:], 'Yersiniabactin': lineage,
             'ybtS': alleles['ybtS'], 'ybtX': alleles['ybtX'], 'ybtQ': alleles['ybtQ'],
             'ybtP': alleles['ybtP'], 'ybtA': alleles['ybtA'], 'irp2': alleles['irp2'],
             'irp1': alleles['irp1'], 'ybtU': alleles['ybtU'], 'ybtT': alleles['ybtT'],

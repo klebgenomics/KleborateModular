@@ -77,7 +77,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
                                       args.klebsiella__cbst_min_coverage, args.klebsiella__cbst_required_exact_matches,
                                       check_for_truncation=True, report_incomplete=True)
 
-    return {'CbST': st, 'Colibactin': lineage,
+    return {'CbST': st[2:], 'Colibactin': lineage,
             'clbA': alleles['clbA'], 'clbB': alleles['clbB'], 'clbC': alleles['clbC'],
             'clbD': alleles['clbD'], 'clbE': alleles['clbE'], 'clbF': alleles['clbF'],
             'clbG': alleles['clbG'], 'clbH': alleles['clbH'], 'clbI': alleles['clbI'],
