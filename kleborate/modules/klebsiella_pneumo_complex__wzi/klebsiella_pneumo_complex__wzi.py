@@ -74,7 +74,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
                           args.klebsiella_pneumo_complex__wzi_min_identity, args.klebsiella_pneumo_complex__wzi_min_coverage,
                           args.klebsiella_pneumo_complex__wzi_required_exact_matches)
 
-    if st == 'NA' :
+    if st == '0' :
         wzi_st = '-'
     else:
         wzi_st = 'wzi' + st[2:]
