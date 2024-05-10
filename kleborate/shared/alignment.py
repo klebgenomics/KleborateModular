@@ -155,34 +155,34 @@ def get_expanded_cigar(cigar):
 
 
 def hits_overlap(a, b):
-    # function determines whether there is overlap
-    # based on their reference start and end positions
     if a.ref_start <= b.ref_end and b.ref_start <= a.ref_end:  # There is some overlap
         allowed_overlap = 50
-        overlap_size = min(a.ref_end, b.ref_end) - max(a.ref_start, b.ref_start) + 1
+        overlap_size = len(range(max(a.ref_start, b.ref_start),
+                                 min(a.ref_end, b.ref_end) + 1))
         return overlap_size > allowed_overlap
     else:
         return False
 
 
-def overlapping(hits, existing_hits):
+
+def overlapping(hit, existing_hits):
     # Only consider hits in the same reading frame.
     existing_hits = [h for h in existing_hits if
-                     h.strand == hits.strand and h.ref_name == hits.ref_name]
+                     h.strand == hit.strand and h.ref_name == hit.ref_name]
 
     for existing_hit in existing_hits:
-        if hits_overlap(hits, existing_hit):
+        if hits_overlap(hit, existing_hit):
             return True
 
     return False
 
 
-def call_redundant_hits(hits):
+def cull_redundant_hits(minimap_hits):
     
-    # Sort the hits from best to worst. Hit quality is defined as the product of gene coverage,
-    # identity 
+    # Sort the hits from best to worst. Hit quality is defined as the product of gene coverage,identity and score
     
-    minimap_hits = sorted(hits, key=lambda x: (1/(x.percent_identity * x.alignment_score * x.query_cov), x.query_name))
+    # minimap_hits = sorted(minimap_hits, key=lambda x: (1/(x.percent_identity * x.alignment_score * x.query_cov), x.query_name))
+    minimap_hits = sorted(minimap_hits, key=lambda x: (1/(x.percent_identity * x.query_cov), x.query_name))
 
     filtered_minimap_hits = []
 

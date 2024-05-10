@@ -35,15 +35,12 @@ def prerequisite_modules():
     return []
 
 
-
 def get_headers():
     full_headers = [
         'K_locus', 'K_type', 'K_locus_confidence', 'K_locus_problems', 'K_locus_identity', 
-        'K_Coverage', 'K_Length discrepancy', 'K_Expected genes in locus', 
-        'K_Expected_genes_in_locus, details', 'K_Missing_expected_genes', 
+        'K_Missing_expected_genes', 
         'O_locus', 'O_type', 'O_locus_confidence', 'O_locus_problems', 'O_locus_identity', 
-        'O_Coverage', 'O_Length_discrepancy', 'O_Expected_genes_in_locus', 
-        'O_Expected_genes_in_locus, details', 'O_Missing_expected_genes'
+        'O_Missing_expected_genes'
     ]
     stdout_headers = []
     return full_headers, stdout_headers
