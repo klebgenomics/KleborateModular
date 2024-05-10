@@ -16,7 +16,7 @@ not, see <http://www.gnu.org/licenses/>.
 from Bio.Seq import Seq
 from Bio import pairwise2
 from Bio.Align import substitution_matrices
-from ...shared.alignment import align_query_to_ref, call_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
+from ...shared.alignment import align_query_to_ref, cull_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
 from ...shared.misc import load_fasta, reverse_complement
 
 
@@ -43,7 +43,7 @@ def check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_identity, min_covera
     snps = []
 
     alignment_hits = align_query_to_ref(qrdr, assembly, min_query_coverage=None, min_identity=min_identity) # added identity threshold
-    alignment_hits = call_redundant_hits(alignment_hits)
+    alignment_hits = cull_redundant_hits(alignment_hits)
     for hit in alignment_hits:
         _, coverage, translation = truncation_check(hit)
         

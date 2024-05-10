@@ -21,7 +21,7 @@ from Bio.Seq import Seq
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
  
-from .alignment import align_query_to_ref, call_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
+from .alignment import align_query_to_ref, cull_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
 from .misc import load_fasta, reverse_complement
 from kleborate.modules.klebsiella_pneumo_complex__amr.shv_mutations import*
 from kleborate.modules.klebsiella_pneumo_complex__amr.qrdr_mutations import*
@@ -122,7 +122,7 @@ def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_cover
     
     hits_dict = collections.defaultdict(list)  # key = class, value = list
     alignment_hits = align_query_to_ref(ref_file, assembly,ref_index=minimap2_index,  min_identity=min_identity, min_query_coverage=None)
-    alignment_hits = call_redundant_hits(alignment_hits)
+    alignment_hits = cull_redundant_hits(alignment_hits)
     
     # calculate alignment coverage
     for hit in alignment_hits:

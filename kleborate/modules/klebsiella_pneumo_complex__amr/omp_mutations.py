@@ -16,15 +16,15 @@ not, see <http://www.gnu.org/licenses/>.
 from Bio.Seq import Seq
 from Bio import pairwise2
 from Bio.Align import substitution_matrices
-from ...shared.alignment import align_query_to_ref, call_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
+from ...shared.alignment import align_query_to_ref, cull_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
 
 
 def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
 
     best_ompk35_cov, best_ompk36_cov = 0.0, 0.0
     
-    alignment_hits = align_query_to_ref(omp, assembly, min_query_coverage=None, min_identity=min_identity)
-    alignment_hits = call_redundant_hits(alignment_hits)
+    alignment_hits = align_query_to_ref(omp, assembly, min_query_coverage=None, min_identity=None)
+    alignment_hits = cull_redundant_hits(alignment_hits)
     
     ompk35_hit = False
     ompk36_hit = False

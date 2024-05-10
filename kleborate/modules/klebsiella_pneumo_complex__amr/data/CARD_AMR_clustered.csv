@@ -2179,6 +2179,7 @@ clusterid,queryID,class,gene,allele,seqID,accession,positions,size,cluster_conta
 163,fosA3,Fcyn,FosA,fosA3,1903,ARO_3002872,-,-,no,no,NA,NA
 163,fosA4,Fcyn,FosA,fosA4,1904,ARO_3003210,-,-,no,no,NA,NA
 163,fosA7,Fcyn,FosA,fosA7,1905,ARO_3004113,-,-,no,no,NA,NA
+163,fosA7,Fcyn,FosA,fosA7.v1,2690,,,,,,,
 163,fosA7.5,Fcyn,FosA,fosA7.5,2428,ARO_3005162,-,-,no,no,NA,NA
 164,fosB.1,Fcyn,FosB,fosB.1,1906,ARO_3004661,-,-,no,no,NA,NA
 164,fosB.2,Fcyn,FosB,fosB.2,1907,ARO_3000172,-,-,no,no,NA,NA
