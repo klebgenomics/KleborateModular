@@ -93,7 +93,8 @@ def main():
     with tempfile.TemporaryDirectory() as temp_dir:
         unzipped_assembly = gunzip_assembly_if_necessary(assembly, temp_dir)
         minimap2_index = build_minimap2_index(assembly, unzipped_assembly, external_programs, temp_dir)
-        results = {'assembly': assembly}
+        # results = {'assembly': assembly}
+        results = {'strain': get_strain_name(assembly)}
 
         pass_check = True  # default, assume no check and run all modules
 
@@ -243,6 +244,14 @@ def get_all_module_names():
     return sorted(module_names)
 
 
+def get_strain_name(full_path):
+    filename = os.path.split(full_path)[1]
+    if filename.endswith('_temp_decompress.fasta'):
+        filename = filename[:-22]
+    if filename.endswith('.gz'):
+        filename = filename[:-3]
+    return os.path.splitext(filename)[0]
+
 def import_modules():
     """
     This function imports all Kleborate modules (whether or not they are used in this run).
@@ -322,7 +331,8 @@ def get_headers(module_names, modules):
     separated by a double-underscore.
     """
     #top_headers, full_headers, stdout_headers = [''], ['assembly'], ['assembly']
-    _,full_headers, stdout_headers = [''], ['assembly'], ['assembly']
+    # _,full_headers, stdout_headers = [''], ['assembly'], ['assembly']
+    _,full_headers, stdout_headers = [''], ['strain'], ['strain']
     for module_name in module_names:
         module_full, module_stdout = modules[module_name].get_headers()
         #top_headers.append(module_name)
@@ -377,11 +387,13 @@ def output_results(full_headers, stdout_headers, outfile, results):
     """
     This function writes the results to stdout and the output file.
     """
-    print('\t'.join([str(results.get(x, "-")).strip("[] ") for x in stdout_headers]))
+    # print('\t'.join([str(results.get(x, "-")).strip("[] ") for x in stdout_headers]))
+    print('\t'.join([str(results.get(x, "-")).strip("[] ").replace("assembly", "strain") for x in stdout_headers]))
     with open(outfile, 'at') as o:
         if o.tell() > 0:  # Check if the file is not empty
             o.write('\n')
-        o.write('\t'.join([str(results.get(x, "-")).strip("[] ") for x in full_headers]))
+        # o.write('\t'.join([str(results.get(x, "-")).strip("[] ") for x in full_headers]))
+        o.write('\t'.join([str(results.get(x, "-")).strip("[] ").replace("assembly", "strain") for x in full_headers]))
 
     for h in results.keys():
         if h not in full_headers:

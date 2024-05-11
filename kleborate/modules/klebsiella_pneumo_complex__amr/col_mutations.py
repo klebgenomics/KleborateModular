@@ -22,7 +22,7 @@ from ...shared.alignment import align_query_to_ref, cull_redundant_hits, is_exac
 def check_for_mgrb_pmrb_gene_truncations(hits_dict, assembly, trunc, min_ident):
     best_mgrb_cov, best_pmrb_cov = 0.0, 0.0
 
-    alignment_hits = align_query_to_ref(trunc, assembly, min_identity=min_ident)
+    alignment_hits = align_query_to_ref(trunc, assembly, min_identity=None)
     alignment_hits = cull_redundant_hits(alignment_hits)
     for hit in alignment_hits:
         assert hit.query_name == 'pmrB' or hit.query_name == 'mgrB'

@@ -23,7 +23,7 @@ from ...shared.misc import load_fasta, reverse_complement
 
 def rmpa2_minimap(ref_file, assembly, minimap2_index, min_coverage, min_identity):
     rmpa2_calls = []
-    hits = align_query_to_ref(ref_file, assembly,ref_index=minimap2_index,  min_identity=min_identity, min_query_coverage=None)
+    hits = align_query_to_ref(ref_file, assembly,ref_index=minimap2_index,  min_identity=min_identity, min_query_coverage=min_coverage)
     hits = cull_redundant_hits(hits)
     #Get rid of any hits that start with 'delete_'
     hits = [h for h in hits if not h.query_name.startswith('delete_')]
