@@ -21,7 +21,8 @@ version = '3.0.0'
 
 html_theme = 'sphinx_book_theme'
 html_theme_options = {
-    "show_toc_level": 3,
+    "show_toc_level": 2,
+    'tocdepth': 2
     "home_page_in_toc": True,
     "navigation_depth": 4
 
