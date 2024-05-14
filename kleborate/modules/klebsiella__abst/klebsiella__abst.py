@@ -73,8 +73,13 @@ def get_results(assembly, minimap2_index, args, previous_results):
     st, lineage, alleles = multi_mlst(assembly, minimap2_index, profiles, alleles, genes,
                                       'iuc_lineage', args.klebsiella__abst_min_identity,
                                       args.klebsiella__abst_min_coverage, args.klebsiella__abst_required_exact_matches,
+       
                                       check_for_truncation=True, report_incomplete=True)
+    if st == 'NA':
+        st = 0
+    else:
+        st = st[2:]
 
-    return {'AbST': st[2:], 'Aerobactin': lineage,
+    return {'AbST': st, 'Aerobactin': lineage,
             'iucA': alleles['iucA'], 'iucB': alleles['iucB'], 'iucC': alleles['iucC'],
             'iucD': alleles['iucD'], 'iutA': alleles['iutA']}
