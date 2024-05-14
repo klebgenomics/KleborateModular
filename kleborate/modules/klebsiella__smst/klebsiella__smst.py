@@ -75,6 +75,11 @@ def get_results(assembly, minimap2_index, args, previous_results):
                                       args.klebsiella__smst_min_coverage, args.klebsiella__smst_required_exact_matches,
                                       check_for_truncation=True, report_incomplete=True)
 
-    return {'SmST': st[2:], 'Salmochelin': lineage,
+    if st == 'NA':
+        st = 0
+    else:
+        st = st[2:]
+
+    return {'SmST': st, 'Salmochelin': lineage,
             'iroB': alleles['iroB'], 'iroC': alleles['iroC'], 'iroD': alleles['iroD'],
             'iroN': alleles['iroN']}
