@@ -181,9 +181,7 @@ def cull_redundant_hits(minimap_hits):
     
     # Sort the hits from best to worst. Hit quality is defined as the product of gene coverage,identity and score
     
-    # minimap_hits = sorted(minimap_hits, key=lambda x: (1/(x.percent_identity * x.alignment_score * x.query_cov), x.query_name))
-    minimap_hits = sorted(minimap_hits, key=lambda x: (1/(x.percent_identity * x.query_cov), x.query_name))
-
+    minimap_hits = sorted(minimap_hits, key=lambda x: (1/(x.percent_identity * x.alignment_score * x.query_cov), x.query_name))
     filtered_minimap_hits = []
 
     for h in minimap_hits:
