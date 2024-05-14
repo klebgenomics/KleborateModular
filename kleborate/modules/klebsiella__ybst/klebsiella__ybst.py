@@ -78,7 +78,12 @@ def get_results(assembly, minimap2_index, args, previous_results):
                                       args.klebsiella__ybst_min_coverage, args.klebsiella__ybst_required_exact_matches,
                                       check_for_truncation=True, report_incomplete=True)
 
-    return {'YbST': st[2:], 'Yersiniabactin': lineage,
+    if st == 'NA':
+        st = 0
+    else:
+        st = st[2:]
+
+    return {'YbST': st, 'Yersiniabactin': lineage,
             'ybtS': alleles['ybtS'], 'ybtX': alleles['ybtX'], 'ybtQ': alleles['ybtQ'],
             'ybtP': alleles['ybtP'], 'ybtA': alleles['ybtA'], 'irp2': alleles['irp2'],
             'irp1': alleles['irp1'], 'ybtU': alleles['ybtU'], 'ybtT': alleles['ybtT'],
