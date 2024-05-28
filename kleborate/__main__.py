@@ -274,7 +274,6 @@ def check_modules(args, modules, module_names, preset_check_modules, preset_pass
     * A list of all external programs used.
     """
     all_external_programs = set()
-    #print(f"Initial module_names: {module_names}")
 
     for m in module_names:
         modules[m].check_cli_options(args)
@@ -286,8 +285,6 @@ def check_modules(args, modules, module_names, preset_check_modules, preset_pass
             if prereq not in new_module_names:
                 new_module_names.append(prereq)
     module_names = new_module_names
-
-    #print(f"Final module_names (after including prerequisites): {module_names}")
 
     dependency_graph = {m: modules[m].prerequisite_modules() for m in module_names}
     
@@ -317,7 +314,6 @@ def check_assemblies(args):
         for _, seq in fasta:
             if len(seq) == 0:
                 sys.exit('Error: invalid FASTA file (contains a zero-length sequence): ' + assembly)
-
 
 def get_headers(module_names, modules):
     """
@@ -387,28 +383,15 @@ def output_results(full_headers, stdout_headers, outfile, results):
     """
     This function writes the results to stdout and the output file.
     """
-    # print('\t'.join([str(results.get(x, "-")).strip("[] ") for x in stdout_headers]))
     print('\t'.join([str(results.get(x, "-")).strip("[] ").replace("assembly", "strain") for x in stdout_headers]))
     with open(outfile, 'at') as o:
         if o.tell() > 0:  # Check if the file is not empty
             o.write('\n')
-        # o.write('\t'.join([str(results.get(x, "-")).strip("[] ") for x in full_headers]))
         o.write('\t'.join([str(results.get(x, "-")).strip("[] ").replace("assembly", "strain") for x in full_headers]))
 
     for h in results.keys():
         if h not in full_headers:
             sys.exit(f'Error: results contained a value ({h}) that is not covered by the output headers')
-
-
-# def output_results(full_headers, stdout_headers, outfile, results): # original code
-#     print('\t'.join([str(results[x]).strip("[] ").replace("'", "") for x in stdout_headers]))
-#     with open(outfile, 'at') as o:
-#         o.write('\t'.join([str(results[x]).strip("[] ").replace("'", "") for x in full_headers]))
-#         o.write('\n')
-
-#     for h in results.keys():
-#         if h not in full_headers:
-#             sys.exit(f'Error: results contained a value ({h}) that is not covered by the output headers')
 
 
 def paper_refs():
