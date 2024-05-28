@@ -7,10 +7,11 @@ name = "kleborate"
 version = "3.0.0"
 description = "Kleborate: a tool for typing and screening pathogen genome assemblies"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 license = {file = "LICENSE"}
 authors = [
     {name = "Ryan Wick", email = "rrwick@gmail.com"},
+    {name = "Mary Maranga", email = "gathonimaranga@gmail.com"},
     {name = "Kathryn Holt", email = "kat.holt@lshtm.ac.uk"},
 ]
 classifiers = [
@@ -21,15 +22,15 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Medical Science Apps.",
     "Intended Audience :: Science/Research"
 ]
-dependencies = ["biopython"]
+dependencies = ["biopython","numpy", "dna_features_viewer", minimap2, mash]
 
 [project.optional-dependencies]
 test = ["pytest", "pytest-mock"]  # needed for running automated tests
 
 [project.urls]
-homepage = "https://github.com/katholt/Kleborate"
-documentation = "https://github.com/katholt/Kleborate/wiki"
-repository = "https://github.com/katholt/Kleborate"
+homepage = "https://github.com/katholt/KleborateModular"
+documentation = "https://kleboratemodular.readthedocs.io/"
+repository = "https://github.com/katholt/KleborateModular"
 
 [project.scripts]
 kleborate = "kleborate.__main__:main"  # create an executable file named "kleborate"
