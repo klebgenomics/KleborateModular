@@ -25,7 +25,7 @@ from dna_features_viewer import GraphicFeature, GraphicRecord
 
 from kaptive.database import Database, get_database
 from kaptive.assembly import typing_pipeline
-from kaptive.misc import check_python_version, check_programs, get_logo, check_cpus, check_dir, check_file
+from kaptive.misc import check_python_version, check_programs, get_logo, check_cpus, check_file
 
 def description():
     return 'In silico serotyping of K and L locus for the Klebsiella pneumoniae species complex'
@@ -66,40 +66,92 @@ def check_external_programs():
     return ['minimap2']
 
 
+# define all headers
+
+all_headers = [
+        'Assembly', 'locus', 'type', 'locus confidence',
+        'locus problems', 'locus identity', 'Coverage', 'Length discrepancy', 
+        'Expected genes in locus', 'Expected genes in locus, details', 
+        'Missing expected genes', 'Other genes in locus', 
+        'Other genes in locus, details', 'Expected genes outside locus', 
+        'Expected genes outside locus, details', 'Other genes outside locus', 
+        'Other genes outside locus, details', 'Truncated genes, details'
+    ]
+
 def get_results(assembly, minimap2_index, args, previous_results):
+
+
     full_headers, _ = get_headers()
-    
-    # Filter for k_ and o_ prefixed headers
-    k_headers = [h for h in full_headers if h.startswith('K_')]
-    o_headers = [h for h in full_headers if h.startswith('O_')]
 
-    # load databases
-    k_db, o_db = Database.from_genbank(get_database('kp_k')), Database.from_genbank(get_database('kp_o'))
+    # k_db, o_db = Database.from_genbank(get_database('kp_k')), Database.from_genbank(get_database('kp_o'))
+    k_db, o_db = get_database('kp_k'), get_database('kp_o')
 
-    if not isinstance(assembly, list):
-        assembly = [assembly]
-
-    assembly_paths = [Path(asmbly) if not isinstance(asmbly, Path) else asmbly for asmbly in assembly]
+    assembly_path = Path(assembly)
 
     results_dict = {}
 
-    for assembly_path in assembly_paths:
-        # Process k typing results
-        k_results = typing_pipeline(assembly_path, k_db, threads=args.threads)
-        k_result_table = k_results.as_table()
-        for line in k_result_table.split('\n'):
-            if line:
-                parts = line.split('\t')[1:-7]  # Slice to exclude the first and last fields
-                for key, value in zip(k_headers, parts):  
-                    results_dict[key] = value
+    k_results = typing_pipeline(assembly_path, k_db, threads=args.threads)
+    k_result_table = k_results.as_table()
+    for line in k_result_table.split('\n'):
+        if line:
+            parts = line.split('\t')
+            for key, value in zip(all_headers, parts):
+                header = 'K_' + key.replace(' ', '_')
+                if header in full_headers:
+                    results_dict[header] = value
 
-        # Process O typing results
-        o_results = typing_pipeline(assembly_path, o_db, threads=args.threads)
-        o_result_table = o_results.as_table()
-        for line in o_result_table.split('\n'):
-            if line:
-                parts = line.split('\t')[1:-7] 
-                for key, value in zip(o_headers, parts):  
-                    results_dict[key] = value
+    o_results = typing_pipeline(assembly_path, o_db, threads=args.threads)
+    o_result_table = o_results.as_table()
+
+    for line in o_result_table.split('\n'):
+        if line:
+            parts = line.split('\t')
+            for key, value in zip(all_headers, parts):
+                header = 'O_' + key.replace(' ', '_')
+                if header in full_headers:
+                    results_dict[header] = value
+
+    for h in results_dict.keys():
+        if h not in full_headers:
+            sys.exit(f'Error: results contained a value ({h}) that is not covered by the full headers')
+
     return results_dict
+
+
+# def get_results(assembly, minimap2_index, args, previous_results):
+#     full_headers, _ = get_headers()
+    
+#     k_headers = [h for h in full_headers if h.startswith('K_')]
+#     o_headers = [h for h in full_headers if h.startswith('O_')]
+
+#     k_db, o_db = Database.from_genbank(get_database('kp_k')), Database.from_genbank(get_database('kp_o'))
+
+#     if not isinstance(assembly, list):
+#         assembly = [assembly]
+
+#     assembly_paths = [Path(asmbly) if not isinstance(asmbly, Path) else asmbly for asmbly in assembly]
+
+#     results_dict = {}
+
+#     for assembly_path in assembly_paths:
+#         k_results = typing_pipeline(assembly_path, k_db, threads=args.threads)
+#         k_result_table = k_results.as_table()
+#         for line in k_result_table.split('\n'):
+#             if line:
+#                 parts = line.split('\t')[1:-7]
+#                 for key, value in zip(k_headers, parts):
+#                     results_dict[key] = value
+
+#         o_results = typing_pipeline(assembly_path, o_db, threads=args.threads)
+#         o_result_table = o_results.as_table()
+#         for line in o_result_table.split('\n'):
+#             if line:
+#                 parts = line.split('\t')[1:-7]
+#                 for key, value in zip(o_headers, parts):
+#                     results_dict[key] = value
+#     return results_dict
+
+
+
+
 
