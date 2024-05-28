@@ -23,9 +23,13 @@ import sys
 import dna_features_viewer
 from dna_features_viewer import GraphicFeature, GraphicRecord
 
+# Add the kaptive directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../kaptive')))
+
 from kaptive.database import Database, get_database
-from kaptive.assembly import typing_pipeline
 from kaptive.misc import check_python_version, check_programs, get_logo, check_cpus, check_file
+from kaptive.assembly import typing_pipeline
+
 
 def description():
     return 'In silico serotyping of K and L locus for the Klebsiella pneumoniae species complex'
@@ -83,8 +87,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
 
     full_headers, _ = get_headers()
 
-    # k_db, o_db = Database.from_genbank(get_database('kp_k')), Database.from_genbank(get_database('kp_o'))
-    k_db, o_db = get_database('kp_k'), get_database('kp_o')
+    k_db, o_db = Database.from_genbank(get_database('kp_k')), Database.from_genbank(get_database('kp_o'))
 
     assembly_path = Path(assembly)
 
