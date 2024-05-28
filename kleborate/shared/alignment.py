@@ -129,7 +129,7 @@ def align_query_to_ref(query_filename, ref_filename, ref_index=None, preset='map
     ref_seqs = dict(load_fasta(ref_filename))
     ref = ref_filename if ref_index is None else ref_index
     with open(os.devnull, 'w') as dev_null:
-        out = subprocess.check_output(['minimap2', '--eqx', '-c', '-x', preset,
+        out = subprocess.check_output(['minimap2', '-B','--eqx', '-c', '-x', preset,
                                        str(ref), str(query_filename)], stderr=dev_null)
     alignments = [Alignment(x, query_seqs=query_seqs, ref_seqs=ref_seqs)
                   for x in out.decode().splitlines()]
