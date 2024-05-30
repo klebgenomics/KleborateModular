@@ -50,8 +50,9 @@ def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
             for pos, wt_base in loci:
                 if pos in bases_per_ref_pos:
                     assembly_base = bases_per_ref_pos[pos]
-                    if assembly_base != wt_base and assembly_base != '-' and assembly_base != '.':
-                        hits_dict['Omp_mutations'].append(hit.query_name + '_synmut_' + str(pos) + assembly_base)
+                    if assembly_base == 'T':  # Check if the mutation changes C to T
+                        hits_dict['Omp_mutations'].append(f"{hit.query_name}_synmut_{wt_base}{pos}{assembly_base}")
+            
                         
             if coverage > best_ompk36_cov:
                 best_ompk36_cov = coverage
