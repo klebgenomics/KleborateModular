@@ -16,7 +16,7 @@ not, see <http://www.gnu.org/licenses/>.
 from Bio.Seq import Seq
 from Bio import pairwise2
 from Bio.Align import substitution_matrices
-from ...shared.alignment import align_query_to_ref, cull_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
+from ...shared.alignment import align_query_to_ref, cull_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check, get_bases_per_ref_pos
 from ...shared.misc import load_fasta, reverse_complement
 
 
@@ -42,8 +42,7 @@ def check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_identity, min_covera
 
     snps = []
 
-    alignment_hits = align_query_to_ref(qrdr, assembly, min_query_coverage=None, min_identity=min_identity) # added identity threshold
-    alignment_hits = cull_redundant_hits(alignment_hits)
+    alignment_hits = align_query_to_ref(qrdr, assembly, min_query_coverage=None, min_identity=min_identity) 
     for hit in alignment_hits:
         _, coverage, translation = truncation_check(hit)
         
@@ -66,16 +65,3 @@ def check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_identity, min_covera
         
     if snps:
         hits_dict['Flq_mutations'] += snps
-
-
-def get_bases_per_ref_pos(alignment):
-    aligned_seq1, aligned_seq2 = alignment[0], alignment[1]
-    bases_per_ref_pos = {}
-    ref_pos = 1
-    for i, ref_b in enumerate(aligned_seq1):
-        if ref_b == '-' or ref_b == '.':
-            continue
-        assembly_b = aligned_seq2[i]
-        bases_per_ref_pos[ref_pos] = assembly_b
-        ref_pos += 1
-    return bases_per_ref_pos

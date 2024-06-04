@@ -17,8 +17,7 @@ from Bio.Seq import Seq
 from Bio import pairwise2
 from Bio import Align
 from Bio.Align import substitution_matrices
-from .qrdr_mutations import get_bases_per_ref_pos
-from ...shared.alignment import align_query_to_ref, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
+from ...shared.alignment import align_query_to_ref, cull_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check, get_bases_per_ref_pos
 
 
 def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
@@ -52,8 +51,7 @@ def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
                     assembly_base = bases_per_ref_pos[pos]
                     if assembly_base == 'T':  # Check if the mutation changes C to T
                         hits_dict['Omp_mutations'].append(f"{hit.query_name}_synmut_{wt_base}{pos}{assembly_base}")
-            
-                        
+
             if coverage > best_ompk36_cov:
                 best_ompk36_cov = coverage
 
@@ -63,6 +61,7 @@ def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
                     
                 elif 'GDTDTY' in translation:
                     hits_dict['Omp_mutations'].append('OmpK36TD')
+                
         else:
             assert False
 
@@ -78,4 +77,3 @@ def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
         if 'Omp_mutations' not in hits_dict:
             hits_dict['Omp_mutations'] = []
         hits_dict['Omp_mutations'] += truncations
-

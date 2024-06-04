@@ -36,7 +36,6 @@ def get_headers():
     return full_headers, stdout_headers
 
 
-
 def add_cli_options(parser):
     module_name = os.path.basename(__file__)[:-3]
     group = parser.add_argument_group(f'{module_name} module')
@@ -62,8 +61,6 @@ def check_cli_options(args):
         sys.exit('Error: --klebsiella_pneumo_complex__amr_min_spurious_identity must be between 50.0 and 100.0')
     if args.klebsiella_pneumo_complex__amr_min_spurious_coverage <= 30.0 or args.klebsiella_pneumo_complex__amr_min_spurious_coverage >= 100.0:
         sys.exit('Error: --klebsiella_pneumo_complex__amr_min_spurious_coverage must be between 30.0 and 100.0')
-
-
 
 
 def check_external_programs():
@@ -99,25 +96,10 @@ def get_results(assembly, minimap2_index, args, previous_results):
         args.klebsiella_pneumo_complex__amr_min_spurious_identity
     )
 
-    # Double check that there weren't any results without a corresponding output header.
+    # Double check that there weren't any results without a corresponding full headers.
     for h in res_hits.keys():
         if h not in full_headers:
             sys.exit( f'Error: results contained a value ({h}) that is not covered by the '
-                      f'output headers')
+                      f'full headers')
 
     return {r: ';'.join(sorted(res_hits[r])) if r in res_hits else '-' for r in full_headers}
-
-
-
-
-   
-
-   
-
-   
-
-
-
-
-
-

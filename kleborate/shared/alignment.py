@@ -113,32 +113,31 @@ class Alignment(object):
 
 
 def align_query_to_ref(query_filename, ref_filename, ref_index=None, preset='map-ont',
-                       min_identity=None, min_query_coverage=None):
-    """
-    Runs minimap2 on two sequence files (FASTA or FASTQ) and returns a list of Alignment objects.
-    Optional arguments:
-    * ref_index: a minimap2 index for the reference. If provided, this will save a bit of time
-                 because minimap2 won't need to make the index.
-    * preset: the value for minimap2's preset option (-x)
-    * min_identity: if provided, alignments with an identity lower than this are discarded.
-                    Expressed as a percentage, so values should be 0-100.
-    * min_query_coverage: if provided, alignments with a query coverage lower than this are
-                          discarded. Expressed as a percentage, so values should be 0-100.
-    """
-    query_seqs = dict(load_fasta(query_filename))
-    ref_seqs = dict(load_fasta(ref_filename))
-    ref = ref_filename if ref_index is None else ref_index
-    with open(os.devnull, 'w') as dev_null:
-        out = subprocess.check_output(['minimap2', '-B','--eqx', '-c', '-x', preset,
-                                       str(ref), str(query_filename)], stderr=dev_null)
-    alignments = [Alignment(x, query_seqs=query_seqs, ref_seqs=ref_seqs)
-                  for x in out.decode().splitlines()]
-    if min_identity is not None:
-        alignments = [a for a in alignments if a.percent_identity >= min_identity]
-    if min_query_coverage is not None:
-        alignments = [a for a in alignments if a.query_cov >= min_query_coverage]
-    return alignments
-
+                        min_identity=None, min_query_coverage=None):
+     """
+     Runs minimap2 on two sequence files (FASTA or FASTQ) and returns a list of Alignment objects.
+     Optional arguments:
+     * ref_index: a minimap2 index for the reference. If provided, this will save a bit of time
+                  because minimap2 won't need to make the index.
+     * preset: the value for minimap2's preset option (-x)
+     * min_identity: if provided, alignments with an identity lower than this are discarded.
+                     Expressed as a percentage, so values should be 0-100.
+     * min_query_coverage: if provided, alignments with a query coverage lower than this are
+                           discarded. Expressed as a percentage, so values should be 0-100.
+     """
+     query_seqs = dict(load_fasta(query_filename))
+     ref_seqs = dict(load_fasta(ref_filename))
+     ref = ref_filename if ref_index is None else ref_index
+     with open(os.devnull, 'w') as dev_null:
+         out = subprocess.check_output(['minimap2','--eqx', '-c', '-x', preset,
+                                        str(ref), str(query_filename)], stderr=dev_null)
+     alignments = [Alignment(x, query_seqs=query_seqs, ref_seqs=ref_seqs)
+                   for x in out.decode().splitlines()]
+     if min_identity is not None:
+         alignments = [a for a in alignments if a.percent_identity >= min_identity]
+     if min_query_coverage is not None:
+         alignments = [a for a in alignments if a.query_cov >= min_query_coverage]
+     return alignments
 
 def get_expanded_cigar(cigar):
     """
@@ -158,15 +157,13 @@ def hits_overlap(a, b):
     if a.ref_start <= b.ref_end and b.ref_start <= a.ref_end:  # There is some overlap
         allowed_overlap = 50
         overlap_size = len(range(max(a.ref_start, b.ref_start),
-                                 min(a.ref_end, b.ref_end) + 1))
+                                 min(a.ref_end, b.ref_end)))
         return overlap_size > allowed_overlap
     else:
         return False
 
 
-
 def overlapping(hit, existing_hits):
-    # Only consider hits in the same reading frame.
     existing_hits = [h for h in existing_hits if
                      h.strand == hit.strand and h.ref_name == hit.ref_name]
 
@@ -175,13 +172,14 @@ def overlapping(hit, existing_hits):
             return True
 
     return False
-
+  
 
 def cull_redundant_hits(minimap_hits):
     
     # Sort the hits from best to worst. Hit quality is defined as the product of gene coverage,identity and score
     
     minimap_hits = sorted(minimap_hits, key=lambda x: (1/(x.percent_identity * x.alignment_score * x.query_cov), x.query_name))
+
     filtered_minimap_hits = []
 
     for h in minimap_hits:
@@ -191,8 +189,7 @@ def cull_redundant_hits(minimap_hits):
     return filtered_minimap_hits
 
 
-
-def truncation_check(alignment, cov_threshold=90.0): # I modified this code to return translated sequence
+def truncation_check(alignment, cov_threshold=90.0): 
     """
     This function checks to see if a gene alignment is truncated at the amino acid level. It
     assumes that the query sequence is a full coding sequence for a gene and the reference is an
@@ -320,3 +317,16 @@ def translate_nucl_to_prot(nucl_seq):
     # to a multiple-of-three length.
     truncated_nucl_seq = nucl_seq[:len(nucl_seq) // 3 * 3]
     return str(Seq(truncated_nucl_seq).translate(table='Bacterial', to_stop=False, cds=False))
+
+
+def get_bases_per_ref_pos(alignment):
+    aligned_seq1, aligned_seq2 = alignment[0], alignment[1]
+    bases_per_ref_pos = {}
+    ref_pos = 1
+    for i, ref_b in enumerate(aligned_seq1):
+        if ref_b == '-' or ref_b == '.':
+            continue
+        assembly_b = aligned_seq2[i]
+        bases_per_ref_pos[ref_pos] = assembly_b
+        ref_pos += 1
+    return bases_per_ref_pos

@@ -75,59 +75,117 @@ def parse_arguments(args, all_module_names, modules):
 
 
 def main(): 
-  all_module_names, modules = import_modules()
-  args = parse_arguments(sys.argv[1:], all_module_names, modules)
-  print_modules(args, all_module_names, modules)
-  module_names, check_module_list, pass_modules = get_used_module_names(args, all_module_names, get_presets())  
-  module_names, module_run_order, external_programs = check_modules(args, modules, module_names, check_module_list, pass_modules)
-  check_assemblies(args)
+    all_module_names, modules = import_modules()
+    args = parse_arguments(sys.argv[1:], all_module_names, modules)
+    print_modules(args, all_module_names, modules)
+    
+    module_names, check_module_list, pass_modules = get_used_module_names(args, all_module_names, get_presets())  
+    
+    # Define preset_check_modules 
+    preset_check_modules = []
+    if args.preset:
+        presets = get_presets()
+        preset_check_modules = [module for module, _ in presets[args.preset]['check']]
 
-  full_headers, stdout_headers = get_headers(module_names, modules)  
-  output_headers(full_headers, stdout_headers, args.outfile) 
+    module_names, module_run_order, external_programs = check_modules(args, modules, module_names, check_module_list, pass_modules)
+    check_assemblies(args)
 
-  # Define preset_check_modules based on presets
-  presets = get_presets()  
-  preset_check_modules = [module for module, _ in presets[args.preset]['check']]
+    full_headers, stdout_headers = get_headers(module_names, modules)  
+    output_headers(full_headers, stdout_headers, args.outfile) 
 
-  for assembly in args.assemblies:
-    with tempfile.TemporaryDirectory() as temp_dir:
-        unzipped_assembly = gunzip_assembly_if_necessary(assembly, temp_dir)
-        minimap2_index = build_minimap2_index(assembly, unzipped_assembly, external_programs, temp_dir)
-        # results = {'assembly': assembly}
-        results = {'strain': get_strain_name(assembly)}
+    for assembly in args.assemblies:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            unzipped_assembly = gunzip_assembly_if_necessary(assembly, temp_dir)
+            minimap2_index = build_minimap2_index(assembly, unzipped_assembly, external_programs, temp_dir)
+            results = {'strain': get_strain_name(assembly)}
 
-        pass_check = True  # default, assume no check and run all modules
+            pass_check = True  # default, assume no check and run all modules
 
-        # if we have 'check' modules in the preset, run these and see if we pass
-        if len(check_module_list) > 0: 
+            # if we have 'check' modules in the preset, run these
+            if args.preset and len(check_module_list) > 0:
+                for module, check in presets[args.preset]['check']:
+                    try:
+                        module_results = modules[module].get_results(unzipped_assembly, minimap2_index, args, results)
 
-            for module, check in presets[args.preset]['check']:
-                try:
-                    module_results = modules[module].get_results(unzipped_assembly, minimap2_index, args, results)
+                        results.update({f'{module}__{header}': result for header, result in module_results.items()})
+                        check_function = globals()[check]
 
-                    results.update({f'{module}__{header}': result for header, result in module_results.items()})
-                    check_function = globals()[check]
+                        if not check_function(module_results):
+                            pass_check = False
+                            print(f"Assembly {assembly} failed in check {check}. Continuing with next assembly.")
+                            break  # Exit the for loop since this assembly failed the check
 
-                    if not check_function(module_results):
+                    except Exception as e:
+                        print(f"Error encountered while processing {assembly} with {module}: {e}. Continuing with next assembly.")
                         pass_check = False
-                        print(f"Assembly {assembly} failed in check {check}. Continuing with next assembly.")
-                        break  # Exit the for loop since this assembly failed the check
+                        break  # Exit the for loop since an error occurred
 
-                except Exception as e:
-                    print(f"Error encountered while processing {assembly} with {module}: {e}. Continuing with next assembly.")
-                    pass_check = False
-                    break  # Exit the for loop since an error occurred
+            # proceed through all other modules
+            if pass_check:
+                for module in module_run_order:
+                    if module not in preset_check_modules:
+                        module_results = modules[module].get_results(unzipped_assembly, minimap2_index, args, results)
 
-        # proceed through all other modules
-        if pass_check:
-            for module in module_run_order:
-                if module not in preset_check_modules:
-                    module_results = modules[module].get_results(unzipped_assembly, minimap2_index, args, results)
+                        results.update({f'{module}__{header}': result for header, result in module_results.items()})
 
-                    results.update({f'{module}__{header}': result for header, result in module_results.items()})
+            # write results
+            output_results(full_headers, stdout_headers, args.outfile, results)
 
-        # write results
-        output_results(full_headers, stdout_headers, args.outfile, results)
+
+# def main(): 
+#   all_module_names, modules = import_modules()
+#   args = parse_arguments(sys.argv[1:], all_module_names, modules)
+#   print_modules(args, all_module_names, modules)
+#   module_names, check_module_list, pass_modules = get_used_module_names(args, all_module_names, get_presets())  
+#   module_names, module_run_order, external_programs = check_modules(args, modules, module_names, check_module_list, pass_modules)
+#   check_assemblies(args)
+
+#   full_headers, stdout_headers = get_headers(module_names, modules)  
+#   output_headers(full_headers, stdout_headers, args.outfile) 
+
+#   # Define preset_check_modules based on presets
+#   presets = get_presets()  
+#   preset_check_modules = [module for module, _ in presets[args.preset]['check']]
+
+#   for assembly in args.assemblies:
+#     with tempfile.TemporaryDirectory() as temp_dir:
+#         unzipped_assembly = gunzip_assembly_if_necessary(assembly, temp_dir)
+#         minimap2_index = build_minimap2_index(assembly, unzipped_assembly, external_programs, temp_dir)
+#         # results = {'assembly': assembly}
+#         results = {'strain': get_strain_name(assembly)}
+
+#         pass_check = True  # default, assume no check and run all modules
+
+#         # if we have 'check' modules in the preset, run these and see if we pass
+#         if len(check_module_list) > 0: 
+
+#             for module, check in presets[args.preset]['check']:
+#                 try:
+#                     module_results = modules[module].get_results(unzipped_assembly, minimap2_index, args, results)
+
+#                     results.update({f'{module}__{header}': result for header, result in module_results.items()})
+#                     check_function = globals()[check]
+
+#                     if not check_function(module_results):
+#                         pass_check = False
+#                         print(f"Assembly {assembly} failed in check {check}. Continuing with next assembly.")
+#                         break  # Exit the for loop since this assembly failed the check
+
+#                 except Exception as e:
+#                     print(f"Error encountered while processing {assembly} with {module}: {e}. Continuing with next assembly.")
+#                     pass_check = False
+#                     break  # Exit the for loop since an error occurred
+
+#         # proceed through all other modules
+#         if pass_check:
+#             for module in module_run_order:
+#                 if module not in preset_check_modules:
+#                     module_results = modules[module].get_results(unzipped_assembly, minimap2_index, args, results)
+
+#                     results.update({f'{module}__{header}': result for header, result in module_results.items()})
+
+#         # write results
+#         output_results(full_headers, stdout_headers, args.outfile, results)
 
 
 def print_modules(args, all_module_names, modules):
@@ -326,8 +384,6 @@ def get_headers(module_names, modules):
     headers, the module name is added before each header in full_headers and stdout_header,
     separated by a double-underscore.
     """
-    #top_headers, full_headers, stdout_headers = [''], ['assembly'], ['assembly']
-    # _,full_headers, stdout_headers = [''], ['assembly'], ['assembly']
     _,full_headers, stdout_headers = [''], ['strain'], ['strain']
     for module_name in module_names:
         module_full, module_stdout = modules[module_name].get_headers()
