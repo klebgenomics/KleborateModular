@@ -80,7 +80,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
              'clbM', 'clbN', 'clbO', 'clbP', 'clbQ']
     profiles = data_dir() / 'profiles.tsv'
     alleles = {gene: data_dir() / f'{gene}.fasta' for gene in genes}
-
+    
     results, spurious_hits  = multi_mlst(assembly, minimap2_index, profiles, alleles, genes,
                                       'clb_lineage', args.klebsiella__cbst_min_identity,
                                       args.klebsiella__cbst_min_coverage, args.klebsiella__cbst_required_exact_matches,
@@ -105,3 +105,6 @@ def get_results(assembly, minimap2_index, args, previous_results):
             'clbL': alleles['clbL'], 'clbM': alleles['clbM'], 'clbN': alleles['clbN'],
             'clbO': alleles['clbO'], 'clbP': alleles['clbP'], 'clbQ': alleles['clbQ'],
             'spurious_clb_hits':spurious_virulence_hits}
+
+
+    

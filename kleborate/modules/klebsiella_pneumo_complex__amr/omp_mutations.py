@@ -77,4 +77,3 @@ def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
         if 'Omp_mutations' not in hits_dict:
             hits_dict['Omp_mutations'] = []
         hits_dict['Omp_mutations'] += truncations
-

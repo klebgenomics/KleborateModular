@@ -98,3 +98,4 @@ def get_results(assembly, minimap2_index, args, previous_results):
     return {'RmST': st, 'RmpADC': lineage,
             'rmpA': alleles['rmpA'], 'rmpD': alleles['rmpD'], 'rmpC': alleles['rmpC'],
             'spurious_rmst_hits':spurious_virulence_hits}
+

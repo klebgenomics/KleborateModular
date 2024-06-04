@@ -78,7 +78,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
     genes = ['iucA', 'iucB', 'iucC', 'iucD', 'iutA']
     profiles = data_dir() / 'profiles.tsv'
     alleles = {gene: data_dir() / f'{gene}.fasta' for gene in genes}
-
+    
     results, spurious_hits  = multi_mlst(assembly, minimap2_index, profiles, alleles, genes,
                                       'iuc_lineage', args.klebsiella__abst_min_identity,
                                       args.klebsiella__abst_min_coverage, args.klebsiella__abst_required_exact_matches,
@@ -101,3 +101,6 @@ def get_results(assembly, minimap2_index, args, previous_results):
             'iucA': alleles['iucA'], 'iucB': alleles['iucB'], 'iucC': alleles['iucC'],
             'iucD': alleles['iucD'], 'iutA': alleles['iutA'],
             'spurious_abst_hits':spurious_virulence_hits}
+
+
+    

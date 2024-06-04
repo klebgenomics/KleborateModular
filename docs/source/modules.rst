@@ -13,20 +13,28 @@ General modules
 Species detection
 -----------------
 
-.. code-block:: Python
-
-   -m enterobacterales__species
+``-m enterobacterales__species``
 
 
 This module will attempt to identify the species of each input assembly. It does this by comparing the assembly using `Mash <https://mash.readthedocs.io/>`_ to a curated set of *Klebsiella* and other *Enterobacteriaceae* assemblies from NCBI, and reporting the species of the closest match. 
 
-Species detection outputs
-+++++++++++++++++++++++++
+Parameters
+++++++++++++++++++
+
+``--enterobacterales__species_strong``
+
+Mash distance threshold for a strong species match (default: 0.02)
+
+``--enterobacterales__species_weak``
+
+Mash distance threshold for a weak species match (default: 0.04)
+
+Outputs
++++++++
 
 Output of the species typing module is the following columns:
 
 .. list-table::
-   :header-rows: 1
 
    * - species
      - Species name (scientific name)
@@ -50,13 +58,12 @@ The module reports a standard set of assembly quality metrics (see Outputs below
 
 It will also flag in the ``QC_warnings``\  column if an assembly size falls outside those specified in the ``species_specification.txt``\  in the module directory, or if N50 <10 kbp or ambiguous bases (Ns) are detected in the sequence.
 
-Contig stats outputs
-++++++++++++++++++++++
+Outputs
++++++++
 
 Output of the contig stats module is the following columns:
 
 .. list-table::
-   :header-rows: 1
 
    * - contig_count
      - Number of contigs in the input assembly
@@ -167,16 +174,31 @@ The relevant STs are:
        3766, 3768, 3771, 3781, 3782, 3784, 3802, 3803
      - ST91 (subsp. ozaenae)
 
+Parameters
+++++++++++
 
-KpSC MLST outputs
-++++++++++++++++++
+``--klebsiella_pneumo_complex__mlst_min_identity``
+
+Minimum alignment percent identity for klebsiella_pneumo_complex_MLST (default: 90.0)
+
+``--klebsiella_pneumo_complex__mlst_min_coverage`` 
+
+Minimum alignment percent coverage for klebsiella_pneumo_complex_MLST (default: 80.0)
+
+``--klebsiella_pneumo_complex__mlst_required_exact_matches`` 
+
+At least this many exact matches are required to call an ST (default: 3)
+
+
+Outputs
++++++++
 
 Output of the KpSC MLST module is the following columns:
 
 .. list-table::
 
-   * - **ST**
-     - **sequence type**
+   * - ST
+     - sequence type
 
    * - gapA, infB, mdh, pgi, phoE, rpoB, tonB
      - allele number
@@ -199,10 +221,10 @@ For each module, if the target locus is detected, the typer will:
 * Report the phylogenetic lineage associated with each sequence type, as outlined below and detailed in the corresponding papers
 * Report the structural variant of the mobile genetic element that is usually associated with that phylogenetic lineage (for *ybt* and *iuc* only)
 
-The *ybt*\ , *clb*\ , *iuc*\ , *iro* and *rmpADC* locus-specific ST schemes are defined in the *K. pneumoniae* `Bacterial Isolate Genome Sequence Database <https://bigsdb.pasteur.fr/klebsiella/>`_. 
+The *ybt*\ , *clb*\ , *iuc*\ , *iro* and *rmpADC* locus-specific ST schemes, and *rmpA2* alleles, are defined in the *K. pneumoniae* `Bacterial Isolate Genome Sequence Database <https://bigsdb.pasteur.fr/klebsiella/>`_. 
 
 Notes on virulence allele reporting:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Virulence alleles are treated in the same way as [MLST] alleles:
 
@@ -212,7 +234,7 @@ Virulence alleles are treated in the same way as [MLST] alleles:
 * KleborateModular will next translate the hit into amino acid sequence and look for truncations (expressed as % amino acid length from the start codon). If the result is less than 90%, it is added to the result (e.g. ``15*-42%``\ ).
 
 Notes on virulence sequence type reporting:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Virulence locus STs are only reported if >50% of the genes in a locus are detected (e.g. at least 6 of the 11 *ybt* locus genes are required to report a *ybt* ST).
 * If <50% of the genes in a locus are detected, KleborateModular reports the ST as ``0`` and the lineage as ``-``.
@@ -220,11 +242,11 @@ Notes on virulence sequence type reporting:
 * For genomes with multiple copies of a virulence locus (e.g. a strain that carries ICE *Kp1* and the KpVP-1 plasmid will have two copies of *iro* and *rmp*\ ), KleborateModular will report and assign a ST or closest matching ST to each of these virulence loci provided that the locus is relatively intact in the genome (i.e. >50% of the genes in a locus are present on a single contig) and according to the above criteria.  
 
 Yersiniabactin and colibactin
-"""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: Python
 
-   -m klebsiella_pneumo_complex__ybst, klebsiella_pneumo_complex__cbst
+   -m klebsiella__ybst, klebsiella__cbst
 
 We previously explored the diversity of the *K. pneumoniae* integrative conjugative element (ICE *Kp*), which mobilises the yersiniabactin locus *ybt*, using genomic analysis of a diverse set of 2498 *Klebsiella* (see `this article <http://mgen.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000196>`_\ ). Overall, we found *ybt* in about a third of all *K. pneumoniae* genomes (and *clb* in about 14%). We identified 17 distinct lineages of *ybt* (see figure) embedded within 14 structural variants of ICE *Kp* that can integrate at any of four tRNA-Asn sites in the chromosome. One type was found to be plasmid-borne. Based on this analysis, we developed a MLST-style approach for assigning yersiniabactin sequence types (YbST) and colibactin sequence types (CbST), which is implemented in KleborateModular. 
 
@@ -232,15 +254,32 @@ Note that while ICE *Kp1* is occasionally found in other species within the KpSC
 
 The allele databases and schemes were last updated in April 2024. 
 
-ybst outputs
+
+ybst Parameters
+++++++++++++++++++
+
+``--klebsiella__ybst_min_identity``
+
+Minimum alignment percent identity for yersiniabactin MLST (default: 90.0)
+
+``--klebsiella__ybst_min_coverage``
+
+Minimum alignment percent coverage for yersiniabactin MLST (default: 80.0)
+
+``--klebsiella__ybst_required_exact_matches``
+
+At least this many exact matches are required to call an ST (default: 2)
+
+
+ybst Outputs
 ++++++++++++++++++
 
 Output of the ybst module is the following columns:
 
 .. list-table::
 
-   * - **Yersiniabactin**
-     - **Lineage (ICEKp prediction)**
+   * - Yersiniabactin
+     - Lineage (ICEKp prediction)
 
    * - YbST
      - Yersiniabactin sequence type
@@ -249,13 +288,31 @@ Output of the ybst module is the following columns:
      - allele number (ybt locus)
 
 
+cbst Parameters
+++++++++++++++++++
+
+``--klebsiella__cbst_min_identity``
+
+Minimum alignment percent identity for colibactin MLST (default: 90.0)
+
+``--klebsiella__cbst_min_coverage``
+
+Minimum alignment percent coverage for colibactin MLST (default: 80.0)
+
+``--klebsiella__cbst_required_exact_matches``
+
+At least this many exact matches are required to call an ST (default: 8)
+
+
+cbst Outputs
+++++++++++++++++++
 
 Output of the cbst module is the following columns:
 
 .. list-table::
 
-   * - **Colibactin**
-     - **Lineage**
+   * - Colibactin
+     - Lineage
 
    * - CbST
      - Colibactin sequence type
@@ -263,12 +320,13 @@ Output of the cbst module is the following columns:
    * - clbA, clbB, clbC, clbD, clbE, clbF, clbG, clbH, clbI, clbL, clbM, clbN, clbO, clbP, clbQ
      - allele number (clb / pks locus)
 
+
 Aerobactin and salmochelin
-""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: Python
 
-   -m klebsiella_pneumo_complex__abst, klebsiella_pneumo_complex__smst
+   -m klebsiella__abst, klebsiella__smst
 
 We further explored the genetic diversity of the aerobactin (\ *iuc*\ ) and salmochelin (\ *iro*\ ) loci among a dataset of 2733 *Klebsiella* genomes (see `this publication <https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-018-0587-5>`_\ ). We identified five *iro* and six *iuc* lineages (see figure), each of which was associated with a specific location within *K. pneumoniae* genomes (primarily virulence plasmids). Based on this analysis, we developed a MLST-style approach for assigning aerobactin sequence types (AbST) and salmochelin sequence types (SmST) which is implemented in Kleborate. 
 
@@ -279,24 +337,40 @@ We further explored the genetic diversity of the aerobactin (\ *iuc*\ ) and salm
 * The salmochelin locus present in ICE *Kp1* constitutes its own lineage *iro3*\ , and the aerobactin locus present in the chromosome of ST67 *K. pneumoniae* subsp *rhinoscleromatis* strains constitutes its own lineage *iuc4*. 
 
 Note on *iucA* sequence update:
-"""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In Kleborate version 2.2.0 and earlier, the majority of *iucA* alleles had a sequence length of 1791 bp, with the exception being those associated with lineage *iuc 5* which have a length of 1725 bp. Related to this, *iucA* in genomes with *iuc 3* encoded a premature stop codon resulting in a significantly truncated and presumably non-functional IucA protein (i.e. at 2% length of the intact amino acid sequence), despite experimental evidence showing siderophore activity in *iuc 3*\ + isolates. In light of this evidence, the sequences of *iucA* genes with the longer ~1791 bp length were updated to ~1725 bp by removing the first 66 bp. These changes are captured in Kleborate version 2.3.0 onwards, and address the truncation issue in *iuc 3*\ + genomes. The following *iucA* alleles and AbST profiles have also been retired due to sequence redundancy following the update:
 
-* alleles: _iucA\ *48*\ , _iucA\ *49*\ , _iucA\ *52*
+* alleles: iucA48, iucA49, iucA52
 * profiles: AbST 70, 82, 83
 
 The allele databases and schemes were last updated in April 2024. 
 
-abst outputs
+abst Parameters
+++++++++++++++++++
+
+``--klebsiella__abst_min_identity``
+
+Minimum alignment percent identity for aerobactin MLST (default: 90.0)
+
+``--klebsiella__abst_min_coverage`` 
+
+Minimum alignment percent coverage for aerobactin MLST (default: 80.0)
+
+``--klebsiella__abst_required_exact_matches``
+
+At least this many exact matches are required to call an ST (default: 3)
+
+
+abst Outputs
 ++++++++++++++++++
 
 Output of the abst module is the following columns:
 
 .. list-table::
 
-   * - **Aerobactin**
-     - **Lineage (plasmid prediction)**
+   * - Aerobactin
+     - Lineage (plasmid prediction)
 
    * - AbST
      - Sequence type
@@ -304,13 +378,30 @@ Output of the abst module is the following columns:
    * - iucA, iucB, iucC, iucD, iutA
      - allele number (iuc locus)
 
+smst Parameters
+++++++++++++++++++
+
+``--klebsiella__smst_min_identity``
+
+Minimum alignment percent identity for salmochelin MLST (default: 90.0)
+
+``--klebsiella__smst_min_coverage``
+
+Minimum alignment percent coverage for salmochelin MLST (default: 80.0)
+
+``--klebsiella__smst_required_exact_matches`` 
+
+At least this many exact matches are required to call an ST (default: 2)
+
+smst Outputs
+++++++++++++++++++
 
 Output of the smst module is the following columns:
 
 .. list-table::
 
-   * - **Salmochelin**
-     - **Lineage (plasmid prediction)**
+   * - Salmochelin
+     - Lineage (plasmid prediction)
 
    * - SmST
      - Sequence type
@@ -320,41 +411,126 @@ Output of the smst module is the following columns:
 
 
 Hypermucoidy loci
-""""""""""""""""""
+^^^^^^^^^^^^^^^^^^
 
 .. code-block:: Python
 
-   -m klebsiella__rmst
+   -m klebsiella__rmst, klebsiella__rmpa2
 
 The *rmpA* locus is associated with the hypermucoidy phenotype that is a virulence feature that is often observed in hypervirulent *K. pneumoniae* strains. Recent work has revealed that *rmpA* serves as a transcriptional regulator for the *rmpD* and *rmpC* genes, and together these genes comprise the *rmpADC* (or *rmp*\ ) locus. *rmpC* is involved in the upregulation of capsule expression while *rmpD* drives hypermucoviscosity (see the paper on `rmpC <https://mbio.asm.org/content/10/2/e00089-19>`_ and this one on `rmpD <https://mbio.asm.org/content/11/5/e01750-20>`_ for more information.) 
 
-In light of this information, we screened and extracted the *rmpA*\ , *rmpD* and *rmpC* sequences from the 2733 genomes included in the aerobactin and salmochelin study, and generated a RmST typing scheme. We observed four distinct *rmp* lineages, which were associated with the KpVP-1 (\ *rmp 1*\ ), KpVP-2 (\ *rmp 2*\ ), *iuc2A* virulence plasmids (\ *rmp 2A*\ ) and ICE *Kp1* (rmp 3). The details of this novel virulence typing scheme have not yet been published. 
+In light of this information, we screened and extracted the *rmpA*\ , *rmpD* and *rmpC* sequences from the 2733 genomes included in the aerobactin and salmochelin study, and generated a RmST typing scheme. We observed four distinct *rmp* lineages, which were associated with the KpVP-1 (\ *rmp 1*\ ), KpVP-2 (\ *rmp 2*\ ), *iuc2A* virulence plasmids (\ *rmp 2A*\ ) and ICE *Kp1* (rmp 3). The details of this novel virulence typing scheme will be published shortly. 
 
-The rmpA module screens for *rmpADC* and will report a sequence type, along with the associated lineage and mobile genetic element
+The klebsiella__rmst module screens for *rmpADC* and will report a sequence type, along with the associated lineage and mobile genetic element.
+
+The *rmpA2* gene is homologous to *rmpA*, and the klebsiella__rmpa2 module screens for alleles of *rmpA2*.
 
 Note:
-"""""
+^^^^^^^^
 
 * Alleles for each gene are sourced from the `BIGSdb-pasteur <https://bigsdb.pasteur.fr/klebsiella/>`_\ , while additional *rmpA* alleles have also been added to Kleborate.
 * The *rmpA* and *rmpA2* genes share ~83% nucleotide identity so are easily distinguished.
 * Unique (non-overlapping) nucleotide Minimap2 hits with >95% identity and >50% coverage are reported. Note multiple hits to the same gene are reported if found. E.g. the NTUH-K2044 genome carries *rmpA* in the virulence plasmid and also in ICE *Kp1* , which is reported in the *rmpA* column as ``rmpA_11(ICEKp1),rmpA_2(KpVP-1)``.
 * As with the other virulence genes, truncations in the *rmpA* and *rmpA2* genes are expressed as a percentage of the amino acid length from the start codon, e.g. ``rmpA_5-54%`` indicates the RmpA protein is truncated after 54% length of the intact amino acid sequence. These truncations appear to be common, due to insertions and deletions within a poly-G tract, and almost certainly result in loss of protein function.
 
-rmst module outputs
+
+rmst Parameters
+++++++++++++++++++
+
+``--klebsiella__rmst_min_identity`` 
+
+Minimum alignment percent identity for Rmp MLST (default: 90.0)
+
+``--klebsiella__rmst_min_coverage``
+
+Minimum alignment percent coverage for Rmp MLST (default: 80.0)
+
+``--klebsiella__rmst_required_exact_matches``
+
+At least this many exact matches are required to call an ST (default: 2)
+
+
+rmst Outputs
 ++++++++++++++++++
 
 Output of the rmst module is the following columns:
 
 .. list-table::
 
-   * - **RmpADC**
-     - **Lineage**
+   * - RmpADC
+     - Lineage
 
    * - RmST
      - Sequence type
 
    * - rmpA, rmpD, rmpC
      - allele number (rmp locus)
+
+
+rmpA2 Parameters
+++++++++++++++++++
+
+``--klebsiella__rmpa2_min_identity`` 
+
+Minimum alignment percent identity for rmpA2 alleles (default: 90.0)
+
+``--klebsiella__rmpa2_min_coverage``
+
+Minimum alignment percent coverage for rmpA2 alleles (default: 80.0)
+
+
+rmpA2 Outputs
+++++++++++++++++++
+
+Output of the rmst module is the following columns:
+
+.. list-table::
+
+   * - rmpA2
+     - best matching allele
+
+
+Virulence score
+^^^^^^^^^^^^^^^^^^
+
+.. code-block:: Python
+
+   -m klebsiella_pneumo_complex__virulence_score
+
+This module calculates a virulence score, which ranges from 0 to 5 as outlined below. Note neither the salmochelin (iro) locus nor rmpADC are explicitly considered in the virulence score, for simplicity. The iro and rmpADC loci typically appear alongside the aerobactin (iuc) locus on the Kp virulence plasmids, and so presence of iuc (score of 3-5) generally implies presence of iro and rmpADC. However we prioritise iuc in the calculation of the score, as aerobactin is specifically associated with growth in blood and is a stronger predictor of the hypervirulence phenotype (see this review). The iro and rmpADC loci are also occasionally present with ybt, in the ICEKp variant - ICEKp1, but this will still score 1.
+
+.. list-table::
+
+   * - 0
+     - negative for all of yersiniabactin (ybt), colibactin (clb), aerobactin (iuc)
+
+   * - 1
+     - yersiniabactin only
+
+   * - 2
+     - yersiniabactin and colibactin (or colibactin only)
+
+   * - 3
+     - aerobactin (without yersiniabactin or colibactin)
+
+   * - 4
+     - aerobactin with yersiniabactin (without colibactin)
+
+   * - 5
+     - yersiniabactin, colibactin and aerobactin
+
+
+
+Virulence score outputs
+++++++++++++++++++++++++++++++++++++++
+
+Virulence score is output in the following column:
+
+.. list-table::
+
+   * - virulence_score
+     - Score of 0-5, as defined above
+
 
 
 KpSC AMR
@@ -412,7 +588,26 @@ Additional chromosomal mutations associated with AMR
 Note these do not count towards acquired resistance gene counts, but do count towards drug classes (with the exception of Omp mutations, whose spectrum of effects depends on the presence of acquired beta-lactamases and thus their impact on specific beta-lactam drug classes is hard to predict).
 
 
-KpSC AMR outputs
+AMR parameters
+++++++++++++++++++
+
+``--klebsiella_pneumo_complex__amr_min_identity`` 
+
+Minimum alignment percent identity for klebsiella_pneumo_complex Amr results (default: 90.0)
+
+``--klebsiella_pneumo_complex__amr_min_coverage`` 
+
+Minimum alignment percent coverage for klebsiella_pneumo_complex Amr results (default: 80.0)
+
+``--klebsiella_pneumo_complex__amr_min_spurious_identity`` 
+
+Minimum alignment percent identity for klebsiella_pneumo_complex Amr spurious results (default: 80.0)
+
+``--klebsiella_pneumo_complex__amr_min_spurious_coverage`` 
+
+Minimum alignment percent coverage for klebsiella_pneumo_complex Amr spurious results (default: 40.0)
+
+AMR outputs
 ++++++++++++++++++
 
 Results of the KpSC AMR module are grouped by drug class (according to the `ARG-Annot <https://www.ncbi.nlm.nih.gov/pubmed/24145532>`_ DB), with beta-lactamases further broken down into Lahey classes (now maintained at `BLDB <http://www.bldb.eu/>`_\ ), as follows:
@@ -501,7 +696,7 @@ Running the KpSC AMR module automatically runs additional modules for generating
 
 
 Resistance score
-""""""""""""""""
+''''''''''''''''''''''
 
 This module calculates a resistance score, which ranges from 0 to 3 as follows
 
@@ -520,7 +715,7 @@ This module calculates a resistance score, which ranges from 0 to 3 as follows
      - Carbapenemase with colistin resistance (regardless of ESBL genes or OmpK mutations)
 
 Resistance gene counts and drug class counts
-""""""""""""""""""""""""""""""""""""""""""""
+''''''''''''''''''''''''''''''''''''''''''''''
 
 This module quantifies how many acquired resistance genes are present and how many drug classes (in *addition* to ampicillin to which KpSC are intrinsically resistant) have at least one resistance determinant detected (i.e. ignoring genes recorded in the Bla_chr and Bla_acquired columns). 
 
@@ -539,14 +734,69 @@ Resistance scores and counts are output in the following columns:
 
 .. list-table::
 
-   * - **resistance_score**
-     - **Score of 0-3, as defined above**
+   * - resistance_score
+     - Score of 0-3, as defined above
 
    * - num_resistance_genes
      - Number of acquired resistance genes
 
    * - num_resistance_classes
      - Number of drug classes to which resistance determinants have been acquired (in addition to intrinsic ampicillin)
+
+
+KpSC K and O locus typing with Kaptive
+-----------------------------------------
+
+.. code-block:: Python
+
+   -m klebsiella_pneumo_complex__kaptive
+
+This module will run the `Kaptive <https://github.com/klebgenomics/kaptive>` v3 tool to identify capsule (K) and O antigen loci. See the Kaptive `documentation <https://kaptive.readthedocs.io/en/latest/>` for more details of how Kaptive works, tutorials, and citations.
+
+Kaptive parameters
++++++++++++++++++++
+
+``-t , --threads``
+
+Number of threads for alignment (default: 1)
+
+
+Kaptive outputs
++++++++++++++++++
+
+Kaptive results are output in the following columns:
+
+.. list-table::
+
+   * - Best match locus
+     - The locus type which most closely matches the assembly
+
+   * - Best match type
+     - The predicted serotype/phenotype of the assembly.
+
+   * - Match confidence
+     - A categorical measure of locus call quality (see confidence score)
+
+    * - Problems
+      - Characters indicating issues with the locus match (see problems)
+
+    * - Identity
+      - Weighted percent identity of the best matching locus to the assembly.
+
+    * - Coverage
+      - Weighted percent coverage of the best matching locus in the assembly.
+
+    * - Length discrepancy
+      - If the locus was found in a single piece, this is the difference between the locus length and the assembly length.
+
+    * - Expected genes in locus
+      - A fraction indicating how many of the genes in the best matching locus were found in the locus part of the assembly.
+
+   * - Expected genes in locus, details
+     - Gene names for the expected genes found in the locus part of the assembly.
+
+   * - Missing expected genes
+     - A string listing the gene names of expected genes that were not found.
 
 
 KpSC Wzi typing for K antigen prediction
@@ -556,7 +806,22 @@ KpSC Wzi typing for K antigen prediction
 
    -m klebsiella_pneumo_complex__wzi
 
-Each K locus includes a wzi gene, which encodes a protein involved in attachment of the capsular polysaccharide to the outer membrane. `Allelic variation in *wzi* genes <https://journals.asm.org/doi/10.1128/jcm.01924-13>`_ correlates with K locus structures, however due to recombination between K loci there is not a 1:1 relationship between wzi and KL/K type `see <https://www.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000102>`_ . Kleborate reports the closest matching *wzi* allele (sourced from the *K. pneumoniae* BIGSdb). This is fast, and provides a handy way of recognising the hypervirulence-associated capsule types (e.g. *wzi1*=K1, *wzi2*=K2, *wzi5*=K5), or spotting capsule switching within clones (e.g. you can tell which ST258 lineage you have from the wzi type (*wzi154*: the main lineage II; wzi29: recombinant lineage I; others: probably other recombinant lineages).
+This module reports the closest match amongst the *wzi* alleles in the `BIGSdb <http://bigsdb.pasteur.fr/klebsiella/klebsiella.html>`_. This is a marker of capsule locus (KL) type, which is predictive of capsule (K) serotype. Although there is not a 1-1 relationship between *wzi* allele and KL/K type, there is a strong correlation (see `Wyres et al, MGen 2016 <http://mgen.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000102>`_ and `Brisse et al, J Clin Micro 2013 <https://jcm.asm.org/content/51/12/4073.long>`_). Note the *wzi database* is populated with alleles from the *Klebsiella pneumoniae* species complex and is not reliable for other species.
+
+The *wzi* allele can provide a handy way of spotting the hypervirulence-associated capsule types (wzi=K1, wzi2=K2, wzi5=K5); or spotting capsule switching within clones, e.g. you can tell which ST258 lineage you have from the _wzi_ type (wzi154: the main lineage II; wzi29: recombinant lineage I; others: probably other recombinant lineages). But the K locus predictions from the Kaptive module are more specific and reliable.
+
+Wzi outputs
++++++++++++++++
+
+Wzi typing results are output in the following columns:
+
+.. list-table::
+
+   * - wzi
+     - wzi allele
+
+   * - K_locus
+     - K locus typically associated with this wzi allele
 
 
 Klebsiella oxytoca species complex
@@ -595,6 +860,22 @@ Genomes identified as belonging to the *K. oxytoca* species complex are subjecte
 A copy of the MLST alleles and ST definitions is stored in the /data directory of this module.
 
 
+KoSC MLST parameters
++++++++++++++++++++++++
+
+``--klebsiella_oxytoca_complex__mlst_min_identity`` 
+
+Minimum alignment percent identity for klebsiella_oxytoca_complex MLST (default: 90.0)
+
+``--klebsiella_oxytoca_complex__mlst_min_coverage`` 
+
+Minimum alignment percent coverage for klebsiella_oxytoca_complex MLST (default: 80.0)
+
+``--klebsiella_oxytoca_complex__mlst_required_exact_matches``
+
+At least this many exact matches are required to call an ST (default: 3)
+
+
 KoSC MLST outputs
 ++++++++++++++++++++
 
@@ -602,8 +883,8 @@ Output of the KoSC MLST module is the following columns:
 
 .. list-table::
 
-   * - **ST**
-     - **sequence type**
+   * - ST
+     - sequence type
 
    * - gapA, infB, mdh, pgi, phoE, rpoB, tonB
      - allele number
@@ -649,8 +930,35 @@ The Achtman scheme is hosted at `\Enterobase <https://enterobase.warwick.ac.uk/>
 
 The genes included in each scheme are noted in the Outputs table below.
 
-A copy of the MLST alleles and ST definitions used in each module is stored in the /data directory of the module.
+A copy of the MLST alleles and ST definitions used in each module is stored in the ``/data``  directory of the module.
 
+
+E. coli MLST parameters
++++++++++++++++++++++++++++
+
+``--escherichia_mlst_achtman_min_identity`` 
+
+Minimum alignment percent identity for *Escherchia-Achtman* MLST (default: 90.0)
+
+``--escherichia_mlst_achtman_min_coverage`` 
+
+Minimum alignment percent coverage for Escherchia-Achtman MLST (default: 80.0)
+
+``--escherichia_mlst_achtman_required_exact_matches`` 
+
+At least this many exact matches are required to call an ST (default: 3)
+
+``--escherichia_mlst_pasteur_min_identity`` 
+
+Minimum alignment percent identity for Escherchia-Pasteur MLST (default: 90.0)
+
+``--escherichia_mlst_pasteur_min_coverage`` 
+
+Minimum alignment percent coverage for Escherchia-Pasteur MLST (default: 80.0)
+
+``--escherichia_mlst_pasteur_required_exact_matches`` 
+
+At least this many exact matches are required to call an ST (default: 4)
 
 E. coli MLST outputs
 ++++++++++++++++++++++
@@ -659,8 +967,8 @@ Output of the Pasteur E. coli MLST module is the following columns:
 
 .. list-table::
 
-   * - **ST**
-     - **sequence type**
+   * - ST
+     - sequence type
 
    * - dinB, icdA, pabB, polB, putP, trpA, trpB, uidA
      - allele number

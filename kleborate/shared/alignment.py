@@ -139,84 +139,6 @@ def align_query_to_ref(query_filename, ref_filename, ref_index=None, preset='map
          alignments = [a for a in alignments if a.query_cov >= min_query_coverage]
      return alignments
 
-# def align_query_to_ref(query_filename, ref_filename, ref_index=None, preset='map-ont',
-#                        min_identity=None, min_query_coverage=None, clip=False, verbose=False):
-#     """
-#     Runs minimap2 on two sequence files (FASTA or FASTQ) and returns a list of Alignment objects.
-#     Optional arguments:
-#     * ref_index: a minimap2 index for the reference. If provided, this will save a bit of time
-#                  because minimap2 won't need to make the index.
-#     * preset: the value for minimap2's preset option (-x)
-#     * min_identity: if provided, alignments with an identity lower than this are discarded.
-#                     Expressed as a percentage, so values should be 0-100.
-#     * min_query_coverage: if provided, alignments with a query coverage lower than this are
-#                           discarded. Expressed as a percentage, so values should be 0-100.
-#     * clip: whether to clip or extend the ranges to the nearest codon boundary.
-#     * verbose: whether to print detailed logs.
-#     """
-#     query_seqs = dict(load_fasta(query_filename))
-#     ref_seqs = dict(load_fasta(ref_filename))
-#     ref = ref_filename if ref_index is None else ref_index
-#     with open(os.devnull, 'w') as dev_null:
-#         out = subprocess.check_output(['minimap2','--eqx', '-c', '-x', preset,
-#                                        str(ref), str(query_filename)], stderr=dev_null)
-#     alignments = [Alignment(x, query_seqs=query_seqs, ref_seqs=ref_seqs)
-#                   for x in out.decode().splitlines()]
-    
-#     for alignment in alignments:
-#         query_start = alignment.query_start
-#         query_end = alignment.query_end
-#         ref_start = alignment.ref_start
-#         ref_end = alignment.ref_end
-#         strand = alignment.strand
-
-#         # Adjust the alignment ranges
-#         new_query_start, new_query_end, new_ref_start, new_ref_end = adjust_codon_range(
-#             query_start, query_end, ref_start, ref_end, strand, clip=clip, verbose=verbose
-#         )
-
-#         # Update the alignment object with the new ranges
-#         alignment.query_start = new_query_start
-#         alignment.query_end = new_query_end
-#         alignment.ref_start = new_ref_start
-#         alignment.ref_end = new_ref_end
-
-#     if min_identity is not None:
-#         alignments = [a for a in alignments if a.percent_identity >= min_identity]
-#     if min_query_coverage is not None:
-#         alignments = [a for a in alignments if a.query_cov >= min_query_coverage]
-    
-#     return alignments
-
-
-# def adjust_codon_range(query_start: int, query_end: int, ref_start: int, ref_end: int, strand: int, clip=False,
-#                        verbose: bool = False) -> tuple[int, int, int, int]:
-#     """Adjust the alignment ranges to the nearest codon boundaries on the query"""
-#     if not clip:
-#         start = next(
-#             i for i in (0, 1, 2) if (query_start - i) % 3 == 0)  # Subtract frame to find the start of the codon
-#         end = next(i for i in (0, 1, 2) if (query_end + i) % 3 == 0)  # Add frame to find the end of the codon
-#         new_query_start = query_start - start  # Extend the start of the codon
-#         new_query_end = query_end + end  # Extend the end of the codon
-#         new_ref_start = ref_start - start if strand == 1 else ref_start - end
-#         new_ref_end = ref_end + end if strand == 1 else ref_end + start
-#     else:
-#         start = next(i for i in (0, 1, 2) if (query_start + i) % 3 == 0)  # Add frame to find the start of the codon
-#         end = next(i for i in (0, 1, 2) if (query_end - i) % 3 == 0)  # Subtract frame to find the end of the codon
-#         new_query_start = query_start + start  # Clip the start of the codon
-#         new_query_end = query_end - end  # Clip the end of the codon
-#         new_ref_start = ref_start + start if strand == 1 else ref_start + end
-#         new_ref_end = ref_end - end if strand == 1 else ref_end - start
-
-#     if query_start != new_query_start or query_end != new_query_end:
-#         warning_message = (f"{'Clipping' if clip else 'Extending'} query: {query_start}-{query_end} -> "
-#                            f"{new_query_start}-{new_query_end}; Ref: {ref_start}-{ref_end} -> {new_ref_start}-{new_ref_end}")
-#         if verbose:
-#             warnings.warn(warning_message)
-
-#     return new_query_start, new_query_end, new_ref_start, new_ref_end
-
-
 def get_expanded_cigar(cigar):
     """
     Takes in a normal CIGAR string and returns an expanded version.
@@ -250,7 +172,7 @@ def overlapping(hit, existing_hits):
             return True
 
     return False
-
+  
 
 def cull_redundant_hits(minimap_hits):
     
