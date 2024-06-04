@@ -18,6 +18,7 @@ import shutil
 import sys
 
 from ...shared.multi_mlst import multi_mlst
+from ...shared.alignment import truncation_check
 
 
 def description():
@@ -29,7 +30,7 @@ def prerequisite_modules():
 
 
 def get_headers():
-    full_headers = ['SmST', 'Salmochelin', 'iroB', 'iroC', 'iroD', 'iroN']
+    full_headers = ['SmST', 'Salmochelin', 'iroB', 'iroC', 'iroD', 'iroN','spurious_smst_hits']
     stdout_headers = []
     return full_headers, stdout_headers
 
@@ -41,6 +42,10 @@ def add_cli_options(parser):
                        help='Minimum alignment percent identity for salmochelin MLST')
     group.add_argument('--klebsiella__smst_min_coverage', type=float, default=80.0,
                        help='Minimum alignment percent coverage for salmochelin MLST')
+    group.add_argument('--klebsiella__smst_min_spurious_identity', type=float, default=80.0,
+                       help='Minimum alignment percent identity for klebsiella__smst spurious results')
+    group.add_argument('--klebsiella__smst_min_spurious_coverage', type=float, default=40.0,
+                       help='Minimum alignment percent coverage for klebsiella__smst spurious results')
     group.add_argument('--klebsiella__smst_required_exact_matches', type=int, default=2,
                        help='At least this many exact matches are required to call an ST')
     return group
@@ -51,6 +56,10 @@ def check_cli_options(args):
         sys.exit('Error: --klebsiella__smst_min_identity must be between 50.0 and 100.0')
     if args.klebsiella__smst_min_coverage <= 50.0 or args.klebsiella__smst_min_coverage >= 100.0:
         sys.exit('Error: --klebsiella__smst_min_coverage must be between 50.0 and 100.0')
+    if args.klebsiella__smst_min_spurious_identity <= 50.0 or args.klebsiella__smst_min_spurious_identity >= 100.0:
+        sys.exit('Error: --klebsiella__smst_min_spurious_identity must be between 50.0 and 100.0')
+    if args.klebsiella__smst_min_spurious_coverage <= 30.0 or args.klebsiella__smst_min_spurious_coverage >= 100.0:
+        sys.exit('Error: --klebsiella__smst_min_spurious_coverage must be between 30.0 and 100.0')
     if args.klebsiella__smst_required_exact_matches < 0:
         sys.exit('Error: --klebsiella__smst_required_exact_matches must be a positive integer')
 
@@ -70,11 +79,25 @@ def get_results(assembly, minimap2_index, args, previous_results):
     profiles = data_dir() / 'profiles.tsv'
     alleles = {gene: data_dir() / f'{gene}.fasta' for gene in genes}
 
-    st, lineage, alleles = multi_mlst(assembly, minimap2_index, profiles, alleles, genes,
+    results, spurious_hits = multi_mlst(assembly, minimap2_index, profiles, alleles, genes,
                                       'iro_lineage', args.klebsiella__smst_min_identity,
                                       args.klebsiella__smst_min_coverage, args.klebsiella__smst_required_exact_matches,
-                                      check_for_truncation=True, report_incomplete=True)
+                                      check_for_truncation=True, report_incomplete=True,
+                                      min_spurious_cov=args.klebsiella__smst_min_spurious_coverage,
+                                      min_spurious_ident=args.klebsiella__smst_min_spurious_identity)
+    st, lineage, alleles = results
 
-    return {'SmST': st[2:], 'Salmochelin': lineage,
+    if st == 'NA':
+        st = 0
+    else:
+        st = st[2:]
+
+    # spurious hits
+    spurious_hits = [item for h in spurious_hits.values() for item in h]
+
+    spurious_virulence_hits = ';'.join(spurious_hits )if spurious_hits else '-'
+
+    return {'SmST': st, 'Salmochelin': lineage,
             'iroB': alleles['iroB'], 'iroC': alleles['iroC'], 'iroD': alleles['iroD'],
-            'iroN': alleles['iroN']}
+            'iroN': alleles['iroN'],
+            'spurious_smst_hits':spurious_virulence_hits}

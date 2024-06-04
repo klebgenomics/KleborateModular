@@ -118,41 +118,9 @@ def get_results(assembly, minimap2_index, args, previous_results):
         if h not in full_headers:
             sys.exit(f'Error: results contained a value ({h}) that is not covered by the full headers')
 
+    results_dict = {k: (v if v else '-') for k, v in results_dict.items()}
+
     return results_dict
-
-
-# def get_results(assembly, minimap2_index, args, previous_results):
-#     full_headers, _ = get_headers()
-    
-#     k_headers = [h for h in full_headers if h.startswith('K_')]
-#     o_headers = [h for h in full_headers if h.startswith('O_')]
-
-#     k_db, o_db = Database.from_genbank(get_database('kp_k')), Database.from_genbank(get_database('kp_o'))
-
-#     if not isinstance(assembly, list):
-#         assembly = [assembly]
-
-#     assembly_paths = [Path(asmbly) if not isinstance(asmbly, Path) else asmbly for asmbly in assembly]
-
-#     results_dict = {}
-
-#     for assembly_path in assembly_paths:
-#         k_results = typing_pipeline(assembly_path, k_db, threads=args.threads)
-#         k_result_table = k_results.as_table()
-#         for line in k_result_table.split('\n'):
-#             if line:
-#                 parts = line.split('\t')[1:-7]
-#                 for key, value in zip(k_headers, parts):
-#                     results_dict[key] = value
-
-#         o_results = typing_pipeline(assembly_path, o_db, threads=args.threads)
-#         o_result_table = o_results.as_table()
-#         for line in o_result_table.split('\n'):
-#             if line:
-#                 parts = line.split('\t')[1:-7]
-#                 for key, value in zip(o_headers, parts):
-#                     results_dict[key] = value
-#     return results_dict
 
 
 

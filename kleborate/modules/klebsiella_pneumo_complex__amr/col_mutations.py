@@ -16,14 +16,13 @@ not, see <http://www.gnu.org/licenses/>.
 from Bio.Seq import Seq
 from Bio import pairwise2
 from Bio.Align import substitution_matrices
-from ...shared.alignment import align_query_to_ref, cull_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
+from ...shared.alignment import align_query_to_ref, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
 
 
-def check_for_mgrb_pmrb_gene_truncations(hits_dict, assembly, trunc, min_ident):
+def check_for_mgrb_pmrb_gene_truncations(hits_dict, assembly, trunc,min_ident):
     best_mgrb_cov, best_pmrb_cov = 0.0, 0.0
 
-    alignment_hits = align_query_to_ref(trunc, assembly, min_identity=None)
-    alignment_hits = cull_redundant_hits(alignment_hits)
+    alignment_hits = align_query_to_ref(trunc, assembly, None, min_identity=None)
     for hit in alignment_hits:
         assert hit.query_name == 'pmrB' or hit.query_name == 'mgrB'
         _, coverage, _ = truncation_check(hit)

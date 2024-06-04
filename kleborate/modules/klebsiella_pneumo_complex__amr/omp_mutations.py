@@ -15,16 +15,17 @@ not, see <http://www.gnu.org/licenses/>.
 
 from Bio.Seq import Seq
 from Bio import pairwise2
+from Bio import Align
 from Bio.Align import substitution_matrices
-from ...shared.alignment import align_query_to_ref, cull_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
+from ...shared.alignment import align_query_to_ref, cull_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check, get_bases_per_ref_pos
 
 
 def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
 
     best_ompk35_cov, best_ompk36_cov = 0.0, 0.0
+    ompk36_loci = {'OmpK36': [(25, 'C')]}
     
     alignment_hits = align_query_to_ref(omp, assembly, min_query_coverage=None, min_identity=None)
-    alignment_hits = cull_redundant_hits(alignment_hits)
     
     ompk35_hit = False
     ompk36_hit = False
@@ -39,6 +40,18 @@ def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
 
         elif hit.query_name == 'OmpK36':
             ompk36_hit = True
+            ref_seq = hit.ref_seq
+            query_seq = hit.query_seq
+            aligner = Align.PairwiseAligner()
+            alignments = aligner.align(query_seq , ref_seq)
+            bases_per_ref_pos = get_bases_per_ref_pos(alignments[0])
+            loci = ompk36_loci[hit.query_name]
+            for pos, wt_base in loci:
+                if pos in bases_per_ref_pos:
+                    assembly_base = bases_per_ref_pos[pos]
+                    if assembly_base == 'T':  # Check if the mutation changes C to T
+                        hits_dict['Omp_mutations'].append(f"{hit.query_name}_synmut_{wt_base}{pos}{assembly_base}")
+
             if coverage > best_ompk36_cov:
                 best_ompk36_cov = coverage
 
@@ -48,6 +61,7 @@ def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
                     
                 elif 'GDTDTY' in translation:
                     hits_dict['Omp_mutations'].append('OmpK36TD')
+                
         else:
             assert False
 

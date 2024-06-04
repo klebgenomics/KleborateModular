@@ -83,7 +83,7 @@ def run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches,
             lv_count += 1
 
     if exact_matches < required_exact_matches:
-        st, extra_info = '0', '-'
+        st, extra_info = 'NA', '-'
     elif lv_count == 0:
         st = 'ST' + str(st)
     else:

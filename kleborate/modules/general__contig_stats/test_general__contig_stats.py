@@ -56,13 +56,13 @@ def test_count_2():
 
 
 def test_n50_1():
-    _, n50, _, _, _ = get_contig_stats(get_file_dir() / 'test_1.fasta')
-    assert n50 == 40
+    _, N50, _, _, _ = get_contig_stats(get_file_dir() / 'test_1.fasta')
+    assert N50 == 40
 
 
 def test_n50_2():
-    _, n50, _, _, _ = get_contig_stats(get_file_dir() / 'test_2.fasta')
-    assert n50 == 200
+    _, N50, _, _, _ = get_contig_stats(get_file_dir() / 'test_2.fasta')
+    assert N50 == 200
 
 
 def test_longest_1():
@@ -143,7 +143,7 @@ def test_empty_file_1():
     contig_count, n50, longest_contig, total_size, ambiguous = \
         get_contig_stats(get_file_dir() / 'empty.fasta')
     assert contig_count == 0
-    assert n50 == 0
+    assert N50 == 0
     assert longest_contig == 0
     assert total_size == 0
     assert ambiguous == 'no'
@@ -157,4 +157,4 @@ def test_get_results():
     assert results['largest_contig'] == '45'
     assert results['total_size'] == '115'
     assert results['ambiguous_bases'] == 'no'
-    assert results['qc_warnings'] == 'N50'
+    assert results['QC_warnings'] == 'N50'
