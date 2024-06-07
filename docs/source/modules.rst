@@ -51,7 +51,7 @@ Contig stats
 
    -m general__contig_stats
 
-This module generates some basic assembly statistics to help users understand their typing results in the context of assembly quality, although we recommend users conduct more comprehensive QC themselves before typing genomes (e.g. screen for contamination, etc).
+This module takes ``enterobacterales__species`` as a prerequisite and  generates some basic assembly statistics to help users understand their typing results in the context of assembly quality, although we recommend users conduct more comprehensive QC themselves before typing genomes (e.g. screen for contamination, etc).
 
 The module reports a standard set of assembly quality metrics (see Outputs below).
 
@@ -497,7 +497,7 @@ Virulence score
 
    -m klebsiella_pneumo_complex__virulence_score
 
-This module calculates a virulence score, which ranges from 0 to 5 as outlined below. Note neither the salmochelin (iro) locus nor rmpADC are explicitly considered in the virulence score, for simplicity. The iro and rmpADC loci typically appear alongside the aerobactin (iuc) locus on the Kp virulence plasmids, and so presence of iuc (score of 3-5) generally implies presence of iro and rmpADC. However we prioritise iuc in the calculation of the score, as aerobactin is specifically associated with growth in blood and is a stronger predictor of the hypervirulence phenotype (see this review). The iro and rmpADC loci are also occasionally present with ybt, in the ICEKp variant - ICEKp1, but this will still score 1.
+This module takes ``klebsiella__abst``, ``klebsiella__cbst``, ``klebsiella__ybst`` as  prerequisite and calculates a virulence score, which ranges from 0 to 5 as outlined below. Note neither the salmochelin (iro) locus nor rmpADC are explicitly considered in the virulence score, for simplicity. The iro and rmpADC loci typically appear alongside the aerobactin (iuc) locus on the Kp virulence plasmids, and so presence of iuc (score of 3-5) generally implies presence of iro and rmpADC. However we prioritise iuc in the calculation of the score, as aerobactin is specifically associated with growth in blood and is a stronger predictor of the hypervirulence phenotype (see this review). The iro and rmpADC loci are also occasionally present with ybt, in the ICEKp variant - ICEKp1, but this will still score 1.
 
 .. list-table::
 
@@ -688,7 +688,7 @@ Results of the KpSC AMR module are grouped by drug class (according to the `ARG-
 Resistance scores and counts
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Running the KpSC AMR module automatically runs additional modules for generating counts of resistance genes and drug classes, and calculating a resistance score. These modules can also be specified manually as follows:
+Running the KpSC AMR module automatically runs additional modules for generating counts of resistance genes and drug classes, and calculating a resistance score. These modules take  ``klebsiella_pneumo_complex__amr`` as a prerequisite and can be specified manually as follows:
 
 .. code-block:: Python
 
