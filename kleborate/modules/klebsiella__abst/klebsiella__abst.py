@@ -82,9 +82,9 @@ def get_results(assembly, minimap2_index, args, previous_results):
     results, spurious_hits  = multi_mlst(assembly, minimap2_index, profiles, alleles, genes,
                                       'iuc_lineage', args.klebsiella__abst_min_identity,
                                       args.klebsiella__abst_min_coverage, args.klebsiella__abst_required_exact_matches,
-                                      check_for_truncation=True, report_incomplete=True,
-                                      min_spurious_cov=args.klebsiella__abst_min_spurious_coverage, 
-                                      min_spurious_ident=args.klebsiella__abst_min_spurious_identity)
+                                      check_for_truncation=True, report_incomplete=True, 
+                                      min_spurious_identity=args.klebsiella__abst_min_spurious_identity,
+                                      min_spurious_coverage=args.klebsiella__abst_min_spurious_coverage)
     st, lineage, alleles = results
     
     if st == 'NA':
