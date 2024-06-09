@@ -83,8 +83,8 @@ def get_results(assembly, minimap2_index, args, previous_results):
                                       'iro_lineage', args.klebsiella__smst_min_identity,
                                       args.klebsiella__smst_min_coverage, args.klebsiella__smst_required_exact_matches,
                                       check_for_truncation=True, report_incomplete=True,
-                                      min_spurious_cov=args.klebsiella__smst_min_spurious_coverage,
-                                      min_spurious_ident=args.klebsiella__smst_min_spurious_identity)
+                                      min_spurious_identity=args.klebsiella__smst_min_spurious_identity,
+                                      min_spurious_coverage=args.klebsiella__smst_min_spurious_coverage)
     st, lineage, alleles = results
 
     if st == 'NA':
