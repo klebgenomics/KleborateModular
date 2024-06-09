@@ -40,17 +40,17 @@ def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
 
         elif hit.query_name == 'OmpK36':
             ompk36_hit = True
-            ref_seq = hit.ref_seq
             query_seq = hit.query_seq
+            assembly_seq = hit.ref_seq
             aligner = Align.PairwiseAligner()
-            alignments = aligner.align(query_seq , ref_seq)
+            alignments = aligner.align(query_seq , assembly_seq)
             bases_per_ref_pos = get_bases_per_ref_pos(alignments[0])
             loci = ompk36_loci[hit.query_name]
             for pos, wt_base in loci:
-                if pos in bases_per_ref_pos:
-                    assembly_base = bases_per_ref_pos[pos]
-                    if assembly_base == 'T':  # Check if the mutation changes C to T
-                        hits_dict['Omp_mutations'].append(f"{hit.query_name}_synmut_{wt_base}{pos}{assembly_base}")
+                assembly_base = bases_per_ref_pos[pos]
+                query_base = query_seq[pos-1]
+                if query_base == wt_base and assembly_base == 'T':
+                    hits_dict['Omp_mutations'].append(f"{hit.query_name}_synmut_{wt_base}{pos}{align_query_base}")
 
             if coverage > best_ompk36_cov:
                 best_ompk36_cov = coverage
