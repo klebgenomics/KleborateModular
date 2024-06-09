@@ -21,10 +21,9 @@ from .mlst import load_st_profiles, run_single_mlst
 from .alignment import truncation_check
 
 
-
 def multi_mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_names, extra_info,
                min_identity, min_coverage, required_exact_matches, check_for_truncation=False,
-               report_incomplete=False, min_spurious_cov=None, min_spurious_ident=None):
+               report_incomplete=False, min_spurious_identity=None, min_spurious_coverage=None,):
     """
     This function takes and returns the same things as the mlst function in mlst.py. However, it
     will look for cases where multiple contigs have hits for the full set of MLST genes, and in
@@ -32,10 +31,10 @@ def multi_mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_
     """
     profiles = load_st_profiles(profiles_path, gene_names, extra_info)
     
-    if min_spurious_cov is not None:
+    if min_spurious_coverage is not None:
         hits_per_gene = {g: align_query_to_ref(allele_paths[g], assembly_path,
-                                               ref_index=minimap2_index, min_identity=min_identity,
-                                               min_query_coverage=min_coverage) for g in gene_names}
+                                               ref_index=minimap2_index, min_identity=min_spurious_identity,
+                                               min_query_coverage=min_spurious_coverage) for g in gene_names}
         
         num_hits_before = {g: len(hits_per_gene[g]) for g in gene_names}
 
@@ -53,23 +52,30 @@ def multi_mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_
                                                min_query_coverage=min_coverage) for g in gene_names}
         spurious_hits = None
 
-    if spurious_hits is not None:
-        spurious_hits = {g: process_spurious_hits(spurious_hits[g]) for g in gene_names}
 
     hits_by_contig = cluster_hits_by_contig(hits_per_gene, gene_names)
     full_set_contigs = find_full_set_contigs(hits_by_contig)
+
+    # If zero or one contigs have the full set of genes, then this is treated as a non-multi-MLST
+    # case, i.e. the same as regular MLST.
 
     if len(full_set_contigs) < 2:
         return run_single_mlst(profiles, hits_per_gene, gene_names, required_exact_matches,
                                check_for_truncation, report_incomplete), spurious_hits
 
+    # If more than one contig has the full set of genes, then this is treated as a multi-MLST case,
+    # where each full-set contig gets an MLST call.
     contig_results = {}
     for contig in full_set_contigs:
         contig_results[contig] = run_single_mlst(profiles, hits_by_contig[contig], gene_names,
                                                  required_exact_matches, check_for_truncation,
                                                  report_incomplete)
-        
+    
+    if spurious_hits is not None:
+        spurious_hits = {g: process_spurious_hits(spurious_hits[g]) for g in gene_names}
+         
     return combine_results(full_set_contigs, contig_results, gene_names), spurious_hits
+
 
 # def multi_mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_names, extra_info,
 #                min_identity, min_coverage, required_exact_matches, check_for_truncation=False,
