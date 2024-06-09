@@ -26,7 +26,7 @@ def description():
 
 
 def prerequisite_modules():
-    return []
+    return ['enterobacterales__species']
 
 
 def get_headers():
