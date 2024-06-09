@@ -20,7 +20,6 @@ from .alignment import align_query_to_ref
 from .mlst import load_st_profiles, run_single_mlst
 from .alignment import truncation_check
 
-
 def multi_mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_names, extra_info,
                min_identity, min_coverage, required_exact_matches, check_for_truncation=False,
                report_incomplete=False, min_spurious_identity=None, min_spurious_coverage=None,):
@@ -53,6 +52,10 @@ def multi_mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_
         spurious_hits = None
 
 
+    if spurious_hits is not None:
+        spurious_hits = {g: process_spurious_hits(spurious_hits[g]) for g in gene_names}
+
+
     hits_by_contig = cluster_hits_by_contig(hits_per_gene, gene_names)
     full_set_contigs = find_full_set_contigs(hits_by_contig)
 
@@ -70,9 +73,6 @@ def multi_mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_
         contig_results[contig] = run_single_mlst(profiles, hits_by_contig[contig], gene_names,
                                                  required_exact_matches, check_for_truncation,
                                                  report_incomplete)
-    
-    if spurious_hits is not None:
-        spurious_hits = {g: process_spurious_hits(spurious_hits[g]) for g in gene_names}
          
     return combine_results(full_set_contigs, contig_results, gene_names), spurious_hits
 
