@@ -591,7 +591,8 @@ In cases where MgrB and PmrB are present and not truncated we have increased the
 * OmpK35 and OmpK36 truncations and point mutations shown to result in reduced susceptibility to beta-lactamases. This information will be reported in the ``Omp_mutations`` column (truncations are expressed as % amino acid length from the start codon). Note if these core genes are present and not truncated then nothing about them will be reported in the 'Omp' column. The specific effect of OmpK mutations on drug susceptibility depends on multiple factors including what combinations of OmpK35 and OmpK36 alleles are present and what beta-lactamase genes are present (this is why we report them in their own column separate to Bla genes). See e.g. `paper <https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1007218>`_ and `this one <https://www.nature.com/articles/s41467-019-11756-y>`_ for more information on OmpK genes and drug resistance.
 
 **Changes in OmpK36 mutations from v2**
-We have added typing for synonymous mutation in ompK36 reported as **ompk36_synmut_C25T**
+
+We have added typing for synonymous mutation in ompK36 reported as ``ompk36_synmut_C25T``
 
 Note these do not count towards acquired resistance gene counts, but do count towards drug classes (with the exception of Omp mutations, whose spectrum of effects depends on the presence of acquired beta-lactamases and thus their impact on specific beta-lactam drug classes is hard to predict).
 
