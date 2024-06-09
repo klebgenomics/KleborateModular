@@ -317,16 +317,4 @@ def translate_nucl_to_prot(nucl_seq):
     # to a multiple-of-three length.
     truncated_nucl_seq = nucl_seq[:len(nucl_seq) // 3 * 3]
     return str(Seq(truncated_nucl_seq).translate(table='Bacterial', to_stop=False, cds=False))
-
-
-def get_bases_per_ref_pos(alignment):
-    aligned_seq1, aligned_seq2 = alignment[0], alignment[1]
-    bases_per_ref_pos = {}
-    ref_pos = 1
-    for i, ref_b in enumerate(aligned_seq1):
-        if ref_b == '-' or ref_b == '.':
-            continue
-        assembly_b = aligned_seq2[i]
-        bases_per_ref_pos[ref_pos] = assembly_b
-        ref_pos += 1
-    return bases_per_ref_pos
+    
