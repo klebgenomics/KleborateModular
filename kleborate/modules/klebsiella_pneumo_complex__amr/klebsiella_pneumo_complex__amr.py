@@ -80,7 +80,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
     trunc = data_dir() / 'MgrB_and_PmrB.fasta'
     omp = data_dir() / 'OmpK.fasta'
 
-    ref_file = data_dir() / 'CARD_v3.1.13.fasta'
+    ref_file = data_dir() / 'CARD_v3.2.9.fasta'
 
     res_hits = resminimap_assembly(
         assembly,
