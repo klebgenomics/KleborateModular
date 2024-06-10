@@ -69,8 +69,10 @@ The following papers provide more information on the component schemes and genot
 Changes from v2
 ----------------
 
+When Kleborate v3 is run using the ``-p kpsc`` option to run preset modules for *K. pneumoniae*_ the same logic is implemented as Kleborate v2, plus the following changes/updates:
+
 * MLST & virulence databases updated (April 2024)
-  * Column ``Chr_ST``  has been removed in v3, as it is redundant with ``ST`` 
+* Column ``Chr_ST``  has been removed in v3, as it is redundant with ``ST`` 
 * AMR database updated based on CARD v3.2.9 (June 2024)
 * Added ``$`` to indicate when PmrB or MgrB have a mutation in the start codon that may disrupt translation (in ``Col_mutations`` column)
 * Added check for synonymous mutation in ompK36 (25 C > T) associated with increased resistance to carbapenems (in ``Omp_mutations`` column)
