@@ -71,6 +71,9 @@ Changes from v2
 
 * MLST & virulence databases updated (April 2024)
   * Column ``Chr_ST``  has been removed in v3, as it is redundant with ``ST`` 
+* AMR database updated based on CARD v3.2.9 (June 2024)
+* Added ``$`` to indicate when PmrB or MgrB have a mutation in the start codon that may disrupt translation (in ``Col_mutations`` column)
+* Added check for synonymous mutation in ompK36 (25 C > T) associated with increased resistance to carbapenems (in ``Omp_mutations`` column)
 * Updated to use Kaptive v3, which has some changes to the names of output variables:
   * ``K_locus_missing_genes``  has been renamed ``K_Missing_expected_genes`` 
   * ``O_locus_missing_genes``  has been renamed ``O_Missing_expected_genes`` 
