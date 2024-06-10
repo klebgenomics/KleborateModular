@@ -550,7 +550,7 @@ Kleborate has logic to choose the best allele hit, annotate that hit with extra 
 In brief:
 
 * Exact nucleotide matches are preferred, followed by exact amino acid matches, followed by inexact nucleotide matches.
-* Annotations indicate aspects of the hit: ``^`` (inexact nucleotide but exact amino acid match), ``*`` (inexact nucleotide and inexact amino acid match), ``?`` (incomplete match) and ``-X%`` (truncated amino acid sequence).
+* Annotations indicate aspects of the hit: ``^`` (inexact nucleotide but exact amino acid match), ``*`` (inexact nucleotide and inexact amino acid match), ``?`` (incomplete match), ``-X%`` (truncated amino acid sequence), ``$`` (mutated start codon, translation may be disrupted).
 * The column indicates the confidence of the hit: strong hits go in the column for their drug class, truncated hits go in the ``truncated_resistance_hits`` column and low identity/coverage hits go in the ``spurious_resistance_hits`` column.
 
 And here is the logic in more detail:
@@ -582,11 +582,7 @@ Additional chromosomal mutations associated with AMR
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Fluoroquinolone resistance mutations: GyrA 83 & 87 and ParC 80 & 84. These appear in the ``Flq_mutations`` column.
-* Colistin resistance due to truncation or loss of core genes MgrB or PmrB. If these genes are missing or truncated, this information will be reported in the 'Col_mutations' column (truncations are expressed as % amino acid length from the start codon). Note if MgrB and PmrB are present and not truncated then nothing about them will be reported in the 'Col' column.
-
-**Changes in Colistin mutations from v2**
-
-In cases where MgrB and PmrB are present and not truncated we have increased the precision of typing by checking whether the first codon of the hit is a known start codon. If the there is a SNP in the first codon, we flag this with a special character ``mgrB$`` or ``pmrB$`` to indicate that the gene is present but may not be translated correctly.
+* Colistin resistance due to truncation or loss of core genes MgrB or PmrB. If these genes are missing or truncated, this information will be reported in the 'Col_mutations' column (truncations are expressed as % amino acid length from the start codon). Note if MgrB and PmrB are present and not truncated then nothing about them will be reported in the 'Col' column. Changes in Colistin mutations from v2: In cases where MgrB and PmrB are present and not truncated, we check whether the first codon of the hit is a known start codon. If not, this will be indicated with a special character ``$`` to flag that the gene is present but may not be translated correctly.
 
 * OmpK35 and OmpK36 truncations and point mutations shown to result in reduced susceptibility to beta-lactamases. This information will be reported in the ``Omp_mutations`` column (truncations are expressed as % amino acid length from the start codon). Note if these core genes are present and not truncated then nothing about them will be reported in the 'Omp' column. The specific effect of OmpK mutations on drug susceptibility depends on multiple factors including what combinations of OmpK35 and OmpK36 alleles are present and what beta-lactamase genes are present (this is why we report them in their own column separate to Bla genes). See e.g. `paper <https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1007218>`_ and `this one <https://www.nature.com/articles/s41467-019-11756-y>`_ for more information on OmpK genes and drug resistance.
 
