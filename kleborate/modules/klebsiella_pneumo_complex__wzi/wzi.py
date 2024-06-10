@@ -18,14 +18,7 @@ from ...shared.mlst import get_best_hits, number_from_hit
 
 def load_st_profiles(database_path, gene_name, extra_info_name=None):
     """
-    This function reads through a tab-delimited MLST database file where the first column is the ST
-    number, the second column is the allele number for the specified gene, and the final optional
-    column is the extra-info. The first line of the file should be a header: 'ST', followed by the
-    gene name, optionally followed by the extra-info column name. All other lines should only
-    contain positive integers for the ST and gene columns, and the final optional column can
-    contain anything.
-
-    This function returns a list of ST profiles, where each value is a tuple:
+    This function returns a list of WZI ST profiles, where each value is a tuple:
     (ST number, list of allele numbers, extra info)
     """
     profiles, first_line = [], True
@@ -145,22 +138,22 @@ def run_single_mlst(profiles, hits_per_gene, gene_name, required_exact_matches,
 def mlst(assembly_path, minimap2_index, profiles_path, allele_path, gene_name, extra_info,
          min_identity, min_coverage, required_exact_matches, check_for_truncation=False):
     """
+    This function is different from the mlst function in shared folder as it takes a single gene
     This function takes:
     * assembly_path: a path for an assembly in FASTA format
     * minimap2_index: a path for the assembly's minimap2 index (for faster alignment)
     * profiles_path: a path for the MLST profiles file in TSV format
-    * allele_paths: a dictionary {gene name: path for the allele FASTA file}
-    * gene_names: a list of the gene names in the MLST scheme
-    * extra_info: the name of an additional extra-info column in the MLST scheme (or None)
+    * allele_path:takes single allele
+    * gene_name:takes single gene
+    * extra_info: the name of an additional extra-info column in the ST scheme
     * min_identity: hits with a lower percent identity than this are discarded
     * min_coverage: hits with a lower percent coverage than this are discarded
     * required_exact_matches: at least this many alleles must be an exact match to assign an ST
     * check_for_truncation: if true, truncation strings will be added to the allele numbers
 
     This function returns:
-    * the best matching ST profile (e.g. 'ST123', 'ST456-1LV' or 'NA')
-    * the extra-info value for the best ST (if used, otherwise an empty string)
-    * a dictionary of allele numbers in str format {gene name: allele number}
+    * the best matching profile
+    * allele numbers
     """
     profiles = load_st_profiles(profiles_path, gene_name, extra_info)
     hits_per_gene = align_query_to_ref(allele_path, assembly_path,
