@@ -50,7 +50,7 @@ def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
                 assembly_base = bases_per_ref_pos[pos]
                 query_base = query_seq[pos-1]
                 if query_base == wt_base and assembly_base == 'T':
-                    hits_dict['Omp_mutations'].append(f"{hit.query_name}_synmut_{wt_base}{pos}{align_query_base}")
+                    hits_dict['Omp_mutations'].append(f"{hit.query_name}_{wt_base.lower()}{pos}{assembly_base.lower()}")
 
             if coverage > best_ompk36_cov:
                 best_ompk36_cov = coverage
