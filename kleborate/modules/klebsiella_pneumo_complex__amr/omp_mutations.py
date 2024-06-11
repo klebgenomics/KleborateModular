@@ -20,7 +20,7 @@ from Bio.Align import substitution_matrices
 from ...shared.alignment import align_query_to_ref, cull_redundant_hits, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check, get_bases_per_ref_pos
 
 
-def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
+def check_omp_genes(hits_dict, assembly, omp):
 
     best_ompk35_cov, best_ompk36_cov = 0.0, 0.0
     ompk36_loci = {'OmpK36': [(25, 'C')]}
@@ -42,8 +42,7 @@ def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
             ompk36_hit = True
             query_seq = hit.query_seq
             assembly_seq = hit.ref_seq
-            aligner = Align.PairwiseAligner()
-            alignments = aligner.align(query_seq , assembly_seq)
+            alignments = pairwise2.align.globalms(query_seq , assembly_seq, 5, -4, -10, -0.5)
             bases_per_ref_pos = get_bases_per_ref_pos(alignments[0])
             loci = ompk36_loci[hit.query_name]
             for pos, wt_base in loci:
