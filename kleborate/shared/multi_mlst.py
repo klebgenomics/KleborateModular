@@ -34,15 +34,9 @@ def multi_mlst(assembly_path, minimap2_index, profiles_path, allele_paths, gene_
         hits_per_gene = {g: align_query_to_ref(allele_paths[g], assembly_path,
                                                ref_index=minimap2_index, min_identity=min_spurious_identity,
                                                min_query_coverage=min_spurious_coverage) for g in gene_names}
-        
-        num_hits_before = {g: len(hits_per_gene[g]) for g in gene_names}
 
         spurious_hits = {g: [h for h in hits_per_gene[g] 
                      if h.query_cov < min_coverage and h.percent_identity < min_identity] for g in gene_names}
-
-
-        hits_per_gene = {g: [h for h in hits_per_gene[g]
-                             if h.query_cov  >= min_coverage and h.percent_identity >= min_identity] for g in gene_names}
     else:
         hits_per_gene = {g: align_query_to_ref(allele_paths[g], assembly_path,
                                                ref_index=minimap2_index, min_identity=min_identity,
