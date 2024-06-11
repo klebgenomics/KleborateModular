@@ -20,7 +20,7 @@ from Bio.Align import substitution_matrices
 from ...shared.alignment import align_query_to_ref, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check, get_bases_per_ref_pos
 
 
-def check_omp_genes(hits_dict, assembly, omp):
+def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
 
     best_ompk35_cov, best_ompk36_cov = 0.0, 0.0
     ompk36_loci = {'OmpK36': [(25, 'C')]}
