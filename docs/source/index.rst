@@ -41,7 +41,7 @@ Kleborate was primarily developed to screen genome assemblies of *Klebsiella pne
 **New modules for other species are in development,** for now these include MLST schemes for *Klebsiella oxytoca* species complex and *Escherichia coli* (see the Modules page).
 
 Summary of modules and their output columns
-###########################################
+++++++++++++++++++++++++++++++++++++++++++++
 
 Please refer to the module section for detailed explanations.
 
