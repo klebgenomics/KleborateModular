@@ -40,47 +40,47 @@ Kleborate was primarily developed to screen genome assemblies of *Klebsiella pne
 
 **New modules for other species are in development,** for now these include MLST schemes for *Klebsiella oxytoca* species complex and *Escherichia coli* (see the Modules page).
 
-.. list-table:: Summary of Modules and their columns outputs
-   :header-rows: 1
-   :widths: 30 70
-   :class: colwidths-given
+..
+   **Summary of Modules and their columns outputs**
 
-   * - Module Name
-     - Columns
-   * - enterobacterales__species
-     - species, species_match
-   * - general__contig_stats
-     - contig_count, N50, largest_contig, total_size, ambiguous_bases, QC_warnings
-   * - klebsiella_pneumo_complex__mlst
-     - ST, gapA, infB, mdh, pgi, phoE, rpoB, tonB
-   * - klebsiella__ybst
-     - YbST, Yersiniabactin, ybtS, ybtX, ybtQ, ybtP, ybtA, irp2, irp1, ybtU, ybtT, ybtE, fyuA
-   * - klebsiella__cbst
-     - CbST, Colibactin, clbA, clbB, clbC, clbD, clbE, clbF, clbG, clbH, clbI, clbL, clbM, clbN, clbO, clbP, clbQ
-   * - klebsiella__abst
-     - AbST, Aerobactin, iucA, iucB, iucC, iucD, iutA
-   * - klebsiella__smst
-     - Salmochelin, SmST, iroB, iroC, iroD, iroN
-   * - klebsiella__rmst
-     - RmST, RmpADC, rmpA, rmpD, rmpC
-   * - klebsiella__rmpa2
-   	 - rmpA2
-   * - Virulence score
-     - virulence_score (Score of 0-5)
-   * - klebsiella_pneumo_complex__amr
-     - AGly_acquired, Col_acquired, Fcyn_acquired, Flq_acquired, Gly_acquired, MLS_acquired, Phe_acquired, Rif_acquired, Sul_acquired, 	Tet_acquired, Tgc_acquired, Tmt_acquired, Bla_acquired, Bla_ESBL_acquired, Bla_ESBL_inhR_acquired, Bla_Carb_acquired, Bla_chr, SHV_mutations, Omp_mutations, Col_mutations, Flq_mutations, truncated_resistance_hits, spurious_resistance_hits
-   * - klebsiella_pneumo_complex__resistance_score
-     - resistance_score (Score of 0-3), num_resistance_genes, num_resistance_classes
-   * - klebsiella_pneumo_complex__wzi
-     - wzi allele
-   * - klebsiella_pneumo_complex__kaptive
-     - Best match locus, Best match type, Match confidence, Problems, Identity, Coverage, Length discrepancy, Expected genes in locus, Expected genes in locus, details, Missing expected gene
-   * - klebsiella_oxytoca_complex__mlst
-     - ST, gapA, infB, mdh, pgi, phoE, rpoB, tonB
-   * - escherichia__mlst_pasteur
-     - ST, dinB, icdA, pabB, polB, putP, trpA, trpB, uidA
-   * - escherichia__mlst_achtman
-     - ST, adk, fumC, gyrB, icd, mdh, purA, recA
+   .. list-table:: 
+
+      * - Module Name
+        - Columns
+      * - enterobacterales__species
+        - species, species_match
+      * - general__contig_stats
+        - contig_count, N50, largest_contig, total_size, ambiguous_bases, QC_warnings
+      * - klebsiella_pneumo_complex__mlst
+        - ST, gapA, infB, mdh, pgi, phoE, rpoB, tonB
+      * - klebsiella__ybst
+        - YbST, Yersiniabactin, ybtS, ybtX, ybtQ, ybtP, ybtA, irp2, irp1, ybtU, ybtT, ybtE, fyuA
+      * - klebsiella__cbst
+        - CbST, Colibactin, clbA, clbB, clbC, clbD, clbE, clbF, clbG, clbH, clbI, clbL, clbM, clbN, clbO, clbP, clbQ
+      * - klebsiella__abst
+        - AbST, Aerobactin, iucA, iucB, iucC, iucD, iutA
+      * - klebsiella__smst
+        - Salmochelin, SmST, iroB, iroC, iroD, iroN
+      * - klebsiella__rmst
+        - RmST, RmpADC, rmpA, rmpD, rmpC
+      * - klebsiella__rmpa2
+      	 - rmpA2
+      * - Virulence score
+        - virulence_score (Score of 0-5)
+      * - klebsiella_pneumo_complex__amr
+        - AGly_acquired, Col_acquired, Fcyn_acquired, Flq_acquired, Gly_acquired, MLS_acquired, Phe_acquired, Rif_acquired, Sul_acquired, 	Tet_acquired, Tgc_acquired, Tmt_acquired, Bla_acquired, Bla_ESBL_acquired, Bla_ESBL_inhR_acquired, Bla_Carb_acquired, Bla_chr, SHV_mutations, Omp_mutations, Col_mutations, Flq_mutations, truncated_resistance_hits, spurious_resistance_hits
+      * - klebsiella_pneumo_complex__resistance_score
+        - resistance_score (Score of 0-3), num_resistance_genes, num_resistance_classes
+      * - klebsiella_pneumo_complex__wzi
+        - wzi allele
+      * - klebsiella_pneumo_complex__kaptive
+        - Best match locus, Best match type, Match confidence, Problems, Identity, Coverage, Length discrepancy, Expected genes in locus, Expected genes in locus, details, Missing expected gene
+      * - klebsiella_oxytoca_complex__mlst
+        - ST, gapA, infB, mdh, pgi, phoE, rpoB, tonB
+      * - escherichia__mlst_pasteur
+        - ST, dinB, icdA, pabB, polB, putP, trpA, trpB, uidA
+      * - escherichia__mlst_achtman
+        - ST, adk, fumC, gyrB, icd, mdh, purA, recA
 
 
 Citations
