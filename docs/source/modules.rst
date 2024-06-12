@@ -3,7 +3,7 @@ Modules
 **************************************
 
 
-Kleborate v3 includes a range of modules for typing bacterial genomes, most of which are specific to a particular species or complex (*Klebsiella pneumoniae SC*, *Klebsiella oxytoca SC*, *Escherichia coli*). We therefore recommend specifying a preset list of modules to run based on the organism, rather than specifying individual modules. This will run the species detection module first, and if the species matches that specified in --preset, the preset modules for that species will be run (if not, the species will be reported and the remaining fields will be blank). 
+Kleborate v3 includes a range of modules for typing bacterial genomes, most of which are specific to a particular species or complex (*Klebsiella pneumoniae SC*, *Klebsiella oxytoca SC*, *Escherichia coli*). We therefore recommend specifying ``-p`` (*kpsc*, *kosc*, *escherichia*) or ``-m`` (list of modules to run based on the organism). This will run the species detection module first, and if the species matches that specified in --preset, the preset modules for that species will be run (if not, the species will be reported and the remaining fields will be blank). 
 
 Details of the available modules, how they work, and how to interpret the outputs, are given below.
 
@@ -150,7 +150,7 @@ KpSC MLST
 
    -m klebsiella_pneumo_complex__mlst
 
-Genomes identified by Kleborate as belonging to the *K. pneumoniae* species complex are subjected to MLST using the 7-locus scheme described at the  *K. pneumoniae* `\Bacteria Isolate Genome Sequence Database hosted at the Pasteur Institute <http://bigsdb.pasteur.fr/klebsiella/klebsiella.html>`_. Note that this scheme is not specific to *K. pneumoniae sensu stricto* but covers the whole species complex. 
+Genomes identified by Kleborate as belonging to the *K. pneumoniae* species complex are subjected to MLST using the 7-locus scheme described at the  *K. pneumoniae* `\Bacteria Isolate Genome Sequence Database hosted at the Pasteur Institute <https://bigsdb.pasteur.fr/klebsiella/>`_. Note that this scheme is not specific to *K. pneumoniae sensu stricto* but covers the whole species complex. 
 
 A copy of the MLST alleles and ST definitions is stored in the **/data** directory of this module.
 
@@ -211,7 +211,7 @@ Output of the KpSC MLST module is the following columns:
 KpSC virulence modules
 ----------------------
 
-Typing modules are available five key acquired virulence loci that are associated with invasive infections and are found at high prevalence among hypervirulent *K. pneumoniae* strains: the siderophores yersiniabactin (\ *ybt*\ ), aerobactin (\ *iuc*\ ) and salmochelin (\ *iro*\ ), the genotoxin colibactin (\ *clb*\ ), and the hypermucoidy locus *rmpADC*. Each of these loci comprises multiple genes and will only be reported if >50% of the genes are detected. 
+Typing modules are available for the five key acquired virulence loci that are associated with invasive infections and are found at high prevalence among hypervirulent *K. pneumoniae* strains: the siderophores yersiniabactin (\ *ybt*\ ), aerobactin (\ *iuc*\ ) and salmochelin (\ *iro*\ ), the genotoxin colibactin (\ *clb*\ ), and the hypermucoidy locus *rmpADC*. Each of these loci comprises multiple genes and will only be reported if >50% of the genes are detected. 
 
 There is also a module to screen for the alternative hypermucoidy marker gene *rmpA2*.
 
@@ -252,7 +252,7 @@ We previously explored the diversity of the *K. pneumoniae* integrative conjugat
 
 Note that while ICE *Kp1* is occasionally found in other species within the KpSC, and even in other genera of Enterobacteriaceae (see `original paper <http://mgen.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000196>`_\ ), most of the known variation included in the database is derived from *K. pneumoniae*.
 
-The allele databases and schemes were last updated in April 2024. 
+The allele databases and schemes were last updated in April 2024. The number of ybt lineages is now 28, and the number of ICE*Kp structural variants is 22.
 
 
 ybst Parameters
@@ -328,7 +328,7 @@ Aerobactin and salmochelin
 
    -m klebsiella__abst, klebsiella__smst
 
-We further explored the genetic diversity of the aerobactin (\ *iuc*\ ) and salmochelin (\ *iro*\ ) loci among a dataset of 2733 *Klebsiella* genomes (see `this publication <https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-018-0587-5>`_\ ). We identified five *iro* and six *iuc* lineages (see figure), each of which was associated with a specific location within *K. pneumoniae* genomes (primarily virulence plasmids). Based on this analysis, we developed a MLST-style approach for assigning aerobactin sequence types (AbST) and salmochelin sequence types (SmST) which is implemented in Kleborate. 
+We further explored the genetic diversity of the aerobactin (\ *iuc*\ ) and salmochelin (\ *iro*\ ) loci among a dataset of 2733 *Klebsiella* genomes (see `this publication <https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-018-0587-5>`_\ ). We identified five *iro* and six *iuc* lineages, each of which was associated with a specific location within *K. pneumoniae* genomes (primarily virulence plasmids). Based on this analysis, we developed a MLST-style approach for assigning aerobactin sequence types (AbST) and salmochelin sequence types (SmST) which is implemented in Kleborate. 
 
 * The most common lineages are *iuc1* and *iro1*\ , which are found together on the FIBk virulence plasmid KpVP-1 (typified by pK2044 or pLVPK common to the hypervirulent clones ST23, ST86, etc). 
 * *iuc2* and *iro2* lineages were associated with the alternative FIBk virulence plasmid KpVP-2 (typified by Kp52.145 plasmid II from the K2 ST66 lab strain known as Kp52.145 or CIP 52.145 or B5055). 
