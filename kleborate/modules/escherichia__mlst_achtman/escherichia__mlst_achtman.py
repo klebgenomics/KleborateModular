@@ -29,9 +29,9 @@ def prerequisite_modules():
 
 
 def get_headers():
-    full_headers = ['st', 'clonal_complex',
+    full_headers = ['ST', 'clonal_complex',
                     'adk', 'fumC', 'gyrB', 'icd', 'mdh', 'purA', 'recA']
-    stdout_headers = ['st']
+    stdout_headers = ['ST']
     return full_headers, stdout_headers
 
 
@@ -79,7 +79,7 @@ def get_results(assembly, minimap2_index, args, previous_results):
              args.escherichia_mlst_achtman_min_identity, args.escherichia_mlst_achtman_min_coverage,
              args.escherichia_mlst_achtman_required_exact_matches)
 
-    return {'st': st, 'clonal_complex': clonal_complex,
+    return {'ST': st, 'clonal_complex': clonal_complex,
             'adk': alleles['adk'], 'fumC': alleles['fumC'], 'gyrB': alleles['gyrB'],
             'icd': alleles['icd'], 'mdh': alleles['mdh'], 'purA': alleles['purA'],
             'recA': alleles['recA']}

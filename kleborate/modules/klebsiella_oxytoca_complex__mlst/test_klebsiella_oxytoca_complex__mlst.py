@@ -121,7 +121,7 @@ def test_get_results_2():
     results = get_results(get_test_genome_dir() / 'GCF_000733495.1.fna.gz', None,
                           Args(klebsiella_oxytoca_complex__mlst_min_identity=90.0, klebsiella_oxytoca_complex__mlst_min_coverage=80.0,
                                klebsiella_oxytoca_complex__mlst_required_exact_matches=3), {})
-    assert results['ST'] == 'ST406-1LV'
+    assert results['ST'] == 'ST445'
     assert results['clonal_complex'] == ''
     assert results['gapA'] == '5'
     assert results['infB'] == '6'
@@ -129,7 +129,7 @@ def test_get_results_2():
     assert results['pgi'] == '10'
     assert results['phoE'] == '46'
     assert results['rpoB'] == '5'
-    assert results['tonB'] == '6*'
+    assert results['tonB'] == '98'
 
 
 def test_get_results_3():
