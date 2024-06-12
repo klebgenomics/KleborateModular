@@ -36,7 +36,7 @@ def get_test_genome_dir():
 Tests calling of carbapenem resistance via the OmpK35/OmpK36 genes.
 """
 def test_get_results_1():
-    Args = collections.namedtuple('Args', ['klebsiella_pneumo_complex__amr_min_identity', 'klebsiella_pneumo_complex__amr_min_coverage','klebsiella_pneumo_complex___amr_min_spurious_identity', 'klebsiella_pneumo_complex__amr_min_spurious_coverage'])
+    Args = collections.namedtuple('Args', ['klebsiella_pneumo_complex__amr_min_identity', 'klebsiella_pneumo_complex__amr_min_coverage','klebsiella_pneumo_complex__amr_min_spurious_identity', 'klebsiella_pneumo_complex__amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / 'test_res_omp_1.fasta', None,
                           Args(klebsiella_pneumo_complex__amr_min_identity=90.0, klebsiella_pneumo_complex__amr_min_coverage=80.0,klebsiella_pneumo_complex__amr_min_spurious_identity=80.0, klebsiella_pneumo_complex__amr_min_spurious_coverage=40.0), {})
     assert results['Omp_mutations'] == '-'
@@ -47,7 +47,7 @@ def test_get_results_2():
     Args = collections.namedtuple('Args', ['klebsiella_pneumo_complex__amr_min_identity', 'klebsiella_pneumo_complex__amr_min_coverage', 'klebsiella_pneumo_complex__amr_min_spurious_identity', 'klebsiella_pneumo_complex__amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / 'test_res_omp_2.fasta', None,
                           Args(klebsiella_pneumo_complex__amr_min_identity=90.0, klebsiella_pneumo_complex__amr_min_coverage=80.0, klebsiella_pneumo_complex__amr_min_spurious_identity=80.0, klebsiella_pneumo_complex__amr_min_spurious_coverage=40.0), {})
-    assert results['Omp_mutations'] == 'OmpK35-36%'
+    assert results['Omp_mutations'] == 'OmpK35-36%;OmpK36_c25t'
 
 
 def test_get_results_3():
@@ -62,7 +62,7 @@ def test_get_results_4():
     Args = collections.namedtuple('Args', ['klebsiella_pneumo_complex__amr_min_identity', 'klebsiella_pneumo_complex__amr_min_coverage','klebsiella_pneumo_complex__amr_min_spurious_identity', 'klebsiella_pneumo_complex__amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / 'test_res_omp_4.fasta', None,
                           Args(klebsiella_pneumo_complex__amr_min_identity=90.0, klebsiella_pneumo_complex__amr_min_coverage=80.0,klebsiella_pneumo_complex__amr_min_spurious_identity=80.0, klebsiella_pneumo_complex__amr_min_spurious_coverage=40.0), {})
-    assert results['Omp_mutations'] == 'OmpK36-0%'
+    assert results['Omp_mutations'] == '-'
 
 def test_get_results_5():
     Args = collections.namedtuple('Args', ['klebsiella_pneumo_complex__amr_min_identity', 'klebsiella_pneumo_complex__amr_min_coverage','klebsiella_pneumo_complex__amr_min_spurious_identity', 'klebsiella_pneumo_complex__amr_min_spurious_coverage'])

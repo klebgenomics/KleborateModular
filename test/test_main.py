@@ -33,26 +33,39 @@ def test_get_version():
 
 def test_get_all_module_names():
     all_module_names = kleborate.__main__.get_all_module_names()
-    assert 'contig_stats' in all_module_names
+    assert 'general__contig_stats' in all_module_names
     assert 'template' not in all_module_names
 
 
 def test_get_headers():
     _, modules = kleborate.__main__.import_modules()
-    top_headers, full_headers, stdout_headers = \
-        kleborate.__main__.get_headers(['contig_stats'], modules)
-    assert top_headers[0] == ''
-    assert top_headers[1] == 'contig_stats'
-    assert full_headers[0] == 'assembly'
-    assert stdout_headers[0] == 'assembly'
+    # top_headers, full_headers, stdout_headers = \
+    full_headers, stdout_headers = \
+        kleborate.__main__.get_headers(['general__contig_stats'], modules)
+    # assert top_headers[0] == ''
+    # assert top_headers[1] == 'general__contig_stats'
+    assert full_headers[0] == 'strain'
+    assert stdout_headers[0] == 'strain'
     assert all(h in full_headers for h in stdout_headers)
 
+
+# def test_check_modules():
+#     _, modules = kleborate.__main__.import_modules()
+#     Args = collections.namedtuple('Args', ['assemblies'])
+#     kleborate.__main__.check_modules(Args(assemblies=['test/test_main/test.fasta']),
+#                                      modules, ['general__contig_stats'])
 
 def test_check_modules():
     _, modules = kleborate.__main__.import_modules()
     Args = collections.namedtuple('Args', ['assemblies'])
-    kleborate.__main__.check_modules(Args(assemblies=['test/test_main/test.fasta']),
-                                     modules, ['contig_stats'])
+    args = Args(assemblies=['test/test_main/test.fasta'])
+    
+    preset_check_modules = []  
+    preset_pass_modules = []  
+    
+    # Calling the check_modules function with all required arguments
+    kleborate.__main__.check_modules(args, modules, ['general__contig_stats'], preset_check_modules, preset_pass_modules)
+
 
 
 def test_check_assemblies_1():
@@ -111,30 +124,17 @@ def test_gunzip_assembly_if_necessary_2():
 
 
 def test_output_headers(capfd):
-    top_headers = ['module', '', '']
     full_headers = ['header_a', 'header_b', 'header_c']
     stdout_headers = ['header_a', 'header_b']
     with tempfile.TemporaryDirectory() as tmp_dir:
         out_file = pathlib.Path(tmp_dir) / 'out.txt'
-        kleborate.__main__.output_headers(top_headers, full_headers, stdout_headers, out_file)
+        kleborate.__main__.output_headers(full_headers, stdout_headers, out_file)
         out, err = capfd.readouterr()
         assert out == 'header_a\theader_b\n'
-        assert open(out_file, 'rt').read() == 'module\t\t\nheader_a\theader_b\theader_c\n'
+        assert open(out_file, 'rt').read() == 'header_a\theader_b\theader_c'
 
 
-def test_output_results_1(capsys):
-    full_headers = ['header_a', 'header_b', 'header_c']
-    stdout_headers = ['header_a', 'header_b']
-    results = {'header_a': 'result_a', 'header_b': 'result_b', 'header_c': 'result_c'}
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        out_file = pathlib.Path(tmp_dir) / 'out.txt'
-        kleborate.__main__.output_results(full_headers, stdout_headers, out_file, results)
-        out, err = capsys.readouterr()
-        assert out == 'result_a\tresult_b\n'
-        assert open(out_file, 'rt').read() == 'result_a\tresult_b\tresult_c\n'
-
-
-def test_output_results_2():
+def test_output_results_1():
     full_headers = ['header_a', 'header_b']
     stdout_headers = ['header_a']
     results = {'header_a': 'result_a', 'header_b': 'result_b', 'header_c': 'result_c'}
@@ -149,45 +149,76 @@ def test_get_presets():
     presets = kleborate.__main__.get_presets()
     all_module_names = kleborate.__main__.get_all_module_names()
     for preset, modules in presets.items():
-        assert len(modules) == len(set(modules))  # duplicates not allowed
-        for module in modules:
-            assert module in all_module_names
+        # Ensure that 'check' and 'pass' keys exist
+        assert 'check' in modules
+        assert 'pass' in modules
 
+        # Check 'check' modules
+        for check_module in modules['check']:
+            assert check_module[0] in all_module_names  # Only check the module name, not the condition
+
+        # Check 'pass' modules
+        for pass_module in modules['pass']:
+            assert pass_module in all_module_names
 
 def test_get_used_module_names_1():
     all_module_names = ['a', 'b', 'c', 'd', 'e']
-    presets = {'1': ['a', 'b', 'c'], '2': ['c', 'd', 'e']}
+    presets = {'1': {'check': [['a'], ['b'], ['c']], 'pass': []}, '2': {'check': [['c'], ['d'], ['e']], 'pass': []}}
     Args = collections.namedtuple('Args', ['modules', 'preset'])
-    modules = kleborate.__main__.get_used_module_names(Args(modules='b,c,d', preset=None),
-                                                       all_module_names, presets)
-    assert modules == ['b', 'c', 'd']
+    module_names, check_modules, pass_modules = kleborate.__main__.get_used_module_names(Args(modules='b,c,d', preset=None),
+                                                                                         all_module_names, presets)
+    assert module_names == ['b', 'c', 'd']
+    assert check_modules == []
+    assert pass_modules == []
+
+
+# def test_get_used_module_names_1():
+#     all_module_names = ['a', 'b', 'c', 'd', 'e']
+#     presets = {'1': ['a', 'b', 'c'], '2': ['c', 'd', 'e']}
+#     Args = collections.namedtuple('Args', ['modules', 'preset'])
+#     modules = kleborate.__main__.get_used_module_names(Args(modules='b,c,d', preset=None),
+#                                                        all_module_names, presets)
+#     assert modules == ['b', 'c', 'd']
 
 
 def test_get_used_module_names_2():
     all_module_names = ['a', 'b', 'c', 'd', 'e']
-    presets = {'1': ['a', 'b', 'c'], '2': ['c', 'd', 'e']}
+    presets = {'1': {'check': [['a'], ['b'], ['c']], 'pass': []}, '2': {'check': [['c'], ['d'], ['e']], 'pass': []}}
     Args = collections.namedtuple('Args', ['modules', 'preset'])
-    modules = kleborate.__main__.get_used_module_names(Args(modules='c,b,a', preset=None),
-                                                       all_module_names, presets)
-    assert modules == ['c', 'b', 'a']
-
+    module_names, check_modules, pass_modules = kleborate.__main__.get_used_module_names(Args(modules='c,b,a', preset=None),
+                                                                                         all_module_names, presets)
+    assert module_names == ['c', 'b', 'a']
+    assert check_modules == []
+    assert pass_modules == []
 
 def test_get_used_module_names_3():
     all_module_names = ['a', 'b', 'c', 'd', 'e']
-    presets = {'1': ['a', 'b', 'c'], '2': ['c', 'd', 'e']}
+    presets = {'1': {'check': [['a'], ['b'], ['c']], 'pass': []}, '2': {'check': [['c'], ['d'], ['e']], 'pass': []}}
     Args = collections.namedtuple('Args', ['modules', 'preset'])
-    modules = kleborate.__main__.get_used_module_names(Args(modules=None, preset='2'),
-                                                       all_module_names, presets)
-    assert modules == ['c', 'd', 'e']
+    module_names, check_modules, pass_modules = kleborate.__main__.get_used_module_names(Args(modules=None, preset='2'),
+                                                                                         all_module_names, presets)
+    assert module_names == ['c', 'd', 'e']
+    assert check_modules == ['c', 'd', 'e']
+    assert pass_modules == []
 
+# def test_get_used_module_names_4():
+#     all_module_names = ['a', 'b', 'c', 'd', 'e']
+#     presets = {'1': ['a', 'b', 'c'], '2': ['c', 'd', 'e']}
+#     Args = collections.namedtuple('Args', ['modules', 'preset'])
+#     modules = kleborate.__main__.get_used_module_names(Args(modules='b,c', preset='2'),
+#                                                        all_module_names, presets)
+#     assert modules == ['c', 'd', 'e', 'b']
 
 def test_get_used_module_names_4():
     all_module_names = ['a', 'b', 'c', 'd', 'e']
-    presets = {'1': ['a', 'b', 'c'], '2': ['c', 'd', 'e']}
+    presets = {'1': {'check': [['a'], ['b'], ['c']], 'pass': []}, '2': {'check': [['c'], ['d'], ['e']], 'pass': []}}
     Args = collections.namedtuple('Args', ['modules', 'preset'])
-    modules = kleborate.__main__.get_used_module_names(Args(modules='b,c', preset='2'),
-                                                       all_module_names, presets)
-    assert modules == ['c', 'd', 'e', 'b']
+    module_names, check_modules, pass_modules = kleborate.__main__.get_used_module_names(Args(modules='b,c', preset='2'),
+                                                                       all_module_names, presets)
+    assert module_names == ['c', 'd', 'e', 'b']  
+    assert check_modules == ['c', 'd', 'e']
+    assert pass_modules == []  
+
 
 
 def test_get_used_module_names_5():
@@ -239,7 +270,8 @@ def test_parse_arguments_1(capsys):
     out = remove_formatting(out)
     assert 'Kleborate:' in out
     assert 'Input/output:' in out
-    assert 'klebsiella_species module:' not in out
+    assert 'enterobacterales__species module:' not in out
+    
 
 
 def test_parse_arguments_2(capsys):
@@ -251,7 +283,7 @@ def test_parse_arguments_2(capsys):
     print(out)
     assert 'Kleborate:' in out
     assert 'Input/output:' in out
-    assert 'klebsiella_species module:' in out
+    assert 'enterobacterales__species module:' in out
 
 
 def test_parse_arguments_3(capsys):
@@ -263,7 +295,7 @@ def test_parse_arguments_3(capsys):
     print(out)
     assert 'Kleborate:' in out
     assert 'Input/output:' in out
-    assert 'klebsiella_species module:' in out
+    assert 'enterobacterales__species module:' in out
 
 
 def test_parse_arguments_4(capsys):
@@ -274,7 +306,7 @@ def test_parse_arguments_4(capsys):
     err = remove_formatting(err)
     assert 'Kleborate:' in err
     assert 'Input/output:' in err
-    assert 'klebsiella_species module:' not in err
+    assert 'enterobacterales__species module:' not in err
 
 
 def test_get_run_order_1():

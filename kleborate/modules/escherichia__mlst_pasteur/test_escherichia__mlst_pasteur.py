@@ -21,7 +21,7 @@ not, see <https://www.gnu.org/licenses/>.
 import collections
 import pytest
 
-from .escherichia_mlst_pasteur import *
+from .escherichia__mlst_pasteur import *
 
 
 def get_test_genome_dir():
@@ -118,7 +118,8 @@ def test_get_results_1():
                           Args(escherichia_mlst_pasteur_min_identity=90.0,
                                escherichia_mlst_pasteur_min_coverage=80.0,
                                escherichia_mlst_pasteur_required_exact_matches=3), {})
-    assert results['st'] == 'ST262'
+
+    assert results['ST'] == 'ST262'
     assert results['dinB'] == '8'
     assert results['icdA'] == '118'
     assert results['pabB'] == '7'
@@ -137,7 +138,7 @@ def test_get_results_2():
                           Args(escherichia_mlst_pasteur_min_identity=90.0,
                                escherichia_mlst_pasteur_min_coverage=80.0,
                                escherichia_mlst_pasteur_required_exact_matches=3), {})
-    assert results['st'] == 'ST296'
+    assert results['ST'] == 'ST296'
     assert results['dinB'] == '68'
     assert results['icdA'] == '110'
     assert results['pabB'] == '91'
@@ -157,4 +158,4 @@ def test_get_results_3():
                           Args(escherichia_mlst_pasteur_min_identity=90.0,
                                escherichia_mlst_pasteur_min_coverage=80.0,
                                escherichia_mlst_pasteur_required_exact_matches=3), {})
-    assert results['st'] == 'NA'
+    assert results['ST'] == 'NA'

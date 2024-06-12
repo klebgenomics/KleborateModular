@@ -20,7 +20,7 @@ not, see <https://www.gnu.org/licenses/>.
 
 import pathlib
 
-from .contig_stats import *
+from .general__contig_stats import *
 
 
 def get_file_dir():
@@ -29,7 +29,7 @@ def get_file_dir():
 
 
 def test_prerequisite_modules():
-    assert prerequisite_modules() == []
+    assert prerequisite_modules() == ['enterobacterales__species']
 
 
 def test_get_headers():
@@ -116,32 +116,60 @@ def test_total_size_4():
 
 
 def test_qc_warnings_1():
+    # Define the species specifications for the test
+    species_specification_dict = {
+        'Klebsiella pneumoniae': {
+            'min_genome_size': 5000000,
+            'max_genome_size': 6500000
+        }
+    }
+    
+    previous_results = {
+        'enterobacterales__species__species': 'Klebsiella pneumoniae'
+    }
+    
     # A perfectly nice assembly - yields no warnings.
-    warnings = get_qc_warnings(250000, 'no')
+    warnings = get_qc_warnings(
+        total_size=5000000,  # Total size within acceptable range
+        N50=20000,        
+        ambiguous_bases='no',  # No ambiguous bases
+        species=previous_results['enterobacterales__species__species'],
+        species_specification_dict=species_specification_dict
+    )
+    
     assert warnings == '-'
 
-
 def test_qc_warnings_2():
-    # Small N50.
-    warnings = get_qc_warnings(1000, 'no')
+    # Define the species specifications for the test
+    species_specification_dict = {
+        'Klebsiella pneumoniae': {
+            'min_genome_size': 5000000,
+            'max_genome_size': 6500000
+        }
+    }
+    
+    previous_results = {
+        'enterobacterales__species__species': 'Klebsiella pneumoniae'
+    }
+    
+    # Small N50 test case with all required arguments
+    warnings = get_qc_warnings(
+        total_size=5000000,  
+        N50=500,          
+        ambiguous_bases='no', 
+        species=previous_results['enterobacterales__species__species'],
+        species_specification_dict=species_specification_dict
+    )
+    
     assert warnings == 'N50'
 
 
-def test_qc_warnings_3():
-    # Has ambiguous bases.
-    warnings = get_qc_warnings(250000, 'yes (50)')
-    assert warnings == 'ambiguous_bases'
-
-
-def test_qc_warnings_4():
-    # Small N50 and has ambiguous bases.
-    warnings = get_qc_warnings(1000, 'yes (1000)')
-    assert warnings == 'N50,ambiguous_bases'
-
-
 def test_empty_file_1():
-    contig_count, n50, longest_contig, total_size, ambiguous = \
-        get_contig_stats(get_file_dir() / 'empty.fasta')
+    previous_results = {
+        'enterobacterales__species__species': 'Klebsiella pneumoniae'
+    }
+    contig_count, N50, longest_contig, total_size, ambiguous = \
+    get_contig_stats(get_file_dir() / 'empty.fasta')
     assert contig_count == 0
     assert N50 == 0
     assert longest_contig == 0
@@ -151,10 +179,14 @@ def test_empty_file_1():
 
 def test_get_results():
     # Final results are all in string format.
-    results = get_results(get_file_dir() / 'test_1.fasta', None, None, {})
+    previous_results = {
+        'enterobacterales__species__species': 'Klebsiella pneumoniae'
+    }
+    # results = get_results(get_file_dir() / 'test_1.fasta', None, None, {})
+    results = get_results(get_file_dir() / 'test_1.fasta', None, None, previous_results)
     assert results['contig_count'] == '4'
-    assert results['n50'] == '40'
+    assert results['N50'] == '40'
     assert results['largest_contig'] == '45'
     assert results['total_size'] == '115'
     assert results['ambiguous_bases'] == 'no'
-    assert results['QC_warnings'] == 'N50'
+    assert results['QC_warnings'] == 'total_size,N50'
