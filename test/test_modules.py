@@ -30,12 +30,11 @@ def test_descriptions():
 
 
 def test_header_subset():
-    # For each module, tests that stdout_headers are a subset of full_headers.
-    module_names, modules = import_modules()
-    for module_name in module_names:
-        full_headers, stdout_headers = modules[module_name].get_headers()
-        assert all(h in full_headers for h in stdout_headers)
-
+     # For each module, tests that stdout_headers are a subset of full_headers.
+     module_names, modules = import_modules()
+     for module_name in module_names:
+         full_headers, stdout_headers = modules[module_name].get_headers()
+         assert all(h in full_headers for h in stdout_headers)
 
 def test_no_header_duplicates():
     # No duplicate header names are allowed within a module.
@@ -45,11 +44,3 @@ def test_no_header_duplicates():
         assert len(full_headers) == len(set(full_headers))
 
 
-def test_no_double_underscores():
-    # Double underscores are not allowed in modules names or in header names.
-    module_names, modules = import_modules()
-    for module_name in module_names:
-        assert '__' not in module_name
-        full_headers, _ = modules[module_name].get_headers()
-        for header_name in full_headers:
-            assert '__' not in header_name

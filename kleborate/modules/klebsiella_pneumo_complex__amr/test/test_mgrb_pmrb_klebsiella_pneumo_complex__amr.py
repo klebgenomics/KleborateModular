@@ -25,7 +25,7 @@ import pytest
 import pathlib
 
 from kleborate.shared.resMinimap import read_class_file, get_res_headers, resminimap_assembly
-from kleborate.modules.kpsc_amr.kpsc_amr import get_headers, get_results
+from kleborate.modules.klebsiella_pneumo_complex__amr.klebsiella_pneumo_complex__amr import get_headers, get_results
 
 
 def get_test_genome_dir():
@@ -38,13 +38,13 @@ Tests calling of colistin resistance via the truncation of mgrB/pmrB.
 def test_get_results_1():
     Args = collections.namedtuple('Args', ['klebsiella_pneumo_complex__amr_min_identity', 'klebsiella_pneumo_complex__amr_min_coverage', 'klebsiella_pneumo_complex__amr_min_spurious_identity', 'klebsiella_pneumo_complex__amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / 'test_res_mgrb_pmrb_1.fasta', None,
-                          Args(klebsiella_pneumo_complex___amr_min_identity=90.0, klebsiella_pneumo_complex__amr_min_coverage=80.0, klebsiella_pneumo_complex__amr_min_spurious_identity=80.0, klebsiella_pneumo_complex__amr_min_spurious_coverage=40.0), {})
+                          Args(klebsiella_pneumo_complex__amr_min_identity=90.0, klebsiella_pneumo_complex__amr_min_coverage=80.0, klebsiella_pneumo_complex__amr_min_spurious_identity=80.0, klebsiella_pneumo_complex__amr_min_spurious_coverage=40.0), {})
     assert results['Col_mutations'] == '-'
 
 
 def test_get_results_2():
     #A frameshift in pmrB should cause an early stop and lead to a colisitin resistance call.
-    Args = collections.namedtuple('Args', ['klebsiella_pneumo_complex__amr_min_identity', 'klebsiella_pneumo_complex__amr_min_coverage', 'klebsiella_pneumo_complex__amr_min_spurious_identity', 'klebsiella_pneumo_complex___amr_min_spurious_coverage'])
+    Args = collections.namedtuple('Args', ['klebsiella_pneumo_complex__amr_min_identity', 'klebsiella_pneumo_complex__amr_min_coverage', 'klebsiella_pneumo_complex__amr_min_spurious_identity', 'klebsiella_pneumo_complex__amr_min_spurious_coverage'])
     results = get_results(get_test_genome_dir() / 'test_res_mgrb_pmrb_2.fasta', None,
                           Args(klebsiella_pneumo_complex__amr_min_identity=90.0, klebsiella_pneumo_complex__amr_min_coverage=80.0, klebsiella_pneumo_complex__amr_min_spurious_identity=80.0, klebsiella_pneumo_complex__amr_min_spurious_coverage=40.0), {})
     assert results['Col_mutations'] == 'PmrB-42%'

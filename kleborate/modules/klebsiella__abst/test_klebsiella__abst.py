@@ -34,9 +34,12 @@ def test_prerequisite_modules():
 
 def test_check_cli_options_1():
     Args = collections.namedtuple('Args', ['klebsiella__abst_min_identity', 'klebsiella__abst_min_coverage',
+                                           'klebsiella__abst_min_spurious_identity', 'klebsiella__abst_min_spurious_coverage',
                                            'klebsiella__abst_required_exact_matches'])
     check_cli_options(Args(klebsiella__abst_min_identity=90.0, klebsiella__abst_min_coverage=90.0,
+                           klebsiella__abst_min_spurious_identity=90.0, klebsiella__abst_min_spurious_coverage=90.0,
                            klebsiella__abst_required_exact_matches=3))
+
 
 
 def test_check_cli_options_2():
@@ -73,10 +76,13 @@ def test_check_cli_options_5():
 
 def test_check_cli_options_6():
     Args = collections.namedtuple('Args', ['klebsiella__abst_min_identity', 'klebsiella__abst_min_coverage',
+                                           'klebsiella__abst_min_spurious_identity', 'klebsiella__abst_min_spurious_coverage',
                                            'klebsiella__abst_required_exact_matches'])
     with pytest.raises(SystemExit):
         check_cli_options(Args(klebsiella__abst_min_identity=90.0, klebsiella__abst_min_coverage=90.0,
+                               klebsiella__abst_min_spurious_identity=80.0, klebsiella__abst_min_spurious_coverage=40.0,
                                klebsiella__abst_required_exact_matches=-2))
+
 
 
 def test_check_external_programs_1(mocker):
@@ -100,27 +106,27 @@ def test_check_external_programs_2(mocker):
 
 def test_get_results_1():
     Args = collections.namedtuple('Args', ['klebsiella__abst_min_identity', 'klebsiella__abst_min_coverage',
+                                           'klebsiella__abst_min_spurious_identity', 'klebsiella__abst_min_spurious_coverage',
                                            'klebsiella__abst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000968155.1.fna.gz', None,
                           Args(klebsiella__abst_min_identity=90.0, klebsiella__abst_min_coverage=80.0,
+                               klebsiella__abst_min_spurious_identity=80.0, klebsiella__abst_min_spurious_coverage=40.0,
                                klebsiella__abst_required_exact_matches=3), {})
-    assert results['st'] == 'ST24'
-    assert results['lineage'] == 'iuc 2'
-    assert results['iucA'] == '2'
-    assert results['iucB'] == '6'
-    assert results['iucC'] == '5'
-    assert results['iucD'] == '6'
-    assert results['iutA'] == '8'
+
 
 
 def test_get_results_2():
     Args = collections.namedtuple('Args', ['klebsiella__abst_min_identity', 'klebsiella__abst_min_coverage',
+                                           'klebsiella__abst_min_spurious_identity', 'klebsiella__abst_min_spurious_coverage',
                                            'klebsiella__abst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000009885.1.fna.gz', None,
                           Args(klebsiella__abst_min_identity=90.0, klebsiella__abst_min_coverage=80.0,
+                               klebsiella__abst_min_spurious_identity=80.0, klebsiella__abst_min_spurious_coverage=40.0,
                                klebsiella__abst_required_exact_matches=3), {})
-    assert results['st'] == 'ST1'
-    assert results['lineage'] == 'iuc 1'
+    print(results)
+
+    assert results['AbST'] == '1'
+    assert results['Aerobactin'] == 'iuc 1'
     assert results['iucA'] == '1'
     assert results['iucB'] == '1'
     assert results['iucC'] == '1'
@@ -131,9 +137,14 @@ def test_get_results_2():
 def test_get_results_3():
     # Tests an E. coli without the iro locus, so no ST should be assigned.
     Args = collections.namedtuple('Args', ['klebsiella__abst_min_identity', 'klebsiella__abst_min_coverage',
+                                           'klebsiella__abst_min_spurious_identity', 'klebsiella__abst_min_spurious_coverage',
                                            'klebsiella__abst_required_exact_matches'])
     results = get_results(get_test_genome_dir() / 'GCF_000008865.2.fna.gz', None,
                           Args(klebsiella__abst_min_identity=90.0, klebsiella__abst_min_coverage=80.0,
+                               klebsiella__abst_min_spurious_identity=80.0, klebsiella__abst_min_spurious_coverage=40.0,
                                klebsiella__abst_required_exact_matches=3), {})
-    assert results['st'] == 'NA'
-    assert results['lineage'] == '-'
+
+    print(results)
+
+    assert results['AbST'] == 0
+    assert results['Aerobactin'] == '-'

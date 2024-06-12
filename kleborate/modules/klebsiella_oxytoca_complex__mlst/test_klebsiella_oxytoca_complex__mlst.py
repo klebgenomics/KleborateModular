@@ -104,7 +104,7 @@ def test_get_results_1():
     results = get_results(get_test_genome_dir() / 'GCF_000247855.1.fna.gz', None,
                           Args(klebsiella_oxytoca_complex__mlst_min_identity=90.0, klebsiella_oxytoca_complex__mlst_min_coverage=80.0,
                                klebsiella_oxytoca_complex__mlst_required_exact_matches=3), {})
-    assert results['st'] == 'ST30'
+    assert results['ST'] == 'ST30'
     assert results['clonal_complex'] == ''
     assert results['gapA'] == '1'
     assert results['infB'] == '2'
@@ -121,7 +121,7 @@ def test_get_results_2():
     results = get_results(get_test_genome_dir() / 'GCF_000733495.1.fna.gz', None,
                           Args(klebsiella_oxytoca_complex__mlst_min_identity=90.0, klebsiella_oxytoca_complex__mlst_min_coverage=80.0,
                                klebsiella_oxytoca_complex__mlst_required_exact_matches=3), {})
-    assert results['st'] == 'ST406-1LV'
+    assert results['ST'] == 'ST406-1LV'
     assert results['clonal_complex'] == ''
     assert results['gapA'] == '5'
     assert results['infB'] == '6'
@@ -139,5 +139,5 @@ def test_get_results_3():
     results = get_results(get_test_genome_dir() / 'GCF_000009885.1.fna.gz', None,
                           Args(klebsiella_oxytoca_complex__mlst_min_identity=90.0, klebsiella_oxytoca_complex__mlst_min_coverage=80.0,
                                klebsiella_oxytoca_complex__mlst_required_exact_matches=3), {})
-    assert results['st'] == 'NA'
+    assert results['ST'] == 'NA'
     assert results['clonal_complex'] == '-'

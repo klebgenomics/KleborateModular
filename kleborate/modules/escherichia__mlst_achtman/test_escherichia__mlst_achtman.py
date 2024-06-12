@@ -21,7 +21,7 @@ not, see <https://www.gnu.org/licenses/>.
 import collections
 import pytest
 
-from .escherichia_mlst_achtman import *
+from .escherichia__mlst_achtman import *
 
 
 def get_test_genome_dir():

@@ -21,7 +21,7 @@ not, see <https://www.gnu.org/licenses/>.
 import collections
 import pytest
 
-from .kpsc_mlst import *
+from .klebsiella_pneumo_complex__mlst import *
 
 
 def get_test_genome_dir():
@@ -104,7 +104,7 @@ def test_get_results_1():
     results = get_results(get_test_genome_dir() / 'GCF_000968155.1.fna.gz', None,
                           Args(klebsiella_pneumo_complex__mlst_min_identity=90.0, klebsiella_pneumo_complex__mlst_min_coverage=80.0,
                                klebsiella_pneumo_complex__mlst_required_exact_matches=3), {})
-    assert results['st'] == 'ST66'
+    assert results['ST'] == 'ST66'
     assert results['gapA'] == '2'
     assert results['infB'] == '3'
     assert results['mdh'] == '2'
@@ -120,7 +120,7 @@ def test_get_results_2():
     results = get_results(get_test_genome_dir() / 'GCF_001068035.1.fna.gz', None,
                           Args(klebsiella_pneumo_complex__mlst_min_identity=90.0, klebsiella_pneumo_complex__mlst_min_coverage=80.0,
                                klebsiella_pneumo_complex__mlst_required_exact_matches=3), {})
-    assert results['st'] == 'ST592-1LV'
+    assert results['ST'] == 'ST592-1LV'
     assert results['gapA'] == '2'
     assert results['infB'] == '3'
     assert results['mdh'] == '6'
@@ -137,4 +137,4 @@ def test_get_results_3():
     results = get_results(get_test_genome_dir() / 'GCF_000247855.1.fna.gz', None,
                           Args(klebsiella_pneumo_complex__mlst_min_identity=90.0, klebsiella_pneumo_complex__mlst_min_coverage=80.0,
                                klebsiella_pneumo_complex__mlst_required_exact_matches=3), {})
-    assert results['st'] == 'NA'
+    assert results['ST'] == 'NA'
