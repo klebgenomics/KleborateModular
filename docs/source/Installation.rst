@@ -29,7 +29,7 @@ Each of these should print a version number message. If not, troubleshoot that t
 
 
 Installation
-------------------------------
+=============
 
 .. code-block:: bash
    conda create -n klebsiella_analysis python=3.9 biopython minimap2  mash -y
