@@ -28,15 +28,16 @@ To verify that you're ready to go, try running these commands from a terminal:
 Each of these should print a version number message. If not, troubleshoot that tool's installation before continuing!
 
 
-Installation
-=============
-
+Run KleborateModular 
+~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: bash
-   conda create -n klebsiella_analysis python=3.9 biopython minimap2  mash -y
+
+   conda create -n klebsiella_analysis python=3.9 biopython minimap2 mash -y
    conda activate klebsiella_analysis
    git clone --recursive https://github.com/klebgenomics/KleborateModular.git
-   
+
    cd KleborateModular
    ./kleborate-runner.py --list_modules
    ./kleborate-runner.py -h
+
