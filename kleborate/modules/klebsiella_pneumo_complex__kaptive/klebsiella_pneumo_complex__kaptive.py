@@ -91,7 +91,6 @@ def get_results(assembly, minimap2_index, args, previous_results):
 
     results_dict = {}
 
-    # Process k_db with a check for NoneType
     k_results = typing_pipeline(assembly_path, k_db, threads=args.threads)
     if k_results is not None:
         k_result_table = k_results.as_table()
@@ -105,7 +104,6 @@ def get_results(assembly, minimap2_index, args, previous_results):
     else:
         print("Warning: No gene alignments sufficient for typing. Skipping k_results processing.")
 
-    # Process o_db with a check for NoneType
     o_results = typing_pipeline(assembly_path, o_db, threads=args.threads)
     if o_results is not None:
         o_result_table = o_results.as_table()
