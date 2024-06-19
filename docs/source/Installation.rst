@@ -14,6 +14,7 @@ Kleborate requires the following software and libraries to be installed and avai
 
 * `Mash <https://github.com/marbl/Mash>`_ v2.0 or later
 * `Minimap2 <https://github.com/lh3/minimap2>`_ 
+* `Kaptive <https://github.com/klebgenomics/Kaptive>`_ 
 * `DNA Features Viewer <https://edinburgh-genome-foundry.github.io/DnaFeaturesViewer/>`_
 
 
