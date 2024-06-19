@@ -16,17 +16,6 @@ Kleborate requires the following software and libraries to be installed and avai
 * `Minimap2 <https://github.com/lh3/minimap2>`_ 
 * `DNA Features Viewer <https://edinburgh-genome-foundry.github.io/DnaFeaturesViewer/>`_
 
-To verify that you're ready to go, try running these commands from a terminal:
-
-.. code-block:: bash
-
-   python3 --version
-   python3 -c "import Bio; print(Bio.__version__)"
-   minimap2 -version
-   mash --version
-
-Each of these should print a version number message. If not, troubleshoot that tool's installation before continuing!
-
 
 Run KleborateModular 
 ~~~~~~~~~~~~~~~~~~~~~
