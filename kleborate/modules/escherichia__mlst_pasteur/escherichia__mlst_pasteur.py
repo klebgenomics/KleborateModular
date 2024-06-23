@@ -31,7 +31,7 @@ def prerequisite_modules():
 def get_headers():
     full_headers = ['ST',
                     'dinB', 'icdA', 'pabB', 'polB', 'putP', 'trpA', 'trpB', 'uidA']
-    stdout_headers = ['st']
+    stdout_headers = ['ST']
     return full_headers, stdout_headers
 
 
