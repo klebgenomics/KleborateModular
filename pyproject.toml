@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 license = {file = "LICENSE"}
 authors = [
-    {name = "Mary Maranga", email = "gathonimaranga@gmail.com"}
+    {name = "Mary Maranga", email = "gathonimaranga@gmail.com"},
     {name = "Ryan Wick", email = "rrwick@gmail.com"},
     {name = "Kathryn Holt", email = "kat.holt@lshtm.ac.uk"},
 ]
