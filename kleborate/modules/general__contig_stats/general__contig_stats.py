@@ -49,7 +49,7 @@ def check_external_programs():
 
 
 def data_dir():
-    return pathlib.Path(__file__).parents[0] 
+    return pathlib.Path(__file__).parents[0] / 'data'
 
 def get_results(assembly, minimap2_index, args, previous_results):
     species_file = data_dir() / 'species_specification.txt'
