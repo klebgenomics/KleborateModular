@@ -10,8 +10,8 @@ readme = "README.md"
 requires-python = ">=3.9"
 license = {file = "LICENSE"}
 authors = [
+    {name = "Mary Maranga", email = "gathonimaranga@gmail.com"}
     {name = "Ryan Wick", email = "rrwick@gmail.com"},
-    {name = "Mary Maranga", email = "gathonimaranga@gmail.com"},
     {name = "Kathryn Holt", email = "kat.holt@lshtm.ac.uk"},
 ]
 classifiers = [
@@ -28,9 +28,9 @@ dependencies = ["biopython","numpy","dna_features_viewer","kaptive","mash"]
 test = ["pytest", "pytest-mock"]  # needed for running automated tests
 
 [project.urls]
-homepage = "https://github.com/katholt/KleborateModular"
+homepage = "https://github.com/klebgenomics/KleborateModular"
 documentation = "https://kleboratemodular.readthedocs.io/"
-repository = "https://github.com/katholt/KleborateModular"
+repository = "https://github.com/klebgenomics/KleborateModular"
 
 [project.scripts]
 kleborate = "kleborate.__main__:main"  # create an executable file named "kleborate"
