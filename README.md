@@ -5,10 +5,7 @@ Kleborate v3 includes a rewrite of [Kleborate](https://github.com/klebgenomics/k
 * Provide functionality for other species, e.g. _Klebsiella oxytoca_ and _Escherichia coli_
 * Replace the BLAST dependency with [minimap2](https://lh3.github.io/minimap2/minimap2.html)
 
-This version of Kleborate is **not yet complete**, so most users will probably want the [main Kleborate repo](https://github.com/klebgenomics/kleborate) instead.
-
-
-**Available modules for Kleborate V3:**
+**Available modules for Kleborate v3:**
 
 * Basic contigs stats
 * Mash-based species detection for Klebsiella and closely-related genera
@@ -33,5 +30,3 @@ This version of Kleborate is **not yet complete**, so most users will probably w
 **For information on how to install, and run Kleborate please visit the [Docs](https://kleboratemodular.readthedocs.io/).**
 
 **A step-by-step tutorial for Kleborate v2 is available [here](http://bit.ly/kleborate-workshop).**
-
-
