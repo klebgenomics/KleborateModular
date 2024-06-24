@@ -9,6 +9,7 @@ Details of the available modules, how they work, and how to interpret the output
 
 General modules
 ===============
+.. _species-detection:
 
 Species detection
 -----------------
@@ -43,6 +44,8 @@ Output of the species typing module is the following columns:
      - Strength of the species call indicated as ``strong``\  (Mash distance ≤ 0.02) or ``weak``\  (Mash distance of > 0.02 and ≤ 0.04, may be novel or hybrid species)
 
 The quality and completeness of Kleborate results depends on the quality of the input genome assemblies. In general, you can expect good results from draft genomes assembled with tools like SPAdes from high-depth (>50x) Illumina data, however it is always possible that key genes subject to genotyping may be split across contigs, which can create problems for detecting and typing them accurately.
+
+.. _contig-stats:
 
 Contig stats
 ------------
