@@ -19,7 +19,7 @@ def description():
 
 
 def prerequisite_modules():
-    return ['klebsiella__abst', 'klebsiella__cbst', 'klebsiella__ybst']
+    return ['klebsiella__abst', 'klebsiella__cbst', 'klebsiella__ybst','klebsiella__rmst', 'klebsiella__smst']
 
 
 def get_headers():
