@@ -56,35 +56,35 @@ Please refer to the module section for detailed explanations.
      - species, species_match
    * - `general__contig_stats <https://kleboratemodular.readthedocs.io/en/latest/modules.html#general__contig_stats>`_
      - contig_count, N50, largest_contig, total_size, ambiguous_bases, QC_warnings
-   * - klebsiella_pneumo_complex__mlst
+   * - `klebsiella_pneumo_complex__mlst <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella_pneumo_complex__mlst>`_
      - ST, gapA, infB, mdh, pgi, phoE, rpoB, tonB
-   * - klebsiella__ybst
+   * - `klebsiella__ybst <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella__ybst>`_
      - YbST, Yersiniabactin, ybtS, ybtX, ybtQ, ybtP, ybtA, irp2, irp1, ybtU, ybtT, ybtE, fyuA
-   * - klebsiella__cbst
+   * - `klebsiella__cbst <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella__cbst>`_
      - CbST, Colibactin, clbA, clbB, clbC, clbD, clbE, clbF, clbG, clbH, clbI, clbL, clbM, clbN, clbO, clbP, clbQ
-   * - klebsiella__abst
+   * - `klebsiella__abst <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella__abst>`_
      - AbST, Aerobactin, iucA, iucB, iucC, iucD, iutA
-   * - klebsiella__smst
+   * - `klebsiella__smst <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella__smst>`_
      - Salmochelin, SmST, iroB, iroC, iroD, iroN
-   * - klebsiella__rmst
+   * - `klebsiella__rmst <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella__rmst>`_
      - RmST, RmpADC, rmpA, rmpD, rmpC
-   * - klebsiella__rmpa2
+   * - `klebsiella__rmpa2 <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella__rmpa2>`_
      - rmpA2
-   * - Virulence score
+   * - `Virulence score <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella_pneumo_complex__virulence_score>`_
      - virulence_score (Score of 0-5)
-   * - klebsiella_pneumo_complex__amr
+   * - `klebsiella_pneumo_complex__amr <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella_pneumo_complex__amr>`_
      - AGly_acquired, Col_acquired, Fcyn_acquired, Flq_acquired, Gly_acquired, MLS_acquired, Phe_acquired, Rif_acquired, Sul_acquired, Tet_acquired, Tgc_acquired, Tmt_acquired, Bla_acquired, Bla_ESBL_acquired, Bla_ESBL_inhR_acquired, Bla_Carb_acquired, Bla_chr, SHV_mutations, Omp_mutations, Col_mutations, Flq_mutations, truncated_resistance_hits, spurious_resistance_hits
-   * - klebsiella_pneumo_complex__resistance_score
+   * - `klebsiella_pneumo_complex__resistance_score <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella_pneumo_complex__resistance_score>`_
      - resistance_score (Score of 0-3), num_resistance_genes, num_resistance_classes
-   * - klebsiella_pneumo_complex__wzi
+   * - `klebsiella_pneumo_complex__wzi <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella_pneumo_complex__wzi>`_
      - wzi allele
-   * - klebsiella_pneumo_complex__kaptive
+   * - `klebsiella_pneumo_complex__kaptive <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella_pneumo_complex__kaptive>`_
      - Best match locus, Best match type, Match confidence, Problems, Identity, Coverage, Length discrepancy, Expected genes in locus, details, Missing expected gene
-   * - klebsiella_oxytoca_complex__mlst
+   * - `klebsiella_oxytoca_complex__mlst <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella_oxytoca_complex__mlst>`_
      - ST, gapA, infB, mdh, pgi, phoE, rpoB, tonB
-   * - escherichia__mlst_pasteur
+   * - `escherichia__mlst_pasteur <https://kleboratemodular.readthedocs.io/en/latest/modules.html#escherichia__mlst_achtman>`_
      - ST, dinB, icdA, pabB, polB, putP, trpA, trpB, uidA
-   * - escherichia__mlst_achtman
+   * - `escherichia__mlst_achtman <https://kleboratemodular.readthedocs.io/en/latest/modules.html#escherichia__mlst_pasteur>`_
      - ST, adk, fumC, gyrB, icd, mdh, purA, recA
 
 Citations
