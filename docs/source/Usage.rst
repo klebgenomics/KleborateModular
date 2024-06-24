@@ -17,25 +17,25 @@ Run with preset modules for *K. pneumoniae* species complex (KpSC):
 
 .. code-block:: Python
 
-   ./kleborate-runner.py -a *.fasta -o results.txt -p kpsc
+   kleborate -a *.fasta -o results.txt -p kpsc
 
 Run with specified modules only:
 
 .. code-block:: Python
 
-   ./kleborate-runner.py -a *.fasta -o results.txt -m 
+   kleborate -a *.fasta -o results.txt -m 
 
 Run with preset modules for *E. coli* or other *Escherichia*, on gzipped assemblies:
 
 .. code-block:: Python
 
-   ./kleborate-runner.py  -a *.fasta.gz -o results.txt -p escherichia
+   kleborate  -a *.fasta.gz -o results.txt -p escherichia
 
 Check available modules, check version, print help:
 
 .. code-block:: Python
 
-   ./kleborate-runner.py [--list_modules] [--version] [-h]
+   kleborate [--list_modules] [--version] [-h]
 
 
 Parameters
