@@ -23,8 +23,6 @@ Install Kleborate
 
 Create a conda environment::
 
-.. code-block:: bash
-
    conda create -n klebsiella_analysis python=3.9 minimap2 mash -y
    conda activate klebsiella_analysis
 
