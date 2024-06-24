@@ -34,7 +34,7 @@ Kleborate was primarily developed to screen genome assemblies of *Klebsiella pne
 
 .. code-block:: Python
 
-   ./kleborate-runner.py  -a *.fasta -o results.txt -p kpsc
+   kleborate  -a *.fasta -o results.txt -p kpsc
 
 (Note the command has changed from Kleborate v2, the above is equivalent to running ``kleborate --all -o results.txt -a *.fasta``  with Kleborate v2 and includes all resistance and Kaptive-based typing)
 
