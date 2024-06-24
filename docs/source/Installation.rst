@@ -18,16 +18,16 @@ Kleborate requires the following software and libraries to be installed and avai
 * `DNA Features Viewer <https://edinburgh-genome-foundry.github.io/DnaFeaturesViewer/>`_
 
 
-Run KleborateModular 
-~~~~~~~~~~~~~~~~~~~~~
+Install Kleborate 
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a conda environment::
 
 .. code-block:: bash
 
-   conda create -n klebsiella_analysis python=3.9 biopython minimap2 mash -y
+   conda create -n klebsiella_analysis python=3.9 minimap2 mash -y
    conda activate klebsiella_analysis
-   git clone --recursive https://github.com/klebgenomics/KleborateModular.git
 
-   cd KleborateModular
-   ./kleborate-runner.py --list_modules
-   ./kleborate-runner.py -h
+Install from PyPI::
 
+   pip install kleborate
