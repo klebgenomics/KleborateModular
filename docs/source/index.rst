@@ -82,9 +82,9 @@ Please refer to the module section for detailed explanations.
      - Best match locus, Best match type, Match confidence, Problems, Identity, Coverage, Length discrepancy, Expected genes in locus, details, Missing expected gene
    * - `klebsiella_oxytoca_complex__mlst <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella_oxytoca_complex__mlst>`_
      - ST, gapA, infB, mdh, pgi, phoE, rpoB, tonB
-   * - `escherichia__mlst_pasteur <https://kleboratemodular.readthedocs.io/en/latest/modules.html#escherichia__mlst_achtman>`_
+   * - `escherichia__mlst_pasteur <https://kleboratemodular.readthedocs.io/en/latest/modules.html#escherichia__mlst_pasteur>`_
      - ST, dinB, icdA, pabB, polB, putP, trpA, trpB, uidA
-   * - `escherichia__mlst_achtman <https://kleboratemodular.readthedocs.io/en/latest/modules.html#escherichia__mlst_pasteur>`_
+   * - `escherichia__mlst_achtman <https://kleboratemodular.readthedocs.io/en/latest/modules.html#escherichia__mlst_achtman>`_
      - ST, adk, fumC, gyrB, icd, mdh, purA, recA
 
 Citations
