@@ -46,7 +46,9 @@ Output of the species typing module is the following columns:
 
 The quality and completeness of Kleborate results depends on the quality of the input genome assemblies. In general, you can expect good results from draft genomes assembled with tools like SPAdes from high-depth (>50x) Illumina data, however it is always possible that key genes subject to genotyping may be split across contigs, which can create problems for detecting and typing them accurately.
 
+
 .._general__contig_stats:
+
 
 Contig stats
 ------------
@@ -146,7 +148,9 @@ We've included the phylogroup numbers in the table below for backwards compatibi
 
 :sup:`b` alternative (older) Kp phylogroup numbers as described in `Brisse et al. 2001 <https://ijs.microbiologyresearch.org/content/journal/ijsem/10.1099/00207713-51-3-915#tab2>`_ and `Fevre et al. 2005 <https://aac.asm.org/content/49/12/5149>`_ prior to the identification of *K. variicola* subsp *tropica*\ , *K. quasivariicola* and *K. africana*.
 
+
 .._klebsiella_pneumo_complex__mlst:
+
 
 KpSC MLST
 ---------
@@ -246,8 +250,10 @@ Notes on virulence sequence type reporting:
 * If <100% but >50% of the genes in a locus are detected, Kleborate will report the locus as (incomplete), along with the closest matching ST and its corresponding phylogenetic lineage. E.g. if only 7 of the 11 *ybt* genes are detected, this will be reported as ``ybtX; ICEKpX (incomplete)``.
 * For genomes with multiple copies of a virulence locus (e.g. a strain that carries ICE *Kp1* and the KpVP-1 plasmid will have two copies of *iro* and *rmp*\ ), Kleborate will report and assign a ST or closest matching ST to each of these virulence loci provided that the locus is relatively intact in the genome (i.e. >50% of the genes in a locus are present on a single contig) and according to the above criteria.  
 
+
 .._klebsiella__ybst:
 .._klebsiella__cbst:
+
 
 Yersiniabactin and colibactin
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -328,8 +334,10 @@ Output of the cbst module is the following columns:
    * - clbA, clbB, clbC, clbD, clbE, clbF, clbG, clbH, clbI, clbL, clbM, clbN, clbO, clbP, clbQ
      - allele number (clb / pks locus)
 
+
 .._klebsiella__abst:
 .._klebsiella__smst:
+
 
 Aerobactin and salmochelin
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -419,8 +427,10 @@ Output of the smst module is the following columns:
    * - iroB, iroC, iroD, iroN
      - allele number (iro locus)
 
+
 .._klebsiella__rmst:
 .._klebsiella__rmpa2:
+
 
 Hypermucoidy loci
 ^^^^^^^^^^^^^^^^^^
@@ -501,7 +511,9 @@ Output of the rmst module is the following columns:
    * - rmpA2
      - best matching allele
 
+
 .._klebsiella_pneumo_complex__virulence_score:
+
 
 Virulence score
 ^^^^^^^^^^^^^^^^^^
@@ -546,6 +558,7 @@ Virulence score is output in the following column:
 
 
 .._klebsiella_pneumo_complex__amr:
+
 
 KpSC AMR
 --------
@@ -699,7 +712,9 @@ Results of the KpSC AMR module are grouped by drug class (according to the `ARG-
    * - spurious_resistance_hits
      - list of acquired resistance genes detected below the identity or coverage thresholds (default <90% identity or <80% nucleotide coverage)
 
+
 .._klebsiella_pneumo_complex__resistance_score:
+
 
 Resistance scores and counts
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -759,7 +774,9 @@ Resistance scores and counts are output in the following columns:
    * - num_resistance_classes
      - Number of drug classes to which resistance determinants have been acquired (in addition to intrinsic ampicillin)
 
+
 .._klebsiella_pneumo_complex__kaptive:
+
 
 KpSC K and O locus typing with Kaptive
 -----------------------------------------
@@ -815,7 +832,9 @@ Kaptive results are output in the following columns:
    * - Missing expected genes
      - A string listing the gene names of expected genes that were not found.
 
+
 .._klebsiella_pneumo_complex__wzi:
+
 
 KpSC Wzi typing for K antigen prediction
 -----------------------------------------
@@ -865,7 +884,9 @@ These modules will be run if the ``enterobacterales__species``\   module confirm
 
    * - Klebsiella spallanzanii
 
+
 .._klebsiella_oxytoca_complex__mlst:
+
 
 KoSC MLST
 ---------
@@ -933,8 +954,10 @@ Escherichia
 
 These modules will be run if the ``enterobacterales__species``\   module confirms the input assembly as a member of the *Escherichia* genus. 
 
+
 .._escherichia__mlst_achtman:
 .._escherichia__mlst_pasteur:
+
 
 E. coli MLST
 ------------
