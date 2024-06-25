@@ -52,11 +52,11 @@ Please refer to the module section for detailed explanations.
 
    * - **Module Name**
      - **Columns**
-   * - :ref:`enterobacterales_species`
+   * - :ref:`Enterobacterales Species <enterobacterales_species>`
      - species, species_match
-   * - :ref:`general_contig_stats`
+   * - :ref:`General Contig Stats <general_contig_stats>`
      - contig_count, N50, largest_contig, total_size, ambiguous_bases, QC_warnings
-   * - :ref:`klebsiella_pneumo_complex__mlst`
+   * - :ref:`Klebsiella Pneumo Complex MLST <klebsiella_pneumo_complex__mlst>`
      - ST, gapA, infB, mdh, pgi, phoE, rpoB, tonB
    * - `klebsiella__ybst <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella__ybst>`_
      - YbST, Yersiniabactin, ybtS, ybtX, ybtQ, ybtP, ybtA, irp2, irp1, ybtU, ybtT, ybtE, fyuA
