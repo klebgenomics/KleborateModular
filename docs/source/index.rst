@@ -52,9 +52,9 @@ Please refer to the module section for detailed explanations.
 
    * - **Module Name**
      - **Columns**
-   * - `enterobacterales__species <https://kleboratemodular.readthedocs.io/en/latest/modules.html#enterobacterales_species>`_
+   * - `enterobacterales__species <#enterobacterales_species>`_
      - species, species_match
-   * - `general__contig_stats <https://kleboratemodular.readthedocs.io/en/latest/modules.html#general__contig_stats>`_
+   * - `general__contig_stats <#general__contig_stats>`_
      - contig_count, N50, largest_contig, total_size, ambiguous_bases, QC_warnings
    * - `klebsiella_pneumo_complex__mlst <https://kleboratemodular.readthedocs.io/en/latest/modules.html#klebsiella_pneumo_complex__mlst>`_
      - ST, gapA, infB, mdh, pgi, phoE, rpoB, tonB
