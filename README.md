@@ -20,7 +20,7 @@ Kleborate v3 includes a rewrite of [Kleborate](https://github.com/klebgenomics/k
 * Chromosomal MLST for the *Klebsiella pneumoniae* species complex
 * Virulence score (0-5) for the *Klebsiella pneumoniae* species complex, based on the results of the abst, cbst and ybst modules
 * Genotyping acquired genes and mutations for the *Klebsiella pneumoniae* species complex
-* Resistance score (0-3) for the *Klebsiella pneumoniae* species complex, based on the results of the kpsc_amr module
+* Resistance score (0-3) for the *Klebsiella pneumoniae* species complex
 * Resistance gene classes count
 * Resistance genes count
 * Wzi typing for K antigen prediction
