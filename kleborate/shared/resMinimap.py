@@ -31,8 +31,8 @@ from kleborate.modules.klebsiella_pneumo_complex__amr.col_mutations import*
 
 def resminimap_assembly(assembly, minimap2_index, ref_file, gene_info, qrdr, trunc, omp,  min_coverage, min_identity,
                           min_spurious_coverage, min_spurious_identity):
-    hits_dict = minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_coverage, min_identity, min_spurious_coverage, min_spurious_identity)
-    
+    hits_dict = minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_identity, min_spurious_coverage, min_spurious_identity, min_coverage)
+   
     if qrdr:
         check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_identity, 90.0)
         
@@ -107,7 +107,7 @@ def get_res_headers(res_classes, bla_classes):
     return res_headers
 
 
-def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_coverage, min_identity, min_spurious_coverage, min_spurious_identity):
+def minimap_against_all(assembly, minimap2_index, ref_file, gene_info, min_identity, min_spurious_coverage, min_spurious_identity, min_coverage):
     
     """
     This function takes:
