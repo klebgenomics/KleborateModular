@@ -70,12 +70,16 @@ Please refer to the module section for detailed explanations.
      - RmST, RmpADC, rmpA, rmpD, rmpC
    * - klebsiella__rmpa2 
      - rmpA2
-   * - Virulence score 
+   * - klebsiella_pneumo_complex__virulence_score 
      - virulence_score (Score of 0-5)
    * - klebsiella_pneumo_complex__amr 
      - AGly_acquired, Col_acquired, Fcyn_acquired, Flq_acquired, Gly_acquired, MLS_acquired, Phe_acquired, Rif_acquired, Sul_acquired, Tet_acquired, Tgc_acquired, Tmt_acquired, Bla_acquired, Bla_ESBL_acquired, Bla_ESBL_inhR_acquired, Bla_Carb_acquired, Bla_chr, SHV_mutations, Omp_mutations, Col_mutations, Flq_mutations, truncated_resistance_hits, spurious_resistance_hits
    * - klebsiella_pneumo_complex__resistance_score 
      - resistance_score (Score of 0-3), num_resistance_genes, num_resistance_classes
+   * - klebsiella_pneumo_complex__resistance_gene_count 
+     - num_resistance_genes
+   * - klebsiella_pneumo_complex__resistance_class_count
+     - num_resistance_classes
    * - klebsiella_pneumo_complex__wzi 
      - wzi allele
    * - klebsiella_pneumo_complex__kaptive 
