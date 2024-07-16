@@ -10,8 +10,10 @@
    Installation
    Usage
    modules
+   kpsc_modules
+   kosc_modules
+   E.coli_modules
    Creating-New-Modules
-
 
 ########################
 Introducing Kleborate v3
