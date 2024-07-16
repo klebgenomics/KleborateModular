@@ -58,9 +58,9 @@ Summary of availabe modules and their output columns
 **Kleborate modules are divided into:**
 
 1. General Modules
-2. Modules for *Klebsiella pneumoniae* Species Complex
-3. Modules for *Klebsiella oxytoca* Species Complex
-4. Modules for *Escherichia* Species Complex
+2. Modules for *Klebsiella pneumoniae* species complex
+3. Modules for *Klebsiella oxytoca* species complex
+4. Modules for *Escherichia* species complex
 
 Details of how the modules work, and how to interpret the outputs, are given below.
 
