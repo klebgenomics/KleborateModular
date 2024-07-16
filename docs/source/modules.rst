@@ -55,12 +55,12 @@ Summary of availabe modules and their output columns
    * - escherichia__mlst_achtman 
      - ST, adk, fumC, gyrB, icd, mdh, purA, recA
 
-Kleborate modules are divided into:
+**Kleborate modules are divided into:**
 
-1. **General Modules**
-2. **Modules for *Klebsiella pneumoniae* Species Complex**
-3. **Modules for *Klebsiella oxytoca* Species Complex**
-4. **Modules for *Escherichia* Species Complex**
+1. General Modules
+2. Modules for *Klebsiella pneumoniae* Species Complex
+3. Modules for *Klebsiella oxytoca* Species Complex
+4. Modules for *Escherichia* Species Complex
 
 Details of how the modules work, and how to interpret the outputs, are given below.
 
