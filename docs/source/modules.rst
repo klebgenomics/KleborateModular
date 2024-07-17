@@ -20,13 +20,13 @@ Summary of availabe modules and their output columns
      - species, species_match
    * - :ref:`general__contig_stats <contig_stats>`
      - contig_count, N50, largest_contig, total_size, ambiguous_bases, QC_warnings
-   * - :ref:`klebsiella_pneumo_complex__mlst <kpsc_modules:klebsiella_pneumo_complex_mlst>`
+   * - :ref:`klebsiella_pneumo_complex__mlst <klebsiella_pneumo_complex_mlst>`
      - ST, gapA, infB, mdh, pgi, phoE, rpoB, tonB
-   * - :ref:`klebsiella__ybst <kpsc_modules:klebsiella__ybst>`
+   * - :ref:`klebsiella__ybst <klebsiella__ybst>`
      - YbST, Yersiniabactin, ybtS, ybtX, ybtQ, ybtP, ybtA, irp2, irp1, ybtU, ybtT, ybtE, fyuA
-   * - :ref:`klebsiella__cbst <kpsc_modules:klebsiella__cbst>`
+   * - :ref:`klebsiella__cbst <klebsiella__cbst>`
      - CbST, Colibactin, clbA, clbB, clbC, clbD, clbE, clbF, clbG, clbH, clbI, clbL, clbM, clbN, clbO, clbP, clbQ
-   * - :ref:`klebsiella__abst <kpsc_modules:klebsiella__abst>`
+   * - :ref:`klebsiella__abst <klebsiella__abst>`
      - AbST, Aerobactin, iucA, iucB, iucC, iucD, iutA
    * - :ref:`klebsiella__smst <kpsc_modules:klebsiella__smst>`
      - Salmochelin, SmST, iroB, iroC, iroD, iroN
