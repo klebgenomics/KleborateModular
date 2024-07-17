@@ -50,9 +50,9 @@ Summary of availabe modules and their output columns
      - Best match locus, Best match type, Match confidence, Problems, Identity, Coverage, Length discrepancy, Expected genes in locus, details, Missing expected gene
    * - :ref:`klebsiella_oxytoca_complex__mlst <klebsiella_oxytoca_complex__mlst>`
      - ST, gapA, infB, mdh, pgi, phoE, rpoB, tonB
-   * - :ref:`escherichia__mlst_pasteur < E. coli MLST>`
+   * - :ref:`escherichia__mlst_pasteur < escherichia__mlst_achtman>`
      - ST, dinB, icdA, pabB, polB, putP, trpA, trpB, uidA
-   * - :ref:`escherichia__mlst_achtman < E. coli MLST>`
+   * - :ref:`escherichia__mlst_achtman < escherichia__mlst_achtman>`
      - ST, adk, fumC, gyrB, icd, mdh, purA, recA
 
 **Kleborate modules are divided into:**
