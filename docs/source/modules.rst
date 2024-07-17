@@ -16,9 +16,9 @@ Summary of availabe modules and their output columns
 
    * - **Module Name**
      - **Columns**
-   * - enterobacterales__species 
+   * - :ref:`enterobacterales__species <species_detection>`
      - species, species_match
-   * - general__contig_stats 
+   * - :ref:`general__contig_stats <contig_stats>`
      - contig_count, N50, largest_contig, total_size, ambiguous_bases, QC_warnings
    * - klebsiella_pneumo_complex__mlst 
      - ST, gapA, infB, mdh, pgi, phoE, rpoB, tonB
@@ -67,6 +67,8 @@ Details of how the modules work, and how to interpret the outputs, are given bel
 General modules
 ===============
 
+.. _species_detection:
+
 Species detection
 -----------------
 
@@ -104,6 +106,8 @@ The quality and completeness of Kleborate results depends on the quality of the 
 
 Contig stats
 ------------
+
+.. _contig_stats:
 
 .. code-block:: Python
 
