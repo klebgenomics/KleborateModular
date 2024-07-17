@@ -2,6 +2,8 @@
 Modules for *Escherichia* species complex
 ****************************************************
 
+.. _E. coli MLST:
+
 .. code-block:: Python
 
    --preset escherichia
@@ -9,7 +11,7 @@ Modules for *Escherichia* species complex
 These modules will be run if the ``enterobacterales__species``\   module confirms the input assembly as a member of the *Escherichia* genus. 
 
 
-E. coli MLST
+*E. coli* MLST
 ------------
 
 .. code-block:: Python
