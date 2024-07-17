@@ -65,7 +65,7 @@ Summary of availabe modules and their output columns
 Details of how the modules work, and how to interpret the outputs, are given below.
 
 General modules
-===============
+-----------------
 
 .. _species_detection:
 
