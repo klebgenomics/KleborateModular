@@ -28,31 +28,31 @@ Summary of availabe modules and their output columns
      - CbST, Colibactin, clbA, clbB, clbC, clbD, clbE, clbF, clbG, clbH, clbI, clbL, clbM, clbN, clbO, clbP, clbQ
    * - :ref:`klebsiella__abst <klebsiella__abst>`
      - AbST, Aerobactin, iucA, iucB, iucC, iucD, iutA
-   * - :ref:`klebsiella__smst <kpsc_modules:klebsiella__smst>`
+   * - :ref:`klebsiella__smst <klebsiella__smst>`
      - Salmochelin, SmST, iroB, iroC, iroD, iroN
-   * - :ref:`klebsiella__rmst <kpsc_modules:klebsiella__rmst>`
+   * - :ref:`klebsiella__rmst <klebsiella__rmst>`
      - RmST, RmpADC, rmpA, rmpD, rmpC
-   * - :ref:`klebsiella__rmpa2 <kpsc_modules:klebsiella__rmpa2>`
+   * - :ref:`klebsiella__rmpa2 <klebsiella__rmpa2>`
      - rmpA2
-   * - :ref:`klebsiella_pneumo_complex__virulence_score <kpsc_modules:klebsiella_pneumo_complex__virulence_score>`
+   * - :ref:`klebsiella_pneumo_complex__virulence_score <klebsiella_pneumo_complex__virulence_score>`
      - virulence_score (Score of 0-5)
-   * - :ref:`klebsiella_pneumo_complex__amr <kpsc_modules:klebsiella_pneumo_complex__amr>`
+   * - :ref:`klebsiella_pneumo_complex__amr <klebsiella_pneumo_complex__amr>`
      - AGly_acquired, Col_acquired, Fcyn_acquired, Flq_acquired, Gly_acquired, MLS_acquired, Phe_acquired, Rif_acquired, Sul_acquired, Tet_acquired, Tgc_acquired, Tmt_acquired, Bla_acquired, Bla_ESBL_acquired, Bla_ESBL_inhR_acquired, Bla_Carb_acquired, Bla_chr, SHV_mutations, Omp_mutations, Col_mutations, Flq_mutations, truncated_resistance_hits, spurious_resistance_hits
-   * - :ref:`klebsiella_pneumo_complex__resistance_score <kpsc_modules:Resistance scores and counts>`
+   * - :ref:`klebsiella_pneumo_complex__resistance_score <Resistance scores and counts>`
      - resistance_score (Score of 0-3)
-   * - :ref:`klebsiella_pneumo_complex__resistance_gene_count <kpsc_modules:Resistance scores and counts>`
+   * - :ref:`klebsiella_pneumo_complex__resistance_gene_count <Resistance scores and counts>`
      - num_resistance_genes
-   * - :ref:`klebsiella_pneumo_complex__resistance_class_count <kpsc_modules:Resistance scores and counts>`
+   * - :ref:`klebsiella_pneumo_complex__resistance_class_count <Resistance scores and counts>`
      - num_resistance_classes
-   * - :ref:`klebsiella_pneumo_complex__wzi <kpsc_modules:klebsiella_pneumo_complex__wzi>`
+   * - :ref:`klebsiella_pneumo_complex__wzi <klebsiella_pneumo_complex__wzi>`
      - wzi allele
-   * - :ref:`klebsiella_pneumo_complex__kaptive <kpsc_modules:klebsiella_pneumo_complex__kaptive>`
+   * - :ref:`klebsiella_pneumo_complex__kaptive <klebsiella_pneumo_complex__kaptive>`
      - Best match locus, Best match type, Match confidence, Problems, Identity, Coverage, Length discrepancy, Expected genes in locus, details, Missing expected gene
-   * - :ref:`klebsiella_oxytoca_complex__mlst <kosc_modules:klebsiella_oxytoca_complex__mlst>`
+   * - :ref:`klebsiella_oxytoca_complex__mlst <klebsiella_oxytoca_complex__mlst>`
      - ST, gapA, infB, mdh, pgi, phoE, rpoB, tonB
-   * - :ref:`escherichia__mlst_pasteur < E. coli:E. coli MLST>`
+   * - :ref:`escherichia__mlst_pasteur < E. coli MLST>`
      - ST, dinB, icdA, pabB, polB, putP, trpA, trpB, uidA
-   * - :ref:`escherichia__mlst_achtman < E. coli:E. coli MLST>`
+   * - :ref:`escherichia__mlst_achtman < E. coli MLST>`
      - ST, adk, fumC, gyrB, icd, mdh, purA, recA
 
 **Kleborate modules are divided into:**
