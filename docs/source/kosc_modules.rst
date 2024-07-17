@@ -2,6 +2,7 @@
 Modules for *Klebsiella oxytoca* species complex
 ****************************************************
 
+.. _klebsiella_oxytoca_complex__mlst:
 
 .. code-block:: Python
 
@@ -23,8 +24,6 @@ These modules will be run if the ``enterobacterales__species``\   module confirm
 
    * - Klebsiella spallanzanii
 
-
-.. _klebsiella_oxytoca_complex__mlst:
 
 
 KoSC MLST
