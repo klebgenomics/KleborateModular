@@ -46,8 +46,15 @@ def parse_arguments(args, all_module_names, modules):
     io_args = parser.add_argument_group('Input/output')
     io_args.add_argument('-a', '--assemblies', nargs='+', type=str,
                          help='FASTA file(s) for assemblies')
-    io_args.add_argument('-o', '--outfile', type=str, default='Kleborate_results.txt',
-                         help='File for detailed output (default: Kleborate_results.txt)')
+
+    io_args.add_argument('-r', '--resume', action='store_true',
+                         help='append the output files')
+
+    io_args.add_argument('-o', '--outdir', type=str, required=True,
+                         help='Directory for storing output files')
+
+    io_args.add_argument('--trim_headers', action='store_true',
+                         help='Trim headers in the output files')
 
     module_args = parser.add_argument_group('Modules')
     module_args.add_argument('--list_modules', action='store_true',
