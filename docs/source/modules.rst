@@ -17,7 +17,7 @@ Kleborate v3 includes a range of modules for typing bacterial genomes, most of w
 
 
 Summary of availabe modules and their output columns
-----------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table:: 
    :header-rows: 1
