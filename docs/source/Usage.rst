@@ -44,11 +44,19 @@ Run with specified modules only:
 If the -m argument is used, the output file is suffixed with the module name.
 
 
+Run with preset modules for *K. oxytoca* species complex
+
+.. code-block:: Python
+
+   kleborate -a *.fasta -o kleborate_results -p kosc
+
+
 Run with preset modules for *E. coli* or other *Escherichia*, on gzipped assemblies:
 
 .. code-block:: Python
 
    kleborate  -a *.fasta.gz -o kleborate_results -p escherichia
+
 
 Check available modules, check version, print help:
 
