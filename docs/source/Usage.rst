@@ -10,7 +10,7 @@ Genome assemblies in FASTA format (can be gzipped).
 
 Can be either draft or completed assemblies, though completed is better because it reduces the risk of fragmented genes/loci.
 
-**The Kleborate output results are split based on the species KpSC, Kosc, *Escherichia* **
+**The Kleborate output results are split based on the species KpSC, Kosc, *Escherichia***
 
 Basic usage
 -----------
@@ -25,7 +25,7 @@ Run with preset modules for *K. pneumoniae* species complex (KpSC):
 - ``-o``: Specifies the directory where the output files will be saved.
 
 
-The output headers consist of the module names. Users can provide the --trim_headers argument to trim off the module names, making the headers easier to read.
+The output headers consist of the module names. Users can provide the ``--trim_headers`` argument to trim off the module names, making the headers easier to read.
 
 .. code-block:: bash
 
@@ -66,11 +66,11 @@ Parameters
 
 FASTA file(s) for assemblies
 
-``-o OUTDIR, --outfile --outdir OUTDIR ``
+``-o OUTDIR, --outfile --outdir OUTDIR``
+    File for detailed output (default: Kleborate_results)
 
-File for detailed output (default: Kleborate_results)
-
-`` --trim_headers Trim headers in the output files ``
+``--trim_headers``
+    Trim headers in the output files
 
 **Modules:**
 
