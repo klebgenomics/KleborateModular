@@ -103,6 +103,10 @@ def main():
     print('\t'.join([h.split('__')[-1] for h in stdout_headers]))
 
    # output file suffix for the -m argument
+    # Ensure the output directory exists
+    if not os.path.exists(args.outdir):
+        os.makedirs(args.outdir)
+        
     if args.modules:
         module_name = args.modules.split(',')[0]  
         outfile_suffix = f'_{module_name}_output.txt'
