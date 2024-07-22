@@ -10,7 +10,7 @@ Genome assemblies in FASTA format (can be gzipped).
 
 Can be either draft or completed assemblies, though completed is better because it reduces the risk of fragmented genes/loci.
 
-**The Kleborate output results are split based on the species KpSC, Kosc, *Escherichia***
+The Kleborate output results are split based on the species
 
 Basic usage
 -----------
@@ -67,7 +67,7 @@ Parameters
 FASTA file(s) for assemblies
 
 ``-o OUTDIR, --outfile --outdir OUTDIR``
-    File for detailed output (default: Kleborate_results)
+    Directory for storing output files (default: Kleborate_results)
 
 ``--trim_headers``
     Trim headers in the output files
