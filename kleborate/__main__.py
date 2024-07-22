@@ -25,6 +25,7 @@ import sys
 import tempfile
 import textwrap
 import uuid
+from glob import glob
 
 from .shared.help_formatter import MyParser, MyHelpFormatter
 from .shared.misc import get_compression_type, load_fasta,reverse_complement
