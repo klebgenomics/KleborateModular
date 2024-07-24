@@ -10,12 +10,6 @@
    Installation
    Usage
    modules
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-   :caption: modules
-
    General_modules
    kpsc_modules
    kosc_modules
