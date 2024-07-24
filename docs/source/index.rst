@@ -10,16 +10,17 @@
    Installation
    Usage
    modules
-   Creating-New-Modules
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+   :hidden:
    :caption: Modules
 
    General_modules
    kpsc_modules
    kosc_modules
    Escherichia_modules
+   Creating-New-Modules
 
 ########################
 Introducing Kleborate v3
