@@ -1,6 +1,6 @@
 
 ****************************************************
-Modules for *Escherichia* species complex
+Modules for *Escherichia* species
 ****************************************************
 
 
