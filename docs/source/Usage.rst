@@ -64,7 +64,7 @@ Parameters
 ``-a ASSEMBLIES [ASSEMBLIES ...], --assemblies ASSEMBLIES [ASSEMBLIES ...]``
     FASTA file(s) for assemblies, optionally gzipped (.gz)
 
-``-o OUTDIR, --outfile --outdir OUTDIR``
+``-o OUTDIR, --outdir OUTDIR``
     Directory for storing output files (default: Kleborate_results)
 
 ``--trim_headers``
