@@ -8,40 +8,31 @@ Input files
 
 Genome assemblies in FASTA format (can be gzipped). 
 
-Can be either draft or completed assemblies, though completed is better because it reduces the risk of fragmented genes/loci.
+Can be either draft or completed assemblies (completed is better because it reduces the risk of fragmented genes/loci).
 
-The Kleborate output results are split based on the species
 
 Basic usage
 -----------
 
-Run with preset modules for *K. pneumoniae* species complex (KpSC):
+Run with preset modules for *K. pneumoniae* species complex (KpSC), which reproduces the behaviour of Kleborate v2:
 
 .. code-block:: Python
 
-   kleborate -a *.fasta -o kleborate_results -p kpsc
+   kleborate -a *.fasta.gz -o kleborate_results -p kpsc --trim_headers
 
-- ``-a *.fasta``: Specifies the input files (assemblies) to be analyzed.
-- ``-o``: Specifies the directory where the output files will be saved.
-
-
-The output headers consist of the module names. Users can provide the ``--trim_headers`` argument to trim off the module names, making the headers easier to read.
-
-.. code-block:: bash
-
-    kleborate -a *.fasta -o kleborate_results -p kpsc --trim_headers
-
-**Alternatively, users can trim the headers using this script:**
-`trim_headers.py <https://github.com/klebgenomics/KleborateModular/blob/main/kleborate/shared/trim_headers.py>`_
+- ``-a *.fasta.gz``: Specifies the input files (assemblies) to be analyzed (.fasta or .fasta.gz).
+- ``-o``: Specifies the directory where the output files will be saved (one output file per species/complex detected).
+- ``-p``: Specifies the preset modules to run (kpsc, kosc, escherichia).
+- ``--trim_headers``: Trim module names from column headers in the output.
 
 
-Run with specified modules only:
+Run with specified modules only, e.g. AMR typing for *K. pneumoniae* species complex:
 
 .. code-block:: Python
 
-   kleborate -a *.fasta -o kleborate_results -m 
+   kleborate -a *.fasta -o kleborate_results -m klebsiella_pneumo_complex__amr
 
-If the -m argument is used, the output file is suffixed with the module name.
+(A list of modules is available via ```kleborate --list_modules``` or `here <https://kleboratemodular.readthedocs.io/en/latest/modules.html>`_)
 
 
 Run with preset modules for *K. oxytoca* species complex
@@ -71,24 +62,18 @@ Parameters
 **Input/output:**
 
 ``-a ASSEMBLIES [ASSEMBLIES ...], --assemblies ASSEMBLIES [ASSEMBLIES ...]``
-
-FASTA file(s) for assemblies
+    FASTA file(s) for assemblies, optionally gzipped (.gz)
 
 ``-o OUTDIR, --outfile --outdir OUTDIR``
     Directory for storing output files (default: Kleborate_results)
 
 ``--trim_headers``
-    Trim headers in the output files
+    Trim headers in the output files (switch on to remove module names from the column headers in the output files). Alternatively, users can trim the headers off later using this script: `trim_headers.py <https://github.com/klebgenomics/KleborateModular/blob/main/kleborate/shared/trim_headers.py>`_
 
 **Modules:**
 
-``--list_modules``         
-
-Print a list of all available modules and then quit (default: False)
-
 ``-p PRESET, --preset PRESET``         
-
-Module presets, choose from:
+    Module presets, choose from:
 
 .. list-table::
 
@@ -101,28 +86,27 @@ Module presets, choose from:
    * - escherichia 
      - *Escherichia* genus
 
+``--list_modules``         
+    Print a list of all available modules and then quit (default: False)
 
 ``-m MODULES, --modules MODULES``         
+    Comma-delimited list of Kleborate modules to use
 
-Comma-delimited list of Kleborate modules to use
+Module-specific parameters can be found `here <https://kleboratemodular.readthedocs.io/en/latest/modules.html>`_
 
 
 **Help:**
      
 ``-h, --help``       
-
-Show a help message and exit
+    Show a help message and exit
 
 ``--help_all``         
-
-Show a help message with all module options
+    Show a help message with all module options
 
 ``--version``         
+    Show program's version number and exit
 
-Show program's version number and exit
 
 
-**Module-specific parameters:** 
 
-See Modules documentation
 
