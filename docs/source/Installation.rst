@@ -29,3 +29,8 @@ Create a conda environment::
 Install from PyPI::
 
    pip install kleborate
+
+Test installation::
+
+   wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/813/595/GCF_002813595.1_ASM281359v1/GCF_002813595.1_ASM281359v1_genomic.fna.gz
+   kleborate -a GCF_002813595.1_ASM281359v1_genomic.fna.gz -o kleborate_test -p kpsc
