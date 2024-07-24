@@ -185,7 +185,7 @@ def main():
                     outfile_suffix = '_escherichia_output.txt'
                 else:
                     print(f"Assembly {assembly} does not match any specified species. Skipping to next assembly.")
-                    break
+                    continue
                     
             # write results
             output_file = os.path.join(args.outdir, f"kleborate_results{outfile_suffix}")
