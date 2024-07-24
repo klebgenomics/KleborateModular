@@ -13,7 +13,7 @@
    General_modules
    kpsc_modules
    kosc_modules
-   E.coli_modules
+   Escherichia_modules
    Creating-New-Modules
 
 ########################
