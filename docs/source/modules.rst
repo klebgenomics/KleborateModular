@@ -5,7 +5,7 @@ Modules
 **************************************
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    General_modules
    kpsc_modules
