@@ -10,10 +10,6 @@
    Installation
    Usage
    modules
-   General_modules
-   kpsc_modules
-   kosc_modules
-   Escherichia_modules
    Creating-New-Modules
 
 
