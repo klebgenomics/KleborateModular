@@ -6,6 +6,7 @@ Modules
 
 .. toctree::
    :maxdepth: 1
+   :hidden:
 
    General_modules
    kpsc_modules
