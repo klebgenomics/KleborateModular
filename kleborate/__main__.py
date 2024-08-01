@@ -48,9 +48,9 @@ def parse_arguments(args, all_module_names, modules):
     io_args.add_argument('-a', '--assemblies', nargs='+', type=str,
                          help='FASTA file(s) for assemblies')
 
-    io_args.add_argument('-o', '--outdir', type=str, required=True,
+    io_args.add_argument('-o', '--outdir', type=str,
                          help='Directory for storing output files')
-    
+
     io_args.add_argument('-r', '--resume', action='store_true',
                          help='append the output files')
 
@@ -96,39 +96,31 @@ def main():
         preset_check_modules = [module for module, _ in presets[args.preset]['check']]
 
     module_names, module_run_order, external_programs = check_modules(args, modules, module_names, check_module_list, pass_modules)
-    check_assemblies(args)
 
     full_headers, stdout_headers = get_headers(module_names, modules)
-    ## print headers 
     print('\t'.join([h.split('__')[-1] for h in stdout_headers]))
 
-   # output file suffix for the -m argument
     # Ensure the output directory exists
     if not os.path.exists(args.outdir):
         os.makedirs(args.outdir)
-        
+
+    # If the resume flag is not set, remove existing output files
     if args.modules:
         module_name = args.modules.split(',')[0]  
-        outfile_suffix = f'_{module_name}_output.txt'
-
-        # If the resume flag is not set, remove existing output file for the specified module
-        if not args.resume:
-            for file in glob(f'{args.outdir}/*{outfile_suffix}'):
-                os.remove(file)
+        out_files_suffixes = [f'_{module_name}_output.txt']
     else:
-        # Suffixes for the output files based on species
         out_files_suffixes = ['kp_complex_output.txt',
                               'ko_complex_output.txt',
                               'escherichia_output.txt']
-
-        # If the resume flag is not set, remove existing output files
-        if not args.resume:
-            for suffix in out_files_suffixes:
-                for file in glob(f'{args.outdir}/*{suffix}'):
-                    os.remove(file)
+    if not args.resume:
+        for suffix in out_files_suffixes:
+            for file in glob(f'{args.outdir}/*{suffix}'):
+                os.remove(file)
 
     # Iterate through each assembly
     for assembly in args.assemblies:
+        check_assembly(assembly)  # Check assembly before processing
+
         with tempfile.TemporaryDirectory() as temp_dir:
             unzipped_assembly = gunzip_assembly_if_necessary(assembly, temp_dir)
             minimap2_index = build_minimap2_index(assembly, unzipped_assembly, external_programs, temp_dir)
@@ -169,12 +161,11 @@ def main():
                         for header in module_headers:
                             results[header] = 'Not Tested'
 
-            # output file suffix based on the -m argument
+            # Split the results based on species
             if args.modules:
                 module_name = args.modules.split(',')[0] 
                 outfile_suffix = f'_{module_name}_output.txt'
             else:
-                # Retrieve the species from the results dictionary
                 # Determine the appropriate output file suffix based on species
                 species = results.get('enterobacterales__species__species', None)
                 if species and is_kp_complex({'species': species}):
@@ -186,7 +177,7 @@ def main():
                 else:
                     print(f"Assembly {assembly} does not match any specified species. Skipping to next assembly.")
                     continue
-                    
+
             # write results
             output_file = os.path.join(args.outdir, f"kleborate_results{outfile_suffix}")
             output_results(full_headers, stdout_headers, output_file, results, args.trim_headers)
@@ -420,21 +411,22 @@ def get_run_order(dependency_graph):
         sys.exit('Error: module dependency graph contains a cycle')
 
 
-def check_assemblies(args):
+def check_assembly(assembly):
     """
-    This function does a quick check to make sure that the input assemblies look good.
+    This function does a quick check to make sure that the input assembly looks good.
     """
-    for assembly in args.assemblies:
-        if os.path.isdir(assembly):
-            sys.exit('Error: ' + assembly + ' is a directory (please specify assembly files)')
-        if not os.path.isfile(assembly):
-            sys.exit('Error: could not find ' + assembly)
-        fasta = load_fasta(assembly)
-        if len(fasta) < 1:
-            sys.exit('Error: invalid FASTA file: ' + assembly)
-        for _, seq in fasta:
-            if len(seq) == 0:
-                sys.exit('Error: invalid FASTA file (contains a zero-length sequence): ' + assembly)
+    # for assembly in args.assemblies:
+    if os.path.isdir(assembly):
+        sys.exit('Error: ' + assembly + ' is a directory (please specify assembly files)')
+    if not os.path.isfile(assembly):
+        sys.exit('Error: could not find ' + assembly)
+    fasta = load_fasta(assembly)
+    if len(fasta) < 1:
+        sys.exit('Error: invalid FASTA file: ' + assembly)
+    for _, seq in fasta:
+        if len(seq) == 0:
+            sys.exit('Error: invalid FASTA file (contains a zero-length sequence): ' + assembly)
+
 
 def get_headers(module_names, modules):
     """
@@ -496,6 +488,7 @@ def output_headers(full_headers, stdout_headers, outfile):
     print('\t'.join(trimmed_stdout_headers))
     with open(outfile, 'wt') as o:
         o.write('\t'.join(trimmed_full_headers))
+
 
 def output_results(full_headers, stdout_headers, outfile, results, trim_headers=False):
     """
