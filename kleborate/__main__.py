@@ -503,7 +503,7 @@ def output_results(full_headers, stdout_headers, outfile, results, trim_headers=
     Always prints stdout headers and writes full headers to the file if the file is new (empty).
     """
     # Print results to the terminal using stdout_headers
-    print('\t'.join([str(results.get(x, "-")).strip("[] ").replace("assembly", "strain") for x in stdout_headers]))
+    print('\t'.join([str(results.get(x, "-")).strip("[] ") for x in stdout_headers]))
 
     # Determine headers based on trim_headers option
     headers_to_write = full_headers
@@ -514,7 +514,7 @@ def output_results(full_headers, stdout_headers, outfile, results, trim_headers=
     with open(outfile, 'at') as o:
         if o.tell() == 0:  # Write headers if file is empty
             o.write('\t'.join(headers_to_write) + '\n')
-        o.write('\t'.join([str(results.get(x, "-")).strip("[] ").replace("assembly", "strain") for x in full_headers]) + '\n')
+        o.write('\t'.join([str(results.get(x, "-")).strip("[] ") for x in full_headers]) + '\n')
 
     # Check for any headers in results that are not in full_headers
     for h in results.keys():
