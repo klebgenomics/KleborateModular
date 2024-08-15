@@ -14,9 +14,9 @@ not, see <http://www.gnu.org/licenses/>.
 """
 
 from Bio.Seq import Seq
-from Bio import pairwise2
+from Bio import Align
 from Bio.Align import substitution_matrices
-from ...shared.alignment import align_query_to_ref, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check, get_bases_per_ref_pos
+from ...shared.alignment import align_query_to_ref, truncation_check, get_bases_per_ref_pos
 from ...shared.misc import load_fasta, reverse_complement
 
 
@@ -38,7 +38,11 @@ def check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_identity, min_covera
     parc_ref = 'MSDMAERLALHEFTENAYLNYSMYVIMDRALPFIGDGLKPVQRRIVYAMSELGLNASAKF' \
                'KKSARTVGDVLGKYHPHGDSACYEAMVLMAQPFSYRYPLVDGQGNWGAPDDPKSFAAMRY'
 
-    blosum62 = substitution_matrices.load('BLOSUM62')
+    # define PairwiseAligner
+    protein_aligner = Align.PairwiseAligner()
+    protein_aligner.substitution_matrix = substitution_matrices.load("BLOSUM62")
+    protein_aligner.open_gap_score = -10
+    protein_aligner.extend_gap_score = -0.5
 
     snps = []
 
@@ -48,9 +52,9 @@ def check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_identity, min_covera
         
         if coverage > min_coverage:
             if hit.query_name == 'GyrA':
-                alignments = pairwise2.align.globalds(gyra_ref, translation, blosum62, -10, -0.5)
+                alignments = protein_aligner.align(gyra_ref, translation)
             elif hit.query_name == 'ParC':
-                alignments = pairwise2.align.globalds(parc_ref, translation, blosum62, -10, -0.5)
+                alignments = protein_aligner.align(parc_ref, translation)
             else:
                 assert False
             bases_per_ref_pos = get_bases_per_ref_pos(alignments[0])
@@ -61,7 +65,6 @@ def check_for_qrdr_mutations(hits_dict, assembly, qrdr, min_identity, min_covera
                 if pos in bases_per_ref_pos and assembly_base != wt_base \
                         and assembly_base != '-' and assembly_base != '.':
                     snps.append(hit.query_name + '-' + str(pos) + assembly_base)
-
         
     if snps:
         hits_dict['Flq_mutations'] += snps
