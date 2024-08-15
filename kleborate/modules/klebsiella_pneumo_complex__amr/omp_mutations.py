@@ -14,16 +14,18 @@ not, see <http://www.gnu.org/licenses/>.
 """
 
 from Bio.Seq import Seq
-from Bio import pairwise2
 from Bio import Align
 from Bio.Align import substitution_matrices
-from ...shared.alignment import align_query_to_ref, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check, get_bases_per_ref_pos
+from ...shared.alignment import align_query_to_ref, truncation_check, get_bases_per_ref_pos
 
 
 def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
 
     best_ompk35_cov, best_ompk36_cov = 0.0, 0.0
     ompk36_loci = {'OmpK36': [(25, 'C')]}
+    
+    # define the aligner
+    aligner = Align.PairwiseAligner(mode='global', match_score=5, mismatch_score=-4, open_gap_score = -10, extend_gap_score = -0.5)
     
     alignment_hits = align_query_to_ref(omp, assembly, min_query_coverage=None, min_identity=None)
     
@@ -42,7 +44,7 @@ def check_omp_genes(hits_dict, assembly, omp, min_identity, min_coverage):
             ompk36_hit = True
             query_seq = hit.query_seq
             assembly_seq = hit.ref_seq
-            alignments = pairwise2.align.globalms(query_seq , assembly_seq, 5, -4, -10, -0.5)
+            alignments = aligner.align(query_seq , assembly_seq)
             bases_per_ref_pos = get_bases_per_ref_pos(alignments[0])
             loci = ompk36_loci[hit.query_name]
             for pos, wt_base in loci:
