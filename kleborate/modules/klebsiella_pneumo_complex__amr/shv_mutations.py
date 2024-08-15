@@ -14,7 +14,7 @@ not, see <http://www.gnu.org/licenses/>.
 """
 
 from Bio.Seq import Seq
-from Bio import pairwise2
+from Bio import Align
 from Bio.Align import substitution_matrices
 from ...shared.misc import reverse_complement
 
@@ -42,8 +42,14 @@ def check_for_shv_mutations(hit, hit_allele, bla_class, exact_match):
                 'DRWETELNEALPGDARDTTTPASMAATLRKLLTSQRLSARSQRQLLQWMVDDRVAGPLIRSVLPAGWFIADKTGAGERG' \
                 'ARGIVALLGPNNKAERIVVIYLRDTPASMAERNQQIAGIGAALIEHWQR'
 
-    blosum62 = substitution_matrices.load('BLOSUM62')
-    alignments = pairwise2.align.globalds(shv_1_ref, translation, blosum62, -10, -0.5)
+    # define the aligner
+    protein_aligner = Align.PairwiseAligner()
+    protein_aligner.substitution_matrix = substitution_matrices.load("BLOSUM62")
+    protein_aligner.open_gap_score = -10
+    protein_aligner.extend_gap_score = -0.5
+
+
+    alignments = protein_aligner.align(shv_1_ref, translation)
 
     # If we didn't get any global amino acid alignments, then it's not appropriate to look for SHV
     # mutations in this hit.
@@ -51,7 +57,8 @@ def check_for_shv_mutations(hit, hit_allele, bla_class, exact_match):
         return bla_class, [], [], None
 
     alignment = alignments[0]
-    ref_aligned, hit_aligned, score, _, _ = alignment
+    ref_aligned, hit_aligned = alignment
+    score = alignment.score
     
 
     # If the identity of the alignment is too low, then it's not appropriate to look for SHV
