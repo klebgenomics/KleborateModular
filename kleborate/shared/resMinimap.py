@@ -15,9 +15,9 @@ not, see <http://www.gnu.org/licenses/>.
 
 import collections
 from collections import defaultdict
-from Bio import pairwise2
-from Bio.Align import substitution_matrices
 from Bio.Seq import Seq
+from Bio import Align
+from Bio.Align import substitution_matrices
 from Bio import SeqIO
 from Bio.Data.CodonTable import TranslationError
  
