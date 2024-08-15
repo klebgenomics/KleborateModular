@@ -14,9 +14,8 @@ not, see <http://www.gnu.org/licenses/>.
 """
 
 from Bio.Seq import Seq
-from Bio import pairwise2
 from Bio.Align import substitution_matrices
-from ...shared.alignment import align_query_to_ref, is_exact_aa_match, translate_nucl_to_prot, check_for_exact_aa_match, truncation_check
+from ...shared.alignment import align_query_to_ref, truncation_check
 
 
 def check_for_mgrb_pmrb_gene_truncations(hits_dict, assembly, trunc, min_ident):
