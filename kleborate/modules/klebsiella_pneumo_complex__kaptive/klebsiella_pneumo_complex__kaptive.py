@@ -24,7 +24,7 @@ import dna_features_viewer
 from dna_features_viewer import GraphicFeature, GraphicRecord
 
 # Add the kaptive path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../kaptive')))
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../kaptive')))
 
 from kaptive.database import Database, get_database, load_database
 from kaptive.misc import check_python_version, check_programs, get_logo, check_cpus, check_file
@@ -126,50 +126,4 @@ def get_results(assembly, minimap2_index, args, previous_results):
 
     return results_dict
     
-# def get_results(assembly, minimap2_index, args, previous_results):
-#     full_headers, _ = get_headers()
-
-#     k_db, o_db = Database.from_genbank(get_database('kp_k')), Database.from_genbank(get_database('kp_o'))
-
-#     assembly_path = Path(assembly)
-
-#     results_dict = {}
-
-#     k_results = typing_pipeline(assembly_path, k_db, threads=args.threads)
-#     if k_results is not None:
-#         k_result_table = k_results.as_table()
-#         for line in k_result_table.split('\n'):
-#             if line:
-#                 parts = line.split('\t')
-#                 for key, value in zip(all_headers, parts):
-#                     header = 'K_' + key.replace(' ', '_')
-#                     if header in full_headers:
-#                         results_dict[header] = value
-#     else:
-#         print("Warning: No gene alignments sufficient for typing. Skipping k_results processing.")
-
-#     o_results = typing_pipeline(assembly_path, o_db, threads=args.threads)
-#     if o_results is not None:
-#         o_result_table = o_results.as_table()
-#         for line in o_result_table.split('\n'):
-#             if line:
-#                 parts = line.split('\t')
-#                 for key, value in zip(all_headers, parts):
-#                     header = 'O_' + key.replace(' ', '_')
-#                     if header in full_headers:
-#                         results_dict[header] = value
-#     else:
-#         print("Warning: No gene alignments sufficient for typing. Skipping o_results processing.")
-
-#     for h in results_dict.keys():
-#         if h not in full_headers:
-#             sys.exit(f'Error: results contained a value ({h}) that is not covered by the full headers')
-
-#     results_dict = {k: (v if v else '-') for k, v in results_dict.items()}
-
-#     return results_dict
-
-
-
-
 
