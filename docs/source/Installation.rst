@@ -9,9 +9,6 @@ Kleborate requires the following software and libraries to be installed and avai
 
 * `Python <https://www.python.org/>`_ v3.9 or later
 * `Biopython <https://biopython.org/>`_ v1.75 or later
-
-  * The ``Bio.pairwise2`` module will be replaced with Bio.Align.PairwiseAligner in the near future
-
 * `Mash <https://github.com/marbl/Mash>`_ v2.0 or later
 * `Minimap2 <https://github.com/lh3/minimap2>`_ 
 * `Kaptive <https://github.com/klebgenomics/Kaptive>`_ 
