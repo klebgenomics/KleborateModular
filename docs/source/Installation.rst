@@ -24,7 +24,9 @@ Create a conda environment and install minimap2 and mash::
    
 
 Activate the conda environment and install kleborate using pip::
+   
    conda activate klebsiella_analysis
+   
    pip install kleborate
 
 Test installation::
