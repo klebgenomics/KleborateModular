@@ -56,6 +56,14 @@ Check available modules, check version, print help:
    kleborate [--list_modules] [--version] [-h]
 
 
+
+Output files
+--------------------
+
+Output files are tab-delimited (.txt) files, one per species/complex detected, named in the format: klebsiella_pneumo_complex_output.txt.
+Columns included in each output file will depend on the modules that are run; essentially each module creates a set of results columns that are added to the output file for the relevant species/complex. By default, each column name is preprended with the name of the module that generated it. This can be turned off using --trim_headers when running kleborate, or these column headers can be stripped off later using the trim_headers.py script.
+
+
 Parameters
 ----------
 
