@@ -18,13 +18,13 @@ Kleborate requires the following software and libraries to be installed and avai
 Install Kleborate 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Create a conda environment::
+Create a conda environment and install minimap2 and mash::
 
    conda create -n klebsiella_analysis -c bioconda python=3.9 minimap2 mash -y
+   
+
+Activate the conda environment and install kleborate using pip::
    conda activate klebsiella_analysis
-
-Install from PyPI::
-
    pip install kleborate
 
 Test installation::
