@@ -107,17 +107,17 @@ def main():
     # If the resume flag is not set, remove existing output files
     if args.modules:
         module_name = args.modules.split(',')[0]  
-        out_files_suffixes = [f'_{module_name}_output.txt']
+        out_files_suffixes = [f'{module_name}.txt']
     else:
-        out_files_suffixes = ['kp_complex_output.txt',
-                              'ko_complex_output.txt',
-                              'escherichia_output.txt']
+        out_files_suffixes = ['klebsiella_pneumo_complex.txt',
+                              'klebsiella_oxytoca_complex.txt',
+                              'escherichia.txt']
     if not args.resume:
         for suffix in out_files_suffixes:
             for file in glob(f'{args.outdir}/*{suffix}'):
                 os.remove(file)
 
-    # Iterate through each assembly
+
     for assembly in args.assemblies:
         check_assembly(assembly)  # Check assembly before processing
 
@@ -139,11 +139,11 @@ def main():
 
                         if not check_function(module_results):
                             pass_check = False
-                            print(f"Assembly {assembly} failed in check {check}. Continuing with next assembly.")
+                            print(f"Assembly {assembly} failed in check {check}.")
                             break  # Exit the for loop since this assembly failed the check
 
                     except Exception as e:
-                        print(f"Error encountered while processing {assembly} with {module}: {e}. Continuing with next assembly.")
+                        print(f"Error encountered while processing {assembly} with {module}: {e}.")
                         pass_check = False
                         break  # Exit the for loop since an error occurred
 
@@ -164,22 +164,22 @@ def main():
             # Split the results based on species
             if args.modules:
                 module_name = args.modules.split(',')[0] 
-                outfile_suffix = f'_{module_name}_output.txt'
+                outfile_suffix = f'{module_name}.txt'
             else:
                 # Determine the appropriate output file suffix based on species
                 species = results.get('enterobacterales__species__species', None)
                 if species and is_kp_complex({'species': species}):
-                    outfile_suffix = '_kp_complex_output.txt'
+                    outfile_suffix = 'klebsiella_pneumo_complex.txt'
                 elif species and is_ko_complex({'species': species}):
-                    outfile_suffix = '_ko_complex_output.txt'
+                    outfile_suffix = 'klebsiella_oxytoca_complex.txt'
                 elif species and is_escherichia({'species': species}):
-                    outfile_suffix = '_escherichia_output.txt'
+                    outfile_suffix = 'escherichia.txt'
                 else:
                     print(f"Assembly {assembly} does not match any specified species. Skipping to next assembly.")
                     continue
 
             # write results
-            output_file = os.path.join(args.outdir, f"kleborate_results{outfile_suffix}")
+            output_file = os.path.join(args.outdir, outfile_suffix)
             output_results(full_headers, stdout_headers, output_file, results, args.trim_headers)
 
 
