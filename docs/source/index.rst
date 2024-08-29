@@ -86,7 +86,8 @@ When Kleborate v3 is run using the ``-p kpsc`` option to run preset modules for 
 Tutorial
 --------
 
-A step-by-step tutorial for Kleborate v2 is available at `bit.ly/kleborate-workshop <bit.ly/kleborate-workshop>`_\ , covering: 
+A step-by-step tutorial for Kleborate v2 is available at `kleborate-workshop <https://docs.google.com/document/d/19iz_bLGBj2yE3xAOTp_VIlJu0jMlzlAJlPzyfLMDYGo/edit#heading=h.7e1hzu2asyop>`_, covering:
+
 
 * Kleborate's features and their scientific rationale
 * How to run Kleborate 
