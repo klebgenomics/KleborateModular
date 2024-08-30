@@ -107,11 +107,11 @@ def main():
     # If the resume flag is not set, remove existing output files
     if args.modules:
         module_name = args.modules.split(',')[0]  
-        out_files_suffixes = [f'{module_name}.txt']
+        out_files_suffixes = [f'{module_name}_output.txt']
     else:
-        out_files_suffixes = ['klebsiella_pneumo_complex.txt',
-                              'klebsiella_oxytoca_complex.txt',
-                              'escherichia.txt']
+        out_files_suffixes = ['klebsiella_pneumo_complex_output.txt',
+                              'klebsiella_oxytoca_complex_output.txt',
+                              'escherichia_output.txt']
     if not args.resume:
         for suffix in out_files_suffixes:
             for file in glob(f'{args.outdir}/*{suffix}'):
@@ -164,16 +164,16 @@ def main():
             # Split the results based on species
             if args.modules:
                 module_name = args.modules.split(',')[0] 
-                outfile_suffix = f'{module_name}.txt'
+                outfile_suffix = f'{module_name}_output.txt'
             else:
                 # Determine the appropriate output file suffix based on species
                 species = results.get('enterobacterales__species__species', None)
                 if species and is_kp_complex({'species': species}):
-                    outfile_suffix = 'klebsiella_pneumo_complex.txt'
+                    outfile_suffix = 'klebsiella_pneumo_complex_output.txt'
                 elif species and is_ko_complex({'species': species}):
-                    outfile_suffix = 'klebsiella_oxytoca_complex.txt'
+                    outfile_suffix = 'klebsiella_oxytoca_complex_output.txt'
                 elif species and is_escherichia({'species': species}):
-                    outfile_suffix = 'escherichia.txt'
+                    outfile_suffix = 'escherichia_output.txt'
                 else:
                     print(f"Assembly {assembly} does not match any specified species. Skipping to next assembly.")
                     continue
