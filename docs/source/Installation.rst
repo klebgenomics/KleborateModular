@@ -29,6 +29,10 @@ Activate the conda environment and install kleborate using pip::
    
    pip install kleborate
 
+Installation from Bioconda::
+
+   conda install bioconda::kleborate
+
 Test installation::
 
    wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/813/595/GCF_002813595.1_ASM281359v1/GCF_002813595.1_ASM281359v1_genomic.fna.gz
