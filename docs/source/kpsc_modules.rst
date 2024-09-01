@@ -494,7 +494,7 @@ And here is the logic in more detail:
 * Kleborate will next translate the hit into amino acid sequence and look for truncations (expressed as % amino acid length from the start codon). If the result is less than 90%, it is added to the result (e.g. ``TEM-15*-42%``\ ) and the hit is reported in the ``truncated_resistance_hits`` column.
 * If the hit is less than 90% identity or 80% nucleotide coverage (adjustable via the ``--min_identity`` and ``--min_coverage`` options), it is reported in the ``spurious_resistance_hits`` column. Otherwise, it is reported in the column for its drug class (e.g. ``Bla_ESBL_acquired``\ ).
 
-Note that Kleborate reports resistance results for all antimicrobial classes with confidently attributable resistance mechanisms in KpSC. Not all of these are actually used clinically for treatment of KpSC infections (e.g. MLS, Rif) but they are still reported as the presence of acquired resistance determinants to these classes is of interest to researchers for other reasons (e.g. these genes can be useful markers of MGEs and MGE spread; there is potential for use of these drugs against other organisms to select for KpSC in co-infected patients or in the environment). For an overview of antimicrobial resistance and consensus definitions of multidrug resistance (MDR), extensive drug resistance (XDR) and pan drug resistance in Enterobacteriaceae, see `Magiorakos 2012 <https://www.clinicalmicrobiologyandinfection.com/article/S1198-743X(1461632-3/fulltext)>`_\ 
+Note that Kleborate reports resistance results for all antimicrobial classes with confidently attributable resistance mechanisms in KpSC. Not all of these are actually used clinically for treatment of KpSC infections (e.g. MLS, Rif) but they are still reported as the presence of acquired resistance determinants to these classes is of interest to researchers for other reasons (e.g. these genes can be useful markers of MGEs and MGE spread; there is potential for use of these drugs against other organisms to select for KpSC in co-infected patients or in the environment). For an overview of antimicrobial resistance and consensus definitions of multidrug resistance (MDR), extensive drug resistance (XDR) and pan drug resistance in Enterobacteriaceae, see `Magiorakos 2012 <https://www.clinicalmicrobiologyandinfection.com/article/S1198-743X(1461632-3/fulltext>`_\ 
 
 SHV beta-lactamases
 ^^^^^^^^^^^^^^^^^^^
@@ -703,34 +703,28 @@ Kaptive outputs
 Kaptive results are output in the following columns:
 
 .. list-table::
+   :header-rows: 1
 
+   * - Column Name
+     - Description
    * - Best match locus
-     - The locus type which most closely matches the assembly
-
+     - The locus type which most closely matches the assembly.
    * - Best match type
      - The predicted serotype/phenotype of the assembly.
-
    * - Match confidence
-     - A categorical measure of locus call quality (see confidence score)
-
-    * - Problems
-      - Characters indicating issues with the locus match (see problems)
-
-    * - Identity
-      - Weighted percent identity of the best matching locus to the assembly.
-
-    * - Coverage
-      - Weighted percent coverage of the best matching locus in the assembly.
-
-    * - Length discrepancy
-      - If the locus was found in a single piece, this is the difference between the locus length and the assembly length.
-
-    * - Expected genes in locus
-      - A fraction indicating how many of the genes in the best matching locus were found in the locus part of the assembly.
-
+     - A categorical measure of locus call quality (see confidence score).
+   * - Problems
+     - Characters indicating issues with the locus match (see problems).
+   * - Identity
+     - Weighted percent identity of the best matching locus to the assembly.
+   * - Coverage
+     - Weighted percent coverage of the best matching locus in the assembly.
+   * - Length discrepancy
+     - If the locus was found in a single piece, this is the difference between the locus length and the assembly length.
+   * - Expected genes in locus
+     - A fraction indicating how many of the genes in the best matching locus were found in the locus part of the assembly.
    * - Expected genes in locus, details
      - Gene names for the expected genes found in the locus part of the assembly.
-
    * - Missing expected genes
      - A string listing the gene names of expected genes that were not found.
 
